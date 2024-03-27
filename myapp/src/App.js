@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 
-// API keyt ym.
+// API keyt haetaan .envistä
 const AUTH_TOKEN = process.env.REACT_APP_READ_ACCESS_TOKEN;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -12,6 +12,7 @@ function App() {
   const [selectedMovieIndex, setSelectedMovieIndex] = useState(0);
   const [posterUrl, setPosterUrl] = useState('');
 
+  // Haetaan tämänhetkisen leffan posteri
   useEffect(() => {
     const fetchPoster = async () => {
       try {
@@ -46,6 +47,7 @@ function App() {
     fetchPoster();
   }, [selectedMovieIndex, movies]);
 
+  // Kun käyttäjä klikkaa 'Search', tehdään haku syötetyillä hakusanoilla TMDB API:in ja valitaan defaulttina ensimmäinen leffa listasta joka sieltä palautuu
   const handleSearch = async () => {
     try {
       const options = {
@@ -75,6 +77,7 @@ function App() {
     }
   };
 
+  // Buttoneilla voi selata hakutuloksia
   const handlePrevMovie = () => {
     setSelectedMovieIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
   };
