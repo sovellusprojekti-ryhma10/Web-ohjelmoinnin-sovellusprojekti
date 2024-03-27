@@ -10,6 +10,7 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [selectedMovieIndex, setSelectedMovieIndex] = useState(0);
 
+  // Käyttäjän painaessa 'Search', rakennetaan kysely TMDB:n APIin ja näytetään sieltä palautuvan listan ensimmäisen leffan tiedot
   const handleSearch = async () => {
     try {
       const options = {
@@ -47,6 +48,7 @@ function App() {
     }
   };
 
+  // Buttoneilla voi navigoida hakutuloksia eteen- ja taaksepäin
   const handlePrevMovie = () => {
     setSelectedMovieIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
   };
