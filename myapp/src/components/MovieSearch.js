@@ -32,6 +32,7 @@ function MovieSearch() {
   const [releaseYear, setReleaseYear] = useState('');
   const [rating, setRating] = useState('');
   const [ratingComparison, setRatingComparison] = useState('equal');
+  const [mediaType, setMediaType] = useState('movie'); 
   const [movies, setMovies] = useState([]);
   const [selectedMovieIndex, setSelectedMovieIndex] = useState(0);
 
@@ -47,7 +48,7 @@ function MovieSearch() {
       };
 
       const response = await fetch(
-        `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&include_adult=false&language=en-US&page=1&api_key=${API_KEY}`,
+        `https://api.themoviedb.org/3/search/${mediaType}?query=${searchQuery}&include_adult=false&language=en-US&page=1&api_key=${API_KEY}`,
         options
       );
 
@@ -100,7 +101,7 @@ function MovieSearch() {
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search for a movie..."
+          placeholder="Search for a movie or TV show..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
         />
@@ -132,6 +133,13 @@ function MovieSearch() {
           <option value="equal">Equal</option>
           <option value="higher">Higher Than</option>
           <option value="lower">Lower Than</option>
+        </select>
+        <select
+          value={mediaType}
+          onChange={e => setMediaType(e.target.value)}
+        >
+          <option value="movie">Movies</option>
+          <option value="tv">TV Shows</option>
         </select>
         <button onClick={handleSearch}>Search</button>
       </div>
