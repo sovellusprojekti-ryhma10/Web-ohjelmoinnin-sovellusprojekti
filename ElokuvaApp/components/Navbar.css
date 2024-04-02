@@ -1,0 +1,27 @@
+nav {
+  background-color: var(--grey-color);
+  display: flex;
+  justify-content: space-between;
+}
+
+nav div {
+  display: inline-block;
+}
+
+nav ul {
+  list-style-type: none;
+}
+
+nav ul li {
+  display: inline-block;
+}
+
+nav a {
+  display: inline-block;
+  padding: 0.5em var(--gutter);
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: var(--accent-color);
+}
