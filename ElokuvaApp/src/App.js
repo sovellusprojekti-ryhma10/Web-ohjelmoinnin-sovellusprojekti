@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar";
-import { Route, Routes } from 'react-router-dom'
-import UserProvider from './context/UserProvider'
-import PrivateRoute from './pages/PrivateRoute'
+
 
 // API keyt haetaan .envistä
 const AUTH_TOKEN = process.env.REACT_APP_READ_ACCESS_TOKEN;
@@ -68,8 +66,7 @@ function App() {
   ///////////////////////////////////////
     return (
         <div className="App">
-      <UserProvider>
-                              <Navbar></Navbar>
+           <Navbar></Navbar>
           <h1>Movie Search</h1>
             <div className="search-container">
                 <input
@@ -113,9 +110,7 @@ function App() {
                     </div>
                 </div>
           )}
-        </UserProvider>
-
-        </div>
+         </div>
     );
 }
 

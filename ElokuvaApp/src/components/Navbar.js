@@ -2,13 +2,11 @@ import { Link } from "react-router-dom";
 import "./Navbar.css";
 import React from "react";
 
-import { useUser } from "../context/useUser";
-import { useNavigate } from "react-router-dom";
 import Group from "../icons/group.png";
 import Search from "../icons/search.png";
 
 export default function Navbar() {
-    const { user } = useUser();
+
     return (
         <nav>
             <div className="navbar">
@@ -29,8 +27,8 @@ export default function Navbar() {
             <div>
                 <ul>
                     <li>
-                        {user === null && <Link to="/login">Login</Link>}
-                        {user && <Link to="/logout">Logout</Link>}
+                       <Link to="/login">Login</Link>
+                        <Link to="/logout">Logout</Link>
                     </li>
                 </ul>
             </div>
