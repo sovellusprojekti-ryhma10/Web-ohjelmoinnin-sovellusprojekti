@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
+import GroupSearchPage from './GroupSearchPage'
+import GroupPage from './GroupPage'
+import { Route, Routes} from 'react-router-dom'
 
 // API keyt haetaan .envistä
 const AUTH_TOKEN = process.env.REACT_APP_READ_ACCESS_TOKEN;
@@ -9,6 +12,8 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [selectedMovieIndex, setSelectedMovieIndex] = useState(0);
+
+
 
   // Käyttäjän painaessa 'Search', rakennetaan kysely TMDB:n APIin ja näytetään sieltä palautuvan listan ensimmäisen leffan tiedot
   const handleSearch = async () => {
@@ -58,7 +63,12 @@ function App() {
   };
 
   return (
+
     <div className="App">
+          <Routes>
+      <Route path="/Group" exact element ={<GroupSearchPage />} />
+      <Route path="/group/:groupId" exact element={<GroupPage />} />
+    </Routes>
       <h1>Movie Search</h1>
       <div className="search-container">
         <input
