@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
-import GroupSearchPage from './GroupSearchPage'
-import GroupPage from './GroupPage'
+import GroupSearchPage from './pages/GroupSearchPage'
+import GroupPage from './pages/GroupPage'
 import { Route, Routes} from 'react-router-dom'
 
 // API keyt haetaan .envistä
