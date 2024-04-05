@@ -1,0 +1,11 @@
+.navbar {
+  position: fixed;
+  width: 18%;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #cfcfcf;
+  border-right: 1px solid #e0e0e0;
+  padding: 1%;
+  height: 100%;
+}/*# sourceMappingURL=Navbar.css.map */
