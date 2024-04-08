@@ -31,7 +31,7 @@ export default function Navbar() {
                     <div className="selectBubble">
                     <img src={Shows} className="icon" alt="Schedule Icon" />   <p>Aikataulut</p>
                     </div>
-                    
+
                 </div>
                 <br></br>
                 <br></br>

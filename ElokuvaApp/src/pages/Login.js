@@ -6,7 +6,8 @@ import "../index.css";
 import { Link } from 'react-router-dom'
 
 export default function Login() {
-  const { login } = useUser()
+  // const user = ""
+  const user = useUser("")
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
@@ -16,8 +17,13 @@ export default function Login() {
     // fake login without db
     if (username === 'admin' && password === 'admin') {
       console.log('login ok')
-        setUser({user: username,password: password})
-        navigate("/")
+      setUsername({
+        username
+      })
+       setPassword({password
+       })
+      navigate("/")
+
     }
   }
 
