@@ -32,3 +32,610 @@ body {
     background: #cfcfcf;
     border-right: 1px solid #e0e0e0;
 }
+
+.List {
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 4px;
+
+    position: absolute;
+    width: 240px;
+    height: 128px;
+    left: 8px;
+    top: 78px;
+}
+
+.MenuItem {
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 16px;
+    gap: 16px;
+
+    width: 240px;
+    height: 40px;
+
+    border-radius: 8px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.FindMovies {
+    width: 208px;
+    height: 24px;
+
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 150%;
+    /* identical to box height, or 24px */
+    display: flex;
+    align-items: center;
+
+    color: #131313;
+}
+
+.selectMenu {
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 16px;
+    gap: 16px;
+
+    width: 240px;
+    height: 40px;
+
+    background: #dbdeff;
+    border-radius: 8px;
+}
+
+.searchIcon {
+    width: 24px;
+    height: 24px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    position: absolute;
+    left: 12.5%;
+    right: 20.83%;
+    top: 12.5%;
+    bottom: 20.83%;
+
+    border: 2px solid #131313;
+}
+/* Vector */
+
+.FindMovie {
+    width: 168px;
+    height: 24px;
+
+    /* Small text */
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    /* identical to box height, or 24px */
+    display: flex;
+    align-items: center;
+
+    color: #131313;
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 16px;
+    gap: 16px;
+
+    width: 240px;
+    height: 40px;
+    background: #f0f0f0;
+    border-radius: 8px;
+}
+
+ 
+/* Aikataulut */
+
+width: 168px;
+height: 24px;
+
+/* Small text */
+font-family: "Inter";
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 150%;
+/* identical to box height, or 24px */
+display: flex;
+align-items: center;
+
+color: #131313;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+/* List */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 8px;
+
+position: absolute;
+width: 240px;
+height: 264px;
+left: 8px;
+top: 274px;
+
+/* List */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 8px;
+
+width: 240px;
+height: 216px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+/* Title */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 16px;
+gap: 8px;
+
+width: 240px;
+height: 24px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+/* Käyttäjät */
+
+width: 208px;
+height: 24px;
+
+font-family: "Inter";
+font-style: normal;
+font-weight: 600;
+font-size: 16px;
+line-height: 150%;
+/* identical to box height, or 24px */
+display: flex;
+align-items: center;
+
+color: #000000;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+/* Menu item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 16px;
+gap: 16px;
+
+width: 240px;
+height: 40px;
+
+background: #f0f0f0;
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+/* smile */
+
+width: 24px;
+height: 24px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+/* Vector */
+
+position: absolute;
+left: 8.33%;
+right: 8.33%;
+top: 8.33%;
+bottom: 8.33%;
+
+border: 2px solid #000000;
+
+/* Vector */
+
+position: absolute;
+left: 33.33%;
+right: 33.33%;
+top: 58.33%;
+bottom: 33.33%;
+
+border: 2px solid #000000;
+
+/* Vector */
+
+position: absolute;
+left: 37.5%;
+right: 62.46%;
+top: 37.5%;
+bottom: 62.5%;
+
+border: 2px solid #000000;
+
+/* Vector */
+
+position: absolute;
+left: 62.5%;
+right: 37.46%;
+top: 37.5%;
+bottom: 62.5%;
+
+border: 2px solid #000000;
+
+/* Etsi käyttäjiä */
+
+width: 168px;
+height: 24px;
+
+/* Small text */
+font-family: "Inter";
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 150%;
+/* identical to box height, or 24px */
+display: flex;
+align-items: center;
+
+color: #000000;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+/* Menu item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 16px;
+gap: 16px;
+
+width: 240px;
+height: 40px;
+
+background: #f0f0f0;
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: stretch;
+flex-grow: 0;
+
+/* material-symbols:home-outline */
+
+width: 24px;
+height: 24px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+/* Vector */
+
+position: absolute;
+left: 16.67%;
+right: 16.67%;
+top: 12.5%;
+bottom: 12.5%;
+
+background: #000000;
+
+/* Oma sivuni */
+
+width: 168px;
+height: 24px;
+
+/* Small text */
+font-family: "Inter";
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 150%;
+/* identical to box height, or 24px */
+display: flex;
+align-items: center;
+
+color: #000000;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+/* Menu item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 16px;
+gap: 16px;
+
+width: 240px;
+height: 40px;
+
+background: #f0f0f0;
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+/* ph:gear */
+
+width: 25px;
+height: 24px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+/* Vector */
+
+position: absolute;
+left: 9.12%;
+right: 9.11%;
+top: 9.12%;
+bottom: 9.11%;
+
+background: #000000;
+
+/* Oma tilini */
+
+width: 167px;
+height: 24px;
+
+/* Small text */
+font-family: "Inter";
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 150%;
+/* identical to box height, or 24px */
+display: flex;
+align-items: center;
+
+color: #131313;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+/* Menu item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 16px;
+gap: 16px;
+
+width: 240px;
+height: 40px;
+
+background: #f0f0f0;
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+align-self: stretch;
+flex-grow: 0;
+
+/* ri:group-line */
+
+width: 24px;
+height: 24px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+/* Vector */
+
+position: absolute;
+left: 8.33%;
+right: 4.17%;
+top: 4.17%;
+bottom: 8.33%;
+
+background: #000000;
+
+/* Ryhmäsivu */
+
+width: 168px;
+height: 24px;
+
+/* Small text */
+font-family: "Inter";
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 150%;
+/* identical to box height, or 24px */
+display: flex;
+align-items: center;
+
+color: #000000;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+/* Menu item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 16px;
+gap: 16px;
+
+width: 240px;
+height: 40px;
+
+background: #fbfbfb;
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+/* lets-icons:group-light */
+
+width: 24px;
+height: 24px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+/* Group */
+
+position: absolute;
+left: 10.42%;
+right: 10.42%;
+top: 10.42%;
+bottom: 10.42%;
+
+/* Vector */
+
+position: absolute;
+left: 43.75%;
+right: 43.75%;
+top: 31.25%;
+bottom: 56.25%;
+
+border: 1px solid #000000;
+
+/* Vector */
+
+position: absolute;
+left: 22.94%;
+right: 22.9%;
+top: 31.21%;
+bottom: 56.29%;
+
+border: 1px solid #000000;
+
+/* Vector */
+
+position: absolute;
+left: 12.97%;
+right: 12.97%;
+top: 50%;
+bottom: 29.17%;
+
+background: #000000;
+
+/* Vector */
+
+position: absolute;
+left: 10.42%;
+right: 10.42%;
+top: 10.42%;
+bottom: 10.42%;
+
+border: 1px solid #000000;
+
+/* Etsi ryhmiä */
+
+width: 168px;
+height: 24px;
+
+/* Small text */
+font-family: "Inter";
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 150%;
+/* identical to box height, or 24px */
+display: flex;
+align-items: center;
+
+color: #131313;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+/* Title */
+
+position: absolute;
+width: 153px;
+height: 30px;
+left: 24px;
+top: 24px;
+
+font-family: "Inter";
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 150%;
+/* identical to box height, or 30px */
+display: flex;
+align-items: center;
+letter-spacing: -0.01em;
+
+color: #131313;

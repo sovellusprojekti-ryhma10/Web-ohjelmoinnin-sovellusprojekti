@@ -1,0 +1,77 @@
+@import "../index.sass"
+.navbar
+	position: fixed
+	width: 18%
+	z-index: 1
+	top: 0
+	left: 0
+	background-color:$navbarbg
+	// tämä on 14.4 px jos otetaan 1440 leveydestä, alkuperäinen figma halusi 16px
+	padding: 1% 0% 0% 1%
+	height: 100%
+	h1
+		padding: 1%	0	10%	0
+	// display: none
+
+
+
+.selectBubble
+	display: flex
+	flex-direction: row
+	align-items: center
+	padding: 0px 16px
+	gap: 2%
+	width: 86%
+	height: 2.5rem
+	background: #FBFBFB
+	border-radius: 8px
+	flex: none
+	order: 1
+	flex-grow: 0
+	margin: 10px 0px
+	img
+		padding: 0px 1rem 0px 0px
+
+	&:hover
+		background-color: #dbdeff
+
+	a
+		text-decoration: none
+		color:$blk
+		font-weight: 600
+
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
+		&:hover
+			color: #000000
+			text-decoration: underline
+		&:active
+			color: #020b5e
+			animation: activate 1s
+
+//			color: #000000
+//			text-decoration: underline
+		&:link
+			// color: #000000
+			// text-decoration: underline
+		&:focus
+			// color: #000000
+			// text-decoration: underline
+		// &:after
+		// 	content: ""
+		// 	display: block
+		// 	width: 0
+		// 	height: 2px
+		// 	background: #00ff00
+		// 	transition: width 0.3s
+		// &:hover:after
+		// 	width: 100%
+		// &:active:after
+		// 	width: 100%
+		// &:visited:after
+		// 	width: 100%
+		// &:link:after
+		// 	width: 100%
+		// &:focus:after
+		// 	width: 100%

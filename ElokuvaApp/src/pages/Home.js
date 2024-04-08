@@ -1,7 +1,10 @@
 import React from 'react'
-
+import FindMovies from './FindMovies'
+import '../index.css';
 export default function Home() {
   return (
-    <p>This is my great homepage</p>
+    <div className='content'>
+      <FindMovies />
+    </div>
   )
 }
