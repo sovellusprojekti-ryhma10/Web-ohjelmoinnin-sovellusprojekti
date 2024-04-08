@@ -1,3 +1,83 @@
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #e9e9e9;
+  font-family: "inter", sans-serif;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.5 rem;
+}
+
+a {
+  font-size: 1rem;
+  text-decoration: none;
+}
+
 .content {
-  padding: 0 500px 0 500px;
+  padding: 1% 1% 1% 1%;
+  width: 80%;
+  padding-left: 20%;
+}
+
+@keyframes activate {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(0.05);
+  }
+}
+.formcontent {
+  padding: 5% 1% 1% 21%;
+  width: 80%;
+  margin: 0 50px;
+}
+
+.formlabel {
+  font-size: 1rem;
+  font-weight: 200;
+  margin-bottom: 1%;
+}
+
+#submit {
+  background-color: #131313;
+  color: #e9e9e9;
+  border: none;
+  padding: 1rem 1rem;
+  font-size: 1rem;
+  margin-top: 2rem;
+  border-radius: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  font-family: "inter", sans-serif;
+}
+
+.input {
+  font-size: 1.2rem;
+  padding: 3px 10px 5px 10px;
+  border: 0px;
+  box-shadow: 5px 5px 13px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 11px;
+  width: 30%;
+}
+.input:active {
+  border: 0px;
+  outline: none;
+  box-shadow: 15px 5px 13px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 11px;
+  width: 30%;
+}
+.input:active:focus {
+  border: 0px;
+  outline: none;
+  box-shadow: 11px 5px 13px 0px rgba(0, 0, 0, 0.1);
+  width: 30%;
+}
+.input:active:hover {
+  background-color: #dbdeff;
 }/*# sourceMappingURL=Login.css.map */

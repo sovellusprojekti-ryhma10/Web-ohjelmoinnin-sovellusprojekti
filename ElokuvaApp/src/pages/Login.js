@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import './Login.css'
+import bstyles from './Login.css'
 import React, { useState } from 'react'
 import { useUser } from '../context/useUser'
 import "../index.css";
+
 export default function Login() {
   const { login } = useUser()
   const [username, setUsername] = useState('')
@@ -18,18 +20,19 @@ export default function Login() {
   }
 
   return (
-    <div className="content">
+    <div className="formcontent">
       <form onSubmit={validate}>
-        <h3>Login</h3>
+              <h1>Luo tili</h1>
+              <h2>Käyttäjätiedot</h2>
         <div>
-          <label>User</label>
-          <input value={username} onChange={e => setUsername(e.target.value)}/>
+          <p className='formlabel'>Username</p>
+          <input className="input" value={username} placeholder='username' onChange={e => setUsername(e.target.value)}/>
         </div>
         <div>
-          <label>Password</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)}/>
+          <p className='formlabel'>Password </p>
+          <input className="input" type="password"  placeholder='password' value={password} onChange={e => setPassword(e.target.value)}/>
         </div>
-        <button>Submit</button>
+        <button id='submit'>Submit</button>
       </form>
     </div>
   )
