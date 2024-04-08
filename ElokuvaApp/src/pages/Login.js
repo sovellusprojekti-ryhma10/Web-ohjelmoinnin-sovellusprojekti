@@ -13,11 +13,11 @@ export default function Login() {
 
   const validate = (e) => {
     e.preventDefault()
+    // fake login without db
     if (username === 'admin' && password === 'admin') {
       console.log('login ok')
-      login({user: username})
-      navigate('/home')
-
+        setUser({user: username,password: password})
+        navigate("/")
     }
   }
 
