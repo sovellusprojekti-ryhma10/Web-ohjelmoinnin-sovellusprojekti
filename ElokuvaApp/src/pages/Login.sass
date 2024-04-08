@@ -1,5 +1,7 @@
 @import "../index.sass"
 .formcontent
+  display: flex
+  flex-direction: column
   padding: 5% 1% 1% 21%
   width: 80%
   margin: 0 50px
@@ -8,6 +10,7 @@
   font-weight: 200
   margin-bottom: 1%
 #submit
+ margin: 5px
  background-color: $blk
  color: $bg
  border: none
@@ -18,7 +21,9 @@
  font-weight: 600
  letter-spacing: 2px
  font-family: 'inter', sans-serif
- 
+ &:hover
+  background-color: $loact
+  color: $blk
 
 .input
  font-size: 1.2rem
@@ -40,3 +45,7 @@
     width: 30%
   &:hover
    background-color: $active
+
+.linksign
+  padding: 10px
+  margin: 10px 10px 10px 10px

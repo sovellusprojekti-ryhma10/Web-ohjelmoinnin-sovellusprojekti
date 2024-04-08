@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import './Login.css'
-import bstyles from './Login.css'
 import React, { useState } from 'react'
 import { useUser } from '../context/useUser'
 import "../index.css";
+import { Link } from 'react-router-dom'
 
 export default function Login() {
   const { login } = useUser()
@@ -13,16 +13,19 @@ export default function Login() {
 
   const validate = (e) => {
     e.preventDefault()
-    if (username.length >0 && password.length >0) {
-      const data = {"user":username,"password":password}
-      login(data)
+    if (username === 'admin' && password === 'admin') {
+      console.log('login ok')
+      login({user: username})
+      navigate('/home')
+
     }
   }
 
   return (
     <div className="formcontent">
-      <form onSubmit={validate}>
-              <h1>Luo tili</h1>
+
+      <form id="login-form" onSubmit={validate}>
+              <h1>Kirjaudu</h1>
               <h2>Käyttäjätiedot</h2>
         <div>
           <p className='formlabel'>Username</p>
@@ -32,8 +35,18 @@ export default function Login() {
           <p className='formlabel'>Password </p>
           <input className="input" type="password"  placeholder='password' value={password} onChange={e => setPassword(e.target.value)}/>
         </div>
-        <button id='submit'>Submit</button>
+        <div>
+          {/* <p className='formlabel'>Toista salasana </p>
+          <input className="input2" type="passwordAgain"  placeholder='Repeat the new password' value={password} onChange={e => setPassword(e.target.value)}/> */}
+        </div>
+
+        <button id='submit'>Kirjaudu</button>
+        <button id='submit'>Poista tili</button>
+        {/* <button id='submit'>Muuta salasana</button> */}
+
       </form>
+
+      <Link className="linksign" to="/create">Luo tili</Link>
     </div>
   )
 }

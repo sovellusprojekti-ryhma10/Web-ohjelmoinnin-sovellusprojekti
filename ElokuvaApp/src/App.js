@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
 import Login from './pages/Login';
-import NotFound from './pages/NotFound'
+import NotFound from './pages/NotFound';
+import CreateAccount from './pages/createAcc'
 
 import Home from "./pages/Home";
 import Navbar from './components/Navbar';
@@ -15,6 +16,7 @@ function App() {
        <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/create" element={<CreateAccount />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 

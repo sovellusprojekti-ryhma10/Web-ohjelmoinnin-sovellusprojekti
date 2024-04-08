@@ -1,7 +1,7 @@
 import "./Navbar.css";
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { useUser } from '../context/useUser'
 import UserProvider from '../context/UserProvider'
 import PrivateRoute from '../pages/PrivateRoute'
 
@@ -15,12 +15,13 @@ import Shows from '../icons/shows.png';
 import Sort from '../icons/sort.png';
 
 export default function Navbar() {
+    const { user } = useUser()
 
     return (
         <nav>
 
             <div className="navbar">
-        
+
                 <h1>Elokuva-sivusto</h1>
                 <p>Löydä elokuva</p>
                 <div>
@@ -30,7 +31,7 @@ export default function Navbar() {
                     <div className="selectBubble">
                     <img src={Shows} className="icon" alt="Schedule Icon" />   <p>Aikataulut</p>
                     </div>
-
+                    
                 </div>
                 <br></br>
                 <br></br>
@@ -41,8 +42,12 @@ export default function Navbar() {
                     <div className="selectBubble">
                     <img src={Group} className="icon" alt="Group Icon" />   <p>Etsi ryhmiä</p>
                     </div>
-                    <div className="selectBubble">
-                    <img src={Koti} className="icon" alt="Home Icon" />  <p>  <Link to="login">Login</Link></p>
+                <div className="selectBubble">
+                <img src={Koti} className="icon" alt="Home Icon" />
+                {user === null &&   <p>  <Link to="login">Login</Link></p>
+                }
+                    {user && <Link to="/logout">Logout</Link>}
+
                 </div>
             </div>
 

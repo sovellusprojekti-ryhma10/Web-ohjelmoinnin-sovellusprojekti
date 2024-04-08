@@ -33,6 +33,8 @@ a {
   }
 }
 .formcontent {
+  display: flex;
+  flex-direction: column;
   padding: 5% 1% 1% 21%;
   width: 80%;
   margin: 0 50px;
@@ -45,6 +47,7 @@ a {
 }
 
 #submit {
+  margin: 5px;
   background-color: #131313;
   color: #e9e9e9;
   border: none;
@@ -55,6 +58,10 @@ a {
   font-weight: 600;
   letter-spacing: 2px;
   font-family: "inter", sans-serif;
+}
+#submit:hover {
+  background-color: #9a9cb0;
+  color: #131313;
 }
 
 .input {
