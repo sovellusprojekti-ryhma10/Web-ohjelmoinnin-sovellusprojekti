@@ -1,32 +1,28 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Personal.css";
-//import { UserContext } from "../context/UserContext";
+import { useUser } from "../context/useUser";
+import { useNavigate } from "react-router-dom";
 
 export default function Personal() {
-  /*  const { user } = useContext(UserContext);
+  const { user } = useUser();
+  const navigate = useNavigate();
 
   if (!user) {
-    navigointi loginiin
+    navigate("/login");
+    return null;
   }
- */
 
-  // const latestFavoriteLists = [];
-  // const lastJoinedGroups = [];
   return (
     <div>
-      <h1>Tervetuloa, {/*user.username*/}</h1>
+      <h1>Tervetuloa, {user.username}</h1>
       <div className="container">
         <div>
           <h2>Suosikkilistat</h2>
-          {/* {latestFavoriteLists.map((list, index) => (
-            <p key={index}>{list.name}</p>
-          ))} */}
+          {/* Suosikkilistojen listaus */}
         </div>
         <div>
           <h2>Ryhmät</h2>
-          {/* {lastJoinedGroups.map((group, index) => (
-            <p key={index}>{group.name}</p>
-          ))} */}
+          {/* Ryhmälistaus */}
         </div>
       </div>
     </div>
