@@ -101,7 +101,7 @@ const GroupSearchPage = () => {
 
 
   return (
-    <div className="container">
+    <div className="group-search-container">
       <h2>Ryhmät</h2>
 
       <div className="insides"> 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import './GroupPage.css'; 
 
 const GroupPage = () => {
   const { groupId } = useParams();
@@ -65,7 +66,7 @@ const GroupPage = () => {
   console.log(groupName, createdBy, groupData);
 
   return (
-    <div>
+    <div className="group-page-container">
       <h2>Group Information</h2>
       <p>Group Name: {groupName}</p>
       <p>Created By: {createdBy}</p>

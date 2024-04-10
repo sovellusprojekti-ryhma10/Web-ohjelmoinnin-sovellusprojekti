@@ -7,12 +7,10 @@ const jwt = require('jsonwebtoken')
 const multer = require('multer');
 const upload = multer({dest: 'uploads/'});
 
-
-
 const groups = require('./routes/group');
 const pgPool = require('./database/pg_connection');
 
-const jwt_secret = 'sdfdsdsfu8sdf87df78'
+const jwt_secret = process.env.JWT_SECRET
 
 const app = express()
 app.use(express.static('public'));
@@ -21,6 +19,8 @@ app.use(upload.none());
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 const port = 3001
+console.log('jwt_secret', jwt_secret)
+// app.use('/group', groups);
 
 app.use('/group', groups);
 
@@ -38,6 +38,3 @@ app.post("/login",(req,res) => {
 app.listen(port,() => {
   console.log(`App is running on port ${port}`)
 })
-
-
-

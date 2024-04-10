@@ -5,14 +5,12 @@ const { register, getPw } = require('../database/auth_db');
 const jwt = require('jsonwebtoken');
 
 router.post('/register',async (req, res) => {
-    const fname = req.body.fname;
-    const lname = req.body.lname;
     const username = req.body.username;
     const pw =req.body.pw;
+    console.log(req);
+    // const hashPw = await bcrypt.hash(pw, 10);
 
-    const hashPw = await bcrypt.hash(pw, 10);
-
-    await register(fname, lname, username, hashPw);
+    await register(username, pw);
 
     res.end();
 
@@ -21,6 +19,7 @@ router.post('/register',async (req, res) => {
 router.post('/login', async (req,res)=>{
     const uname = req.body.username;
     const pw = req.body.pw;
+    console.log(req);
 
     const db_pw = await getPw(uname);
 
@@ -31,7 +30,7 @@ router.post('/login', async (req,res)=>{
             const token = jwt.sign({username: uname }, process.env.JWT_SECRET);
             res.status(200).json({jwtToken: token},);
         }else{
-            res.status(401).json({error: 'Wrong password'});            
+            res.status(401).json({error: 'Wrong password'});
         }
     }else{
         res.status(404).json({error: 'User not found'});
