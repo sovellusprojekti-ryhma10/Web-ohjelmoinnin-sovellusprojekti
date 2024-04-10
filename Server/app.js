@@ -6,10 +6,8 @@ const cors = require('cors')
 const jwt = require('jsonwebtoken')
 const multer = require('multer');
 const upload = multer({dest: 'uploads/'});
-
-
-
-// const groups = require('./routes/group');
+const account = require('./routes/account');
+const groups = require('./routes/group');
 const pgPool = require('./database/pg_connection');
 
 const jwt_secret = process.env.JWT_SECRET
@@ -24,6 +22,9 @@ const port = 3001
 console.log('jwt_secret', jwt_secret)
 // app.use('/group', groups);
 
+app.use('/group', groups);
+app.use('/account', account);
+
 app.post("/login",(req,res) => {
   const { user, password } = req.body
   if (user === 'admin' && password === 'admin') {
@@ -33,7 +34,6 @@ app.post("/login",(req,res) => {
     res.status(401).json({message: 'Invalid credentials!'})
   }
 })
-
 
 app.listen(port,() => {
   console.log(`App is running on port ${port}`)

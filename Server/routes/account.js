@@ -1,17 +1,15 @@
-const { getUser, getTesti} = require('../database/account_db');
+const { getAccounts,getUser,getTesti} = require('../database/account_db');
 const { auth } = require('../middleware/auth');
 
 const router = require('express').Router();
 
-router.get('/all', async (req, res) => {
-    console.log(req);
-
+router.get('/', async (req, res) => {
     const accounts = await getAccounts();
     console.log(accounts);
     res.json(accounts);
 });
 
-router.get('/', async (req,res) => {
+router.post('/username', async (req,res) => {
      const user = await getUser(req.query.username);
      console.log(user);
      res.json(user);
@@ -25,4 +23,4 @@ router.get('/testi', async (req,res) => {
 });
 
 
-module.exports = {router};
+module.exports = router;
