@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 function auth(req, res, next){
     // Authorization:Bearer token
     const token = req.headers.authorization?.split(' ')[1];
+    console.log(req);
 
     try{
         const username = jwt.verify(token, process.env.JWT_SECRET).username;
@@ -15,4 +16,3 @@ function auth(req, res, next){
 }
 
 module.exports = {auth};
-

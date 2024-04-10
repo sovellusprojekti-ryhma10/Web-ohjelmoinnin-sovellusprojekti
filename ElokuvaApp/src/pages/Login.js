@@ -3,34 +3,56 @@ import './Login.css'
 import React, { useState } from 'react'
 import { useUser } from '../context/useUser'
 import "../index.css";
+import { Link } from 'react-router-dom'
+
 export default function Login() {
-  const { login } = useUser()
+  // const user = ""
+  const user = useUser("")
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
 
   const validate = (e) => {
     e.preventDefault()
-    if (username.length >0 && password.length >0) {
-      const data = {"user":username,"password":password}
-      login(data)
+    // fake login without db
+    if (username === 'admin' && password === 'admin') {
+      console.log('login ok')
+      setUsername({
+        username
+      })
+       setPassword({password
+       })
+      navigate("/")
+
     }
   }
 
   return (
-    <div className="content">
-      <form onSubmit={validate}>
-        <h3>Login</h3>
+    <div className="formcontent">
+
+      <form id="login-form" onSubmit={validate}>
+              <h1>Kirjaudu</h1>
+              <h2>Käyttäjätiedot</h2>
         <div>
-          <label>User</label>
-          <input value={username} onChange={e => setUsername(e.target.value)}/>
+          <p className='formlabel'>Username</p>
+          <input className="input" value={username} placeholder='username' onChange={e => setUsername(e.target.value)}/>
         </div>
         <div>
-          <label>Password</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)}/>
+          <p className='formlabel'>Password </p>
+          <input className="input" type="password"  placeholder='password' value={password} onChange={e => setPassword(e.target.value)}/>
         </div>
-        <button>Submit</button>
+        <div>
+          {/* <p className='formlabel'>Toista salasana </p>
+          <input className="input2" type="passwordAgain"  placeholder='Repeat the new password' value={password} onChange={e => setPassword(e.target.value)}/> */}
+        </div>
+
+        <button id='submit'>Kirjaudu</button>
+        <button id='submit'>Poista tili</button>
+        {/* <button id='submit'>Muuta salasana</button> */}
+
       </form>
+
+      <Link className="linksign" to="/create">Luo tili</Link>
     </div>
   )
 }

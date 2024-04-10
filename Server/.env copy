@@ -5,3 +5,4 @@ REACT_APP_PG_PORT = 5432
 REACT_APP_PG_UNAME = sovellusprojekti_user
 REACT_APP_PG_PW = rFEgeqp4t31oyRDxi4RphyLBp3NDgna2
 REACT_APP_PG_DATABASE = sovellusprojekti
+REACT_APP_PG_JWT_SECRET = 3f3F3F
