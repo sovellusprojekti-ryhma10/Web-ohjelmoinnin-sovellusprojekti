@@ -1,4 +1,4 @@
-const { getUser} = require('../database/account_db');
+const { getUser, getTesti} = require('../database/account_db');
 const { auth } = require('../middleware/auth');
 
 const router = require('express').Router();
@@ -18,5 +18,11 @@ router.get('/', async (req,res) => {
 });
 
 
+router.get('/testi', async (req,res) => {
+    const user = await getTesti();
+    console.log(user);
+    res.json(user);
+});
 
-module.exports = router;
+
+module.exports = {router};

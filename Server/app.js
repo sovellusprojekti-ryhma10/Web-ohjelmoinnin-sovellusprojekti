@@ -12,7 +12,7 @@ const upload = multer({dest: 'uploads/'});
 // const groups = require('./routes/group');
 const pgPool = require('./database/pg_connection');
 
-const jwt_secret = process.env.PG_JWT_SECRET
+const jwt_secret = process.env.JWT_SECRET
 
 const app = express()
 app.use(express.static('public'));
