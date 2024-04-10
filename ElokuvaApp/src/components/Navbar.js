@@ -8,11 +8,11 @@ import PrivateRoute from '../pages/PrivateRoute'
 import Group from "../icons/group.png";
 import Search from "../icons/search.png";
 import Grouppage from "../icons/groupPage.png";
-import Koti from '../icons/home.png';
-import Profile from '../icons/profile.png';
-import Settings from '../icons/settings.png';
-import Shows from '../icons/shows.png';
-import Sort from '../icons/sort.png';
+import Koti from "../icons/home.png";
+import Profile from "../icons/profile.png";
+import Settings from "../icons/settings.png";
+import Shows from "../icons/shows.png";
+import Sort from "../icons/sort.png";
 
 export default function Navbar() {
     const { user } = useUser()
