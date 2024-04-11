@@ -7,8 +7,8 @@ const GroupSearchPage = () => {
   const [groups, setGroups] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [writeBoxText, setWriteBoxText] = useState('');
-  const created_by = 2;
-  const accountId = 3
+  const created_by = 3;
+  const accountId = 3;
   const navigate = useNavigate();
 
 

@@ -1,4 +1,4 @@
-const { getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent} = require('../database/groups_db');
+const { getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin} = require('../database/groups_db');
 
 const router = require('express').Router();
 
@@ -49,7 +49,7 @@ router.get('/:groupId', async (req, res) => {
     const accountId = req.query.accountId;
 
     const data = await getGroupsData(accountId, groupId);
-    console.log(JSON.stringify(data) + "Tuleeko tänne Saakka");
+    console.log(JSON.stringify(data) + "Tuleeko tänne Saakka tämä täällä sinä siellä");
     res.json(data);
   
 
@@ -68,5 +68,19 @@ router.get('/:groupId', async (req, res) => {
 }
   
   });
+
+  router.put('/:groupId/make/admin', async (req, res) => {
+    const { memberName, accountId, groupId } = req.body;
+    try {
+        const adminId = accountId;
+        await addGroupsAdmin(memberName, adminId, groupId);
+        res.send("member is now admin");
+        } 
+        catch (error) {
+        console.error('Error making admin:', error);
+        res.status(500).send("Error making admin");
+        }
+
+});
 
 module.exports = router;

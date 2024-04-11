@@ -9,11 +9,38 @@ const sql = {
     GET_GROUP_ID: 'SELECT id FROM Groups WHERE group_name = ($1)',
     GET_GROUP_DATA: 'SELECT content FROM Group_pages WHERE group_id = ($1)',
     GET_GROUP_INFO: 'SELECT group_name, created_by FROM Groups WHERE id = ($1)',
+
+    GET_GROUP_MEMBERS_USERNAME:'SELECT DISTINCT A.username FROM User_Groups UG JOIN Accounts A ON UG.account_id = A.id WHERE UG.group_id = ($1) AND is_admin = (false);',
+    GET_GROUPS_ADMINS:'SELECT DISTINCT A.username FROM User_Groups UG JOIN Accounts A ON UG.account_id = A.id WHERE UG.group_id = ($1) AND is_admin = (true);',
+
     GET_CREATED_BY: 'SELECT username FROM Accounts WHERE id = ($1)',
-    CHECK_IF_USER_IS_ADMIN: 'SELECT is_admin FROM User_Groups WHERE account_id = ($1) AND group_id = ($2)',
     ADD_CONTENT: 'UPDATE Group_pages SET content = $1 WHERE group_id = $2',
-    ADD_GROUP_PAGES: 'INSERT INTO Group_pages (group_id) VALUES (1$)'
+    ADD_GROUP_PAGES: 'INSERT INTO Group_pages (group_id) VALUES ($1)',
+
+    CHECK_IF_USER_IS_ADMIN: 'SELECT is_admin FROM User_Groups WHERE account_id = ($1) AND group_id = ($2)',
+    MAKE_ADMIN: 'UPDATE User_Groups SET is_admin = TRUE WHERE account_id = ($1) AND group_id = ($2)',
+    GET_USER_ID: 'SELECT id FROM Accounts WHERE username = ($1)'
+
 };
+
+
+async function addGroupsAdmin(memberName, adminId, groupId) {
+    try {
+        const isAdmindata = await pgPool.query(sql.CHECK_IF_USER_IS_ADMIN, [adminId, groupId]);
+        const isAdmin = isAdmindata.rows[0].is_admin; // assuming there's only one row
+
+        if (isAdmin === true) {
+            const accountIdData = await pgPool.query(sql.GET_USER_ID, [memberName]);
+            const accountId = accountIdData.rows[0].id;
+            console.log(accountId, groupId);
+            await pgPool.query(sql.MAKE_ADMIN, [accountId, groupId]);
+        }
+    } catch (error) {
+        console.error('Error adding admin', error);
+        throw error;
+    }
+}
+
 
 async function addGroupsContent(description, accountId, groupId) {
     try {
@@ -41,6 +68,13 @@ async function getGroupsData(accountId, groupId) {
             const groupInfoResult = await pgPool.query(sql.GET_GROUP_INFO, [groupId]);
             const groupInfo = groupInfoResult.rows[0];
 
+            const usernamesResult = await pgPool.query(sql.GET_GROUP_MEMBERS_USERNAME, [groupId]);
+            const usernames = usernamesResult.rows.map(row => row.username);
+
+            const adminUsernamesResult = await pgPool.query(sql.GET_GROUPS_ADMINS, [groupId]);
+            const adminUsernames = adminUsernamesResult.rows.map(row => row.username);
+
+
             const isAdminResult = await pgPool.query(sql.CHECK_IF_USER_IS_ADMIN, [accountId, groupId]);
             const isAdmin = isAdminResult.rows.length > 0 ? isAdminResult.rows[0].is_admin : false;
 
@@ -51,13 +85,15 @@ async function getGroupsData(accountId, groupId) {
             const usernameResult = await pgPool.query(sql.GET_CREATED_BY, [created_by]);
             const username = usernameResult.rows[0].username;
 
-            console.log(data.rows, groupInfo.group_name, username);
+            console.log(data.rows, groupInfo.group_name, username, usernames, adminUsernames);
             // Return the data
             return {
                 isAdmin: isAdmin,
                 groupData: data.rows,
                 groupName: groupInfo.group_name,
-                createdBy: username
+                createdBy: username,
+                groupMembers: usernames,
+                groupAdmins: adminUsernames
             };
         } else {
             console.error('User is not in the group');
@@ -119,4 +155,4 @@ async function addUserGroup(account_id, group_name) {
     }
 }
 
-module.exports = { getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent };
+module.exports = { getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin };

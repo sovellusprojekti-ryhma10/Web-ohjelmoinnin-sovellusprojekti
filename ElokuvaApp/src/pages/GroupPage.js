@@ -6,7 +6,7 @@ const GroupPage = () => {
   const { groupId } = useParams();
   const [groupInfo, setGroupInfo] = useState(null);
   const [description, setDescription] = useState('');
-  const accountId = 3;
+  const accountId = 2;
 
   useEffect(() => {
     const fetchGroupInfo = async () => {
@@ -16,17 +16,15 @@ const GroupPage = () => {
           throw new Error('Failed to fetch group information');
         }
         const data = await response.json();
-        console.log (data);
+        console.log(data);
         setGroupInfo(data);
       } catch (error) {
         console.error('Error fetching group information:', error);
       }
     };
 
-
     fetchGroupInfo();
   }, [groupId]);
-
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
@@ -56,33 +54,93 @@ const GroupPage = () => {
     }
   };
 
+  const handleRemoveFromGroup = async (memberName) => {
+    try {
+      const response = await fetch(`http://localhost:3001/group/${groupId}/remove/person`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ groupId, accountId, memberName }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update member status');
+      }
+      console.log(`Marking ${memberName} as removed from the group`);
+    } catch (error) {
+      console.error('Error updating member status:', error);
+    }
+  };
+
+  const handleGiveAdmin = async (memberName) => {
+    try {
+      const response = await fetch(`http://localhost:3001/group/${groupId}/make/admin`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ groupId, accountId, memberName }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update member to admin');
+      }
+      console.log(`Marking ${memberName} as admin`);
+    } catch (error) {
+      console.error('Error updating admin status:', error);
+    }
+  };
+
+
   if (!groupInfo) {
     return <div>Loading...</div>;
   }
 
-
-  const { groupName, createdBy, groupData } = groupInfo;
+  const { groupName, createdBy, groupData, groupMembers, isAdmin, groupAdmins } = groupInfo;
   const content = groupData.length > 0 ? groupData[0].content : "No content available";
   console.log(groupName, createdBy, groupData);
 
   return (
     <div className="group-page-container">
       <h2>Group Information</h2>
-      <p>Group Name: {groupName}</p>
-      <p>Created By: {createdBy}</p>
-      <p>Description: {content}</p>
+      <p>Ryhmän nimi: {groupName}</p>
+      <p>Ryhmän luoja: {createdBy}</p>
+      <p>Ryhmän kuvaus: {content}</p>
+      <p>Ryhmä Jäsenet:</p>
+      {groupMembers.map((member, index) => (
+  <div key={index}>
+    <span>{member}</span>
 
+        <button onClick={() => handleRemoveFromGroup(member)}>poista ryhmästä</button>
+          <button onClick={() => handleGiveAdmin(member)}>anna admin</button>
+
+  </div> 
+))}
+      {groupAdmins.map((admin, index) => (
+  <div key={index}>
+    <span>{admin}</span>
+
+    {admin !== createdBy && (
+      <>
+        <button onClick={() => handleRemoveFromGroup(admin)}>poista ryhmästä</button>
+        <button onClick={() => handleGiveAdmin(admin)}>poista admin</button>
+      </>
+    )}
+  </div> 
+))}
+      <div className="description">
+      {isAdmin && (
+            <>
       <textarea
-    defaultValue={content} 
-    onChange={handleDescriptionChange}
-   placeholder="Type description here..."
-  />
-
+        defaultValue={content} 
+        onChange={handleDescriptionChange}
+        placeholder="Type description here..."
+      />
       <button onClick={handleDescriptionSubmit}>Submit Description</button>
-
+      </>
+          )}
+          </div>
     </div>
   );
 };
-
 
 export default GroupPage;
