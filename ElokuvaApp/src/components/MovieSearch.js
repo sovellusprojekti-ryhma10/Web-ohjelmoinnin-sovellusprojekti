@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 // API keyt haetaan .envistä
 const AUTH_TOKEN = process.env.REACT_APP_READ_ACCESS_TOKEN;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
+// Lista mahdollisista genreistä joilla voi filtteröidä hakutuloksia
 const genreOptions = [
   { id: 28, name: "Action" },
   { id: 12, name: "Adventure" },
@@ -31,13 +33,28 @@ function MovieSearch() {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [releaseYear, setReleaseYear] = useState("");
   const [rating, setRating] = useState("");
-  const [ratingComparison, setRatingComparison] = useState("equal");
+  const [ratingComparison, setRatingComparison] = useState("Higher Than");
   const [mediaType, setMediaType] = useState("movie");
+  const [page, setPage] = useState(1);
   const [movies, setMovies] = useState([]);
   const [selectedMovieIndex, setSelectedMovieIndex] = useState(0);
+  const [selectedMovieIndexB, setSelectedMovieIndexB] = useState(
+    selectedMovieIndex + 1
+  );
+  const [selectedMovieIndexC, setSelectedMovieIndexC] = useState(
+    selectedMovieIndex + 2
+  );
+  const [selectedMovieIndexD, setSelectedMovieIndexD] = useState(
+    selectedMovieIndex + 3
+  );
 
-  // Käyttäjän painaessa 'Search', rakennetaan kysely TMDB:n APIin ja näytetään sieltä palautuvan listan ensimmäisen leffan tiedot
-  const handleSearch = async () => {
+  // Kutsutaan hakufunktio kun sivu latautuu niin saadaan lista tällä hetkellä pyörivistä elokuvista
+  useEffect(() => {
+    handleSearch(page);
+  }, []);
+
+  // Hakufunktio saa parametrina sivunumeron, eli miltä sivulta tulokset haetaan
+  const handleSearch = async (pageNumber) => {
     try {
       const options = {
         method: "GET",
@@ -47,13 +64,20 @@ function MovieSearch() {
         },
       };
 
-      const response = await fetch(
-        `https://api.themoviedb.org/3/search/${mediaType}?query=${searchQuery}&include_adult=false&language=en-US&page=1&api_key=${API_KEY}`,
-        options
-      );
+      // Jos hakupalkki on tyhjä, haetaan lista tällä hetkellä pyörivistä elokuvista. Muussa tapauksessa tehdään haku käyttäjän kirjoittamien hakusanojen perusteella
+      let apiUrl;
+
+      if (searchQuery === "") {
+        apiUrl = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${pageNumber}&api_key=${API_KEY}`;
+      } else {
+        apiUrl = `https://api.themoviedb.org/3/search/${mediaType}?query=${searchQuery}&include_adult=false&language=en-US&page=${pageNumber}&api_key=${API_KEY}`;
+      }
+
+      const response = await fetch(apiUrl, options);
 
       const data = await response.json();
 
+      // Filtteritoimintoja
       if (data.results && data.results.length > 0) {
         let filteredMovies = data.results.filter((movie) => {
           if (
@@ -64,11 +88,6 @@ function MovieSearch() {
           if (releaseYear && !movie.release_date.includes(releaseYear))
             return false;
           if (rating) {
-            if (
-              ratingComparison === "equal" &&
-              movie.vote_average !== parseFloat(rating)
-            )
-              return false;
             if (
               ratingComparison === "higher" &&
               movie.vote_average <= parseFloat(rating)
@@ -83,6 +102,9 @@ function MovieSearch() {
           return true;
         });
 
+        // Resetoidaan näytettävien elokuvien indexit
+        resetMovieIndexes();
+
         filteredMovies = filteredMovies.map((movie) => ({
           id: movie.id,
           title: movie.title,
@@ -93,48 +115,58 @@ function MovieSearch() {
         }));
 
         setMovies(filteredMovies);
-        setSelectedMovieIndex(0);
+        //setSelectedMovieIndex(0);
       } else {
         setMovies([]);
-        setSelectedMovieIndex(0);
+        //setSelectedMovieIndex(0);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  // lisätty funktio joka lisää haetun elokuvan käyttäjän suosikkeihin.
-  const handleSaveMovie = async () => {
-    const currentMovie = movies[selectedMovieIndex];
-    try {
-      const response = await fetch("YOUR_BACKEND_ENDPOINT_HERE", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(currentMovie),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to add movie to favorites");
-      }
-      console.log("Movie added to favorites");
-    } catch (error) {
-      console.error("Error adding movie to favorites:", error);
+  // Previous ja Next -painikkeita painellessa sivulla näkyvät hakutulokset vaihtuu. Kerrallaan näkyy neljä tulosta. Kun päästään sivun loppuun (tai peruutettaessa sivun alkuun), vaihdetaan sivua ja kutsutaan uudestaan hakufunktiota
+  const handlePrevMovie = () => {
+    if (selectedMovieIndexD === 3) {
+      const prevPage = parseInt(page) - 1;
+      setPage(prevPage);
+      setSelectedMovieIndex(16);
+      setSelectedMovieIndexB(17);
+      setSelectedMovieIndexC(18);
+      setSelectedMovieIndexD(19);
+      handleSearch(prevPage);
+    } else {
+      setSelectedMovieIndex(selectedMovieIndex - 4);
+      setSelectedMovieIndexB(selectedMovieIndexB - 4);
+      setSelectedMovieIndexC(selectedMovieIndexC - 4);
+      setSelectedMovieIndexD(selectedMovieIndexD - 4);
     }
   };
 
-  // Buttoneilla voi navigoida hakutuloksia eteen- ja taaksepäin
-  const handlePrevMovie = () => {
-    setSelectedMovieIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : prevIndex
-    );
+  const handleNextMovie = () => {
+    if (selectedMovieIndexD === 19) {
+      const nextPage = parseInt(page) + 1;
+      setPage(nextPage);
+      resetMovieIndexes();
+      handleSearch(nextPage);
+    } else {
+      setSelectedMovieIndex(selectedMovieIndex + 4);
+      setSelectedMovieIndexB(selectedMovieIndexB + 4);
+      setSelectedMovieIndexC(selectedMovieIndexC + 4);
+      setSelectedMovieIndexD(selectedMovieIndexD + 4);
+    }
   };
 
-  const handleNextMovie = () => {
-    setSelectedMovieIndex((prevIndex) =>
-      prevIndex < movies.length - 1 ? prevIndex + 1 : prevIndex
-    );
+  // Funktio resetoi näytettävien elokuvien indexit, käytetään sivua vaihdettaessa ja uutta hakua tehtäessä
+  const resetMovieIndexes = () => {
+    setSelectedMovieIndex(0);
+    setSelectedMovieIndexB(1);
+    setSelectedMovieIndexC(2);
+    setSelectedMovieIndexD(3);
+  };
+
+  const resetPage = () => {
+    setPage(1);
   };
 
   return (
@@ -166,7 +198,7 @@ function MovieSearch() {
         />
         <input
           type="number"
-          placeholder="Rating"
+          placeholder="TMDB Rating"
           value={rating}
           onChange={(e) => setRating(e.target.value)}
         />
@@ -174,7 +206,6 @@ function MovieSearch() {
           value={ratingComparison}
           onChange={(e) => setRatingComparison(e.target.value)}
         >
-          <option value="equal">Equal</option>
           <option value="higher">Higher Than</option>
           <option value="lower">Lower Than</option>
         </select>
@@ -185,39 +216,70 @@ function MovieSearch() {
           <option value="movie">Movies</option>
           <option value="tv">TV Shows</option>
         </select>
-        <button onClick={handleSearch}>Search</button>
+        <button
+          onClick={() => {
+            handleSearch(page);
+            resetPage();
+          }}
+        >
+          Search
+        </button>
       </div>
       {movies.length > 0 && (
-        <div className="movie-info">
-          <h2>{movies[selectedMovieIndex].title}</h2>
-          <p>{movies[selectedMovieIndex].overview}</p>
-          <p>Release Date: {movies[selectedMovieIndex].release_date}</p>
-          <p>Vote Average: {movies[selectedMovieIndex].vote_average}</p>
-          {movies[selectedMovieIndex].poster_path && (
-            <img
-              src={movies[selectedMovieIndex].poster_path}
-              alt="Movie Poster"
-              style={{ maxHeight: "500px", width: "auto" }}
-            />
-          )}
-
-          <button onClick={handleSaveMovie}>Add to favorites</button>
-
-          <div className="navigation-buttons">
-            <button
-              onClick={handlePrevMovie}
-              disabled={selectedMovieIndex === 0}
-            >
-              Previous
-            </button>
-            <button
-              onClick={handleNextMovie}
-              disabled={selectedMovieIndex === movies.length - 1}
-            >
-              Next
-            </button>
+        <>
+          <div className="movie-info">
+            <h2>{movies[selectedMovieIndex].title}</h2>
+            {movies[selectedMovieIndex].poster_path && (
+              <Link to={`/${mediaType}/${movies[selectedMovieIndex].id}`} key={movies[selectedMovieIndex].id}>
+              <img
+                src={movies[selectedMovieIndex].poster_path}
+                alt="Movie Poster"
+                style={{ maxHeight: "300px", width: "auto" }}
+              />
+              </Link>
+            )}
           </div>
-        </div>
+          <div className="movie-info-b">
+            <h2>{movies[selectedMovieIndexB].title}</h2>
+            {movies[selectedMovieIndexB].poster_path && (
+              <Link to={`/movie/${movies[selectedMovieIndexB].id}`} key={movies[selectedMovieIndexB].id}>
+              <img
+                src={movies[selectedMovieIndexB].poster_path}
+                alt="Movie Poster"
+                style={{ maxHeight: "300px", width: "auto" }}
+              />
+              </Link>
+            )}
+          </div>
+          <div className="movie-info-c">
+            <h2>{movies[selectedMovieIndexC].title}</h2>
+            {movies[selectedMovieIndexC].poster_path && (
+              <Link to={`/movie/${movies[selectedMovieIndexC].id}`} key={movies[selectedMovieIndexC].id}>
+              <img
+                src={movies[selectedMovieIndexC].poster_path}
+                alt="Movie Poster"
+                style={{ maxHeight: "300px", width: "auto" }}
+              />
+              </Link>
+            )}
+          </div>
+          <div className="movie-info-d">
+            <h2>{movies[selectedMovieIndexD].title}</h2>
+            {movies[selectedMovieIndexD].poster_path && (
+              <Link to={`/movie/${movies[selectedMovieIndexD].id}`} key={movies[selectedMovieIndexD].id}>
+              <img
+                src={movies[selectedMovieIndexD].poster_path}
+                alt="Movie Poster"
+                style={{ maxHeight: "300px", width: "auto" }}
+              />
+              </Link>
+            )}
+          </div>
+          <div className="navigation-buttons">
+            <button onClick={handlePrevMovie}>Previous</button>
+            <button onClick={handleNextMovie}>Next</button>
+          </div>
+        </>
       )}
     </div>
   );
