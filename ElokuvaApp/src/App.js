@@ -13,14 +13,18 @@ import Personal from "./pages/Personal";
 import CreateAcc from "./pages/CreateAcc";
 import FavoriteLists from "./pages/FavoriteLists";
 import SpecificList from "./components/SpecificList";
+import MoviePage from "./components/MoviePage";
+import MovieSearch from "./components/MovieSearch";
 
 function App() {
   return (
     <UserProvider>
+      <Navbar />
       <Routes>
-        <Route path="/Group" exact element={<GroupSearchPage />} />
-        <Route path="/group/:groupId" exact element={<GroupPage />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<MovieSearch />} />
+        <Route path="/movie/:movieID" element={<MoviePage />} />
+        <Route path="/Group" element={<GroupSearchPage />} />
+        <Route path="/group/:groupId" element={<GroupPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/CreateAcc" element={<CreateAcc />} />
         <Route path="/personal" element={<PrivateRoute />}>
@@ -30,10 +34,6 @@ function App() {
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <div className="App">
-        <Navbar />
-        <div className="content">{/* Add your content here */}</div>
-      </div>
     </UserProvider>
   );
 }

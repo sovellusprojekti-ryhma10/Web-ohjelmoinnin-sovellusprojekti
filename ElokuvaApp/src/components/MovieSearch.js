@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import "./MovieSearch.css";
 
 // API keyt haetaan .envistä
 const AUTH_TOKEN = process.env.REACT_APP_READ_ACCESS_TOKEN;
@@ -230,48 +231,60 @@ function MovieSearch() {
           <div className="movie-info">
             <h2>{movies[selectedMovieIndex].title}</h2>
             {movies[selectedMovieIndex].poster_path && (
-              <Link to={`/${mediaType}/${movies[selectedMovieIndex].id}`} key={movies[selectedMovieIndex].id}>
-              <img
-                src={movies[selectedMovieIndex].poster_path}
-                alt="Movie Poster"
-                style={{ maxHeight: "300px", width: "auto" }}
-              />
+              <Link
+                to={`/${mediaType}/${movies[selectedMovieIndex].id}`}
+                key={movies[selectedMovieIndex].id}
+              >
+                <img
+                  src={movies[selectedMovieIndex].poster_path}
+                  alt="Movie Poster"
+                  style={{ maxHeight: "300px", width: "auto" }}
+                />
               </Link>
             )}
           </div>
           <div className="movie-info-b">
             <h2>{movies[selectedMovieIndexB].title}</h2>
             {movies[selectedMovieIndexB].poster_path && (
-              <Link to={`/movie/${movies[selectedMovieIndexB].id}`} key={movies[selectedMovieIndexB].id}>
-              <img
-                src={movies[selectedMovieIndexB].poster_path}
-                alt="Movie Poster"
-                style={{ maxHeight: "300px", width: "auto" }}
-              />
+              <Link
+                to={`/movie/${movies[selectedMovieIndexB].id}`}
+                key={movies[selectedMovieIndexB].id}
+              >
+                <img
+                  src={movies[selectedMovieIndexB].poster_path}
+                  alt="Movie Poster"
+                  style={{ maxHeight: "300px", width: "auto" }}
+                />
               </Link>
             )}
           </div>
           <div className="movie-info-c">
             <h2>{movies[selectedMovieIndexC].title}</h2>
             {movies[selectedMovieIndexC].poster_path && (
-              <Link to={`/movie/${movies[selectedMovieIndexC].id}`} key={movies[selectedMovieIndexC].id}>
-              <img
-                src={movies[selectedMovieIndexC].poster_path}
-                alt="Movie Poster"
-                style={{ maxHeight: "300px", width: "auto" }}
-              />
+              <Link
+                to={`/movie/${movies[selectedMovieIndexC].id}`}
+                key={movies[selectedMovieIndexC].id}
+              >
+                <img
+                  src={movies[selectedMovieIndexC].poster_path}
+                  alt="Movie Poster"
+                  style={{ maxHeight: "300px", width: "auto" }}
+                />
               </Link>
             )}
           </div>
           <div className="movie-info-d">
             <h2>{movies[selectedMovieIndexD].title}</h2>
             {movies[selectedMovieIndexD].poster_path && (
-              <Link to={`/movie/${movies[selectedMovieIndexD].id}`} key={movies[selectedMovieIndexD].id}>
-              <img
-                src={movies[selectedMovieIndexD].poster_path}
-                alt="Movie Poster"
-                style={{ maxHeight: "300px", width: "auto" }}
-              />
+              <Link
+                to={`/movie/${movies[selectedMovieIndexD].id}`}
+                key={movies[selectedMovieIndexD].id}
+              >
+                <img
+                  src={movies[selectedMovieIndexD].poster_path}
+                  alt="Movie Poster"
+                  style={{ maxHeight: "300px", width: "auto" }}
+                />
               </Link>
             )}
           </div>
