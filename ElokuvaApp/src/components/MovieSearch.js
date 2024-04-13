@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 // API keyt haetaan .envistä
 const AUTH_TOKEN = process.env.REACT_APP_READ_ACCESS_TOKEN;
@@ -28,13 +28,12 @@ const genreOptions = [
   { id: 37, name: "Western" },
 ];
 
-function MovieSearch() {
+function MovieSearch( { setMediaType, mediaType } ) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [releaseYear, setReleaseYear] = useState("");
   const [rating, setRating] = useState("");
   const [ratingComparison, setRatingComparison] = useState("Higher Than");
-  const [mediaType, setMediaType] = useState("movie");
   const [page, setPage] = useState(1);
   const [movies, setMovies] = useState([]);
   const [selectedMovieIndex, setSelectedMovieIndex] = useState(0);
@@ -47,6 +46,9 @@ function MovieSearch() {
   const [selectedMovieIndexD, setSelectedMovieIndexD] = useState(
     selectedMovieIndex + 3
   );
+  const handleSetMediaType = (type) => {
+    setMediaType(type);
+  };
 
   // Kutsutaan hakufunktio kun sivu latautuu niin saadaan lista tällä hetkellä pyörivistä elokuvista
   useEffect(() => {
@@ -108,6 +110,7 @@ function MovieSearch() {
         filteredMovies = filteredMovies.map((movie) => ({
           id: movie.id,
           title: movie.title,
+          name: movie.name,
           overview: movie.overview,
           release_date: movie.release_date,
           vote_average: movie.vote_average,
@@ -115,10 +118,8 @@ function MovieSearch() {
         }));
 
         setMovies(filteredMovies);
-        //setSelectedMovieIndex(0);
       } else {
         setMovies([]);
-        //setSelectedMovieIndex(0);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -211,7 +212,10 @@ function MovieSearch() {
         </select>
         <select
           value={mediaType}
-          onChange={(e) => setMediaType(e.target.value)}
+          onChange={(e) => {
+            setMediaType(e.target.value); 
+            handleSetMediaType(e.target.value);
+          }}
         >
           <option value="movie">Movies</option>
           <option value="tv">TV Shows</option>
@@ -229,49 +233,66 @@ function MovieSearch() {
         <>
           <div className="movie-info">
             <h2>{movies[selectedMovieIndex].title}</h2>
+            <h2>{movies[selectedMovieIndex].name}</h2>
             {movies[selectedMovieIndex].poster_path && (
-              <Link to={`/${mediaType}/${movies[selectedMovieIndex].id}`} key={movies[selectedMovieIndex].id}>
-              <img
-                src={movies[selectedMovieIndex].poster_path}
-                alt="Movie Poster"
-                style={{ maxHeight: "300px", width: "auto" }}
-              />
+              <Link
+                to={`/${mediaType}/${movies[selectedMovieIndex].id}`}
+                key={movies[selectedMovieIndex].id}
+                onClick={() => handleSetMediaType(mediaType)}
+              >
+                <img
+                  src={movies[selectedMovieIndex].poster_path}
+                  alt="Movie Poster"
+                  style={{ maxHeight: "300px", width: "auto" }}
+                />
               </Link>
             )}
           </div>
           <div className="movie-info-b">
             <h2>{movies[selectedMovieIndexB].title}</h2>
+            <h2>{movies[selectedMovieIndexB].name}</h2>
             {movies[selectedMovieIndexB].poster_path && (
-              <Link to={`/movie/${movies[selectedMovieIndexB].id}`} key={movies[selectedMovieIndexB].id}>
-              <img
-                src={movies[selectedMovieIndexB].poster_path}
-                alt="Movie Poster"
-                style={{ maxHeight: "300px", width: "auto" }}
-              />
+              <Link
+                to={`/${mediaType}/${movies[selectedMovieIndexB].id}`}
+                key={movies[selectedMovieIndexB].id}
+              >
+                <img
+                  src={movies[selectedMovieIndexB].poster_path}
+                  alt="Movie Poster"
+                  style={{ maxHeight: "300px", width: "auto" }}
+                />
               </Link>
             )}
           </div>
           <div className="movie-info-c">
             <h2>{movies[selectedMovieIndexC].title}</h2>
+            <h2>{movies[selectedMovieIndexC].name}</h2>
             {movies[selectedMovieIndexC].poster_path && (
-              <Link to={`/movie/${movies[selectedMovieIndexC].id}`} key={movies[selectedMovieIndexC].id}>
-              <img
-                src={movies[selectedMovieIndexC].poster_path}
-                alt="Movie Poster"
-                style={{ maxHeight: "300px", width: "auto" }}
-              />
+              <Link
+                to={`/${mediaType}/${movies[selectedMovieIndexC].id}`}
+                key={movies[selectedMovieIndexC].id}
+              >
+                <img
+                  src={movies[selectedMovieIndexC].poster_path}
+                  alt="Movie Poster"
+                  style={{ maxHeight: "300px", width: "auto" }}
+                />
               </Link>
             )}
           </div>
           <div className="movie-info-d">
             <h2>{movies[selectedMovieIndexD].title}</h2>
+            <h2>{movies[selectedMovieIndexD].name}</h2>
             {movies[selectedMovieIndexD].poster_path && (
-              <Link to={`/movie/${movies[selectedMovieIndexD].id}`} key={movies[selectedMovieIndexD].id}>
-              <img
-                src={movies[selectedMovieIndexD].poster_path}
-                alt="Movie Poster"
-                style={{ maxHeight: "300px", width: "auto" }}
-              />
+              <Link
+                to={`/${mediaType}/${movies[selectedMovieIndexD].id}`}
+                key={movies[selectedMovieIndexD].id}
+              >
+                <img
+                  src={movies[selectedMovieIndexD].poster_path}
+                  alt="Movie Poster"
+                  style={{ maxHeight: "300px", width: "auto" }}
+                />
               </Link>
             )}
           </div>
