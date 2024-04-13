@@ -7,13 +7,15 @@ const GroupSearchPage = () => {
   const [groups, setGroups] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [writeBoxText, setWriteBoxText] = useState('');
-  const created_by = 3;
-  const accountId = 3;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(20);
+  const created_by = 5;
+  const accountId = 5;
   const navigate = useNavigate();
 
 
   useEffect(() => {
-    fetchGroups();
+    fetchGroups(currentPage);
 
     const handleScroll = (event) => {
       const delta = Math.sign(event.deltaY); // Check the direction of the scroll
@@ -28,9 +30,9 @@ const GroupSearchPage = () => {
   }, []);
 
   // Function to fetch groups from the backend
-  const fetchGroups = async () => {
-    try {
-      const response = await fetch('http://localhost:3001/group/all');
+  const fetchGroups = async (currentPage) => {
+    try { 
+      const response = await fetch(`http://localhost:3001/group/all?currentPage=${currentPage}&perPage=${perPage}`);
       if (!response.ok) {
         throw new Error('Failed to fetch groups');
       }
@@ -93,12 +95,14 @@ const GroupSearchPage = () => {
     setWriteBoxText(event.target.value);
   };
 
-  
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchGroups(page);
+  };
 
   const filteredGroups = groups.filter(group =>
     group.group_name && group.group_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
 
   return (
     <div className="group-search-container">
@@ -119,17 +123,25 @@ const GroupSearchPage = () => {
       <div className="headers-container">
       <span className='headers'><p>Ryhmän nimi</p></span>
       <span className='headers2'><p>Ryhmän luoja</p></span>
+      <span className='headers3'><p>Ryhmän kuvaus</p></span>
     </div>
     <div className="group-list" style={{ height: '300px', overflowY: 'scroll' }}>
         <ul>
           {filteredGroups.map(group => (
             <li key={group.id}>
               <span className="group-name">{group.group_name}</span>
-              <span className="created-by">{group.username}</span>
+              <span className="created-by">{group.created_by_username}</span>
+              <span className="group-description" title={group.content}>Ryhmän kuvaus</span>
               <button className="button-join" onClick={(event) => handleJoinGroup(event, group.group_name)}>Liity ryhmään</button>
             </li>
           ))}
         </ul>
+      </div>
+      <div className="pagination">
+        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+          Edellinen sivu
+        </button>
+        <button onClick={() => handlePageChange(currentPage + 1)}>Seuraava sivu</button>
       </div>
       <div className="input-group">
         <h4>Luo uusi ryhmä</h4>

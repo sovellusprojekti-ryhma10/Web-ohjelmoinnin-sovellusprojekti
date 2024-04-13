@@ -6,7 +6,7 @@ const GroupPage = () => {
   const { groupId } = useParams();
   const [groupInfo, setGroupInfo] = useState(null);
   const [description, setDescription] = useState('');
-  const accountId = 2;
+  const accountId = 5;
 
   useEffect(() => {
     const fetchGroupInfo = async () => {
@@ -54,10 +54,10 @@ const GroupPage = () => {
     }
   };
 
-  const handleRemoveFromGroup = async (memberName) => {
+  const handleRemoveFromGroup = async (memberName, request) => {
     try {
       const response = await fetch(`http://localhost:3001/group/${groupId}/remove/person`, {
-        method: 'PUT',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -67,6 +67,23 @@ const GroupPage = () => {
         throw new Error('Failed to update member status');
       }
       console.log(`Marking ${memberName} as removed from the group`);
+    } catch (error) {
+      console.error('Error updating member status:', error);
+    }
+  };
+  const handleAddToGroup = async (request) => {
+    try {
+      const response = await fetch(`http://localhost:3001/group/${groupId}/make/member`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ groupId, accountId, request }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update user to group');
+      }
+      console.log(`Marking ${request} as member`);
     } catch (error) {
       console.error('Error updating member status:', error);
     }
@@ -95,7 +112,7 @@ const GroupPage = () => {
     return <div>Loading...</div>;
   }
 
-  const { groupName, createdBy, groupData, groupMembers, isAdmin, groupAdmins } = groupInfo;
+  const { groupName, createdBy, groupData, groupMembers, isAdmin, groupAdmins, requestToJoin } = groupInfo;
   const content = groupData.length > 0 ? groupData[0].content : "No content available";
   console.log(groupName, createdBy, groupData);
 
@@ -105,13 +122,36 @@ const GroupPage = () => {
       <p>Ryhmän nimi: {groupName}</p>
       <p>Ryhmän luoja: {createdBy}</p>
       <p>Ryhmän kuvaus: {content}</p>
+      
+      {requestToJoin.map((request, index) => (
+  <div key={index}>
+    <span>{request}</span>
+
+    {isAdmin && (
+      <>
+        <button onClick={() => handleAddToGroup(request)}>Hyväksy pyyntö</button>
+        <button onClick={() => handleRemoveFromGroup(request)}>Hylkää pyyntö</button>
+      </>
+    )}
+
+  </div> 
+  ))}
+      {isAdmin && (
+            <>
+      <p>Pyytää liittymään ryhmään:</p>
+      </>
+          )}
+
       <p>Ryhmä Jäsenet:</p>
       {groupMembers.map((member, index) => (
   <div key={index}>
     <span>{member}</span>
-
+    {isAdmin && (
+      <>
         <button onClick={() => handleRemoveFromGroup(member)}>poista ryhmästä</button>
           <button onClick={() => handleGiveAdmin(member)}>anna admin</button>
+          </>
+          )}
 
   </div> 
 ))}
@@ -119,7 +159,7 @@ const GroupPage = () => {
   <div key={index}>
     <span>{admin}</span>
 
-    {admin !== createdBy && (
+    {isAdmin && (
       <>
         <button onClick={() => handleRemoveFromGroup(admin)}>poista ryhmästä</button>
         <button onClick={() => handleGiveAdmin(admin)}>poista admin</button>

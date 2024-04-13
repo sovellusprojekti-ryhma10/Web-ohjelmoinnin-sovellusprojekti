@@ -4,11 +4,13 @@ body {
   background-color: grey;
 }
 .group-search-container {
+  position: relative;
   color: black; 
   font-weight: bold; 
   background-color: grey;
-  max-width: 60%;
+  max-width: 75%;
   max-height: 80%;
+  left: 10%;
   margin: 20px auto;
   display: flex;
   flex-direction: column; /* Arrange items vertically */
@@ -47,18 +49,22 @@ h2 {
   position: relative;
 }
 
-.group-name {
-  margin-right: auto;
-}
 
+.group.description{
+  position: relative;
+  left: 50%;
+
+
+}
 .created-by {
   position: absolute;
   left: 29%;
   transform: translateX(-50%);
 }
 .button-join {
-  position: absolute;
-  left: 50%; 
+  width: 15%;
+  position: relative;
+  left: -38%; 
   background-color: black;
   color: white;
   border: none;
@@ -99,20 +105,30 @@ h2 {
 }
 
 .headers {
+
   display: inline-block;
-  width: 24%;
+  width: 10%;
+  left: 20%;
   color: grey;
 }
 .headers2 {
+  position: absolute;
   display: inline-block;
-  width: 70%;
-  margin-right: 15%;
+  width: 10%;
+  left: 25%;
+  color: grey;
+}
+.headers3 {
+  position: absolute;
+  display: inline-block;
+  width: 10%;
+  left: 74%;
   color: grey;
 }
 
 .group-name {
   display: inline-block;
-  width: 9%; 
+
 }
 .created-by {
   display: inline-block;
@@ -126,18 +142,54 @@ h2 {
   transform: translate(-50%, -50%);
 }
 .group-list::-webkit-scrollbar {
-  width: 10px; /* Width of the scrollbar */
+  width: 10px; 
 }
 
 .group-list::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Background color of the track */
+  background: #f1f1f1; 
 }
 
 .group-list::-webkit-scrollbar-thumb {
-  background: #888; /* Color of the thumb */
-  border-radius: 5px; /* Border radius of the thumb */
+  background: #888;
+  border-radius: 5px; 
 }
 
 .group-list::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Color of the thumb on hover */
+  background: #555; 
+}
+
+
+.group-description {
+  position: absolute;
+  left: 75%;
+  cursor: pointer; 
+}
+
+.group-description::after {
+  width: 300%;
+  content: attr(title); 
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8); 
+  color: white; 
+  padding: 5px 10px; 
+  border-radius: 5px; 
+  z-index: 0; 
+  display: none;
+  bottom: 100%;
+  left: 40%; 
+  transform: translateX(-50%); 
+}
+
+.group-description:hover::after {
+  display: block; 
+}
+.pagination button {
+
+  position: relative;
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
 }
