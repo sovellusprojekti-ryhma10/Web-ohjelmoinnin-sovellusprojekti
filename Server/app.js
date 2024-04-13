@@ -1,40 +1,77 @@
-require('dotenv').config();
+//app.js
+const express = require("express");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const { verifyCredentials } = require("./database/auth_db");
+const { auth } = require("./middleware/auth");
+const pgPool = require("./database/pg_connection");
+const favoriteListsRouter = require("./routes/FavoriteLists");
 
+const app = express(); // Define the app variable before using it
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-const express = require('express')
-const cors = require('cors')
-const jwt = require('jsonwebtoken')
-const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
-const account = require('./routes/account');
-const groups = require('./routes/group');
-const pgPool = require('./database/pg_connection');
+// Use the favoriteListsRouter as middleware
+app.use("/api", favoriteListsRouter);
 
-const jwt_secret = process.env.JWT_SECRET
+const port = 3001;
 
-const app = express()
-app.use(express.static('public'));
-app.use(cors())
-app.use(upload.none());
-app.use(express.json())
-app.use(express.urlencoded({extended: false}))
-const port = 3001
-console.log('jwt_secret', jwt_secret)
-// app.use('/group', groups);
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
 
-app.use('/group', groups);
-app.use('/account', account);
+  try {
+    const { isAuth, accountId } = await verifyCredentials(username, password);
 
-app.post("/login",(req,res) => {
-  const { user, password } = req.body
-  if (user === 'admin' && password === 'admin') {
-    const token = jwt.sign({user: user},jwt_secret)
-    res.status(200).json({token:token})
-  } else {
-    res.status(401).json({message: 'Invalid credentials!'})
+    if (isAuth) {
+      // Include the account ID in the JWT payload
+      const token = jwt.sign(
+        { username: username, accountId: accountId },
+        process.env.JWT_SECRET
+      );
+      res.status(200).json({ token: token });
+    } else {
+      res.status(401).json({ message: "Invalid credentials!" });
+    }
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
-})
+});
 
-app.listen(port,() => {
-  console.log(`App is running on port ${port}`)
-})
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const existingUser = await pgPool.query(
+      "SELECT * FROM accounts WHERE username = $1",
+      [username]
+    );
+
+    if (existingUser.rowCount > 0) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    await pgPool.query(
+      "INSERT INTO accounts (username, password_hash) VALUES ($1, $2)",
+      [username, hashedPassword]
+    );
+
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error("Error during registration:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/protected", auth, (req, res) => {
+  res.json({ message: "This is a protected route" });
+});
+
+app.listen(port, () => {
+  console.log(`App is running on port ${port}`);
+});
