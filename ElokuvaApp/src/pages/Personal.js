@@ -1,28 +1,24 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom"; // Import Link
 import "./Personal.css";
+import "../index.css";
 import { useUser } from "../context/useUser";
-import { useNavigate } from "react-router-dom";
 
 export default function Personal() {
   const { user } = useUser();
-  const navigate = useNavigate();
-
-  if (!user) {
-    navigate("/login");
-    return null;
-  }
 
   return (
     <div>
-      <h1>Tervetuloa, {user.username}</h1>
+      <h1>Tervetuloa, {user.username}!</h1>
       <div className="container">
         <div>
           <h2>Suosikkilistat</h2>
-          {/* Suosikkilistojen listaus */}
+          <Link to="/Personal/FavoriteLists">
+            <button>Mene suosikkilistoihin</button>
+          </Link>
         </div>
         <div>
-          <h2>Ryhmät</h2>
-          {/* Ryhmälistaus */}
+          <h2>Groups</h2>
         </div>
       </div>
     </div>
