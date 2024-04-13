@@ -1,19 +1,23 @@
-const pgPool = require('./pg_connection');
+const { Pool } = require("pg");
+const bcrypt = require("bcrypt");
 
-const sql = {
-    REGISTER: 'INSERT INTO accounts VALUES ($1,$2)',
-    GET_PW: 'SELECT pw FROM accounts WHERE username=$1'
+const pgPool = require("./pg_connection");
+
+async function verifyCredentials(username, password) {
+  const result = await pgPool.query(
+    "SELECT password_hash, id FROM accounts WHERE username = $1",
+    [username]
+  );
+
+  if (result.rowCount > 0) {
+    const isAuth = await bcrypt.compare(password, result.rows[0].password_hash);
+    if (isAuth) {
+      // Return both the authentication result and the account ID
+      return { isAuth, accountId: result.rows[0].id };
+    }
+  }
+
+  return { isAuth: false };
 }
 
-async function register(username, pwHash){
-    await pgPool.query(sql.REGISTER, [username, pwHash]);
-}
-
-async function getPw(username){
-    const result = await pgPool.query(sql.GET_PW, [username]);
-
-    return result.rowCount > 0 ? result.rows[0].pw : null;
-
-}
-
-module.exports = {register, getPw};
+module.exports = { verifyCredentials };
