@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import "./MovieSearch.css";
 
 // API keyt haetaan .envistä
 const AUTH_TOKEN = process.env.REACT_APP_READ_ACCESS_TOKEN;
@@ -28,7 +29,7 @@ const genreOptions = [
   { id: 37, name: "Western" },
 ];
 
-function MovieSearch( { setMediaType, mediaType } ) {
+function MovieSearch({ setMediaType, mediaType }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [releaseYear, setReleaseYear] = useState("");
@@ -213,7 +214,7 @@ function MovieSearch( { setMediaType, mediaType } ) {
         <select
           value={mediaType}
           onChange={(e) => {
-            setMediaType(e.target.value); 
+            setMediaType(e.target.value);
             handleSetMediaType(e.target.value);
           }}
         >

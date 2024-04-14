@@ -17,30 +17,39 @@ import MovieSearch from "./components/MovieSearch";
 import MoviePage from "./components/MoviePage";
 
 function App() {
-    const [mediaType, setMediaType] = useState("movie"); // mediaType hook täytyy määritellä App.js:ssä jotta sitä voi käyttää sekä MovieSearchissa että MoviePagessa
+  const [mediaType, setMediaType] = useState("movie"); // mediaType hook täytyy määritellä App.js:ssä jotta sitä voi käyttää sekä MovieSearchissa että MoviePagessa
 
-    return (
-        <UserProvider>
-            <div className="App">
-                <Navbar />
-                <Routes>
-                    <Route path="/Group" exact element={<GroupSearchPage />} />
-                    <Route path="/group/:groupId" exact element={<GroupPage />} />
-                    <Route path="/" element={<Home />} />
-                    <Route exact path="/search" element={<MovieSearch setMediaType={setMediaType} mediaType={mediaType} />} />
-                    <Route path="/:mediaType/:movieID" element={<MoviePage mediaType={mediaType} />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/CreateAcc" element={<CreateAcc />} />
-                    <Route path="/personal" element={<PrivateRoute />}>
-                        <Route index element={<Personal />} />
-                        <Route path="favoriteLists" element={<FavoriteLists />} />
-                        <Route path="favoriteLists/:listId" element={<SpecificList />} />
-                    </Route>
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-            </div>
-        </UserProvider>
-    );
+  return (
+    <UserProvider>
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/Group" exact element={<GroupSearchPage />} />
+          <Route path="/group/:groupId" exact element={<GroupPage />} />
+          <Route path="/" element={<Home />} />
+          <Route
+            exact
+            path="/search"
+            element={
+              <MovieSearch setMediaType={setMediaType} mediaType={mediaType} />
+            }
+          />
+          <Route
+            path="/:mediaType/:movieID"
+            element={<MoviePage mediaType={mediaType} />}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/CreateAcc" element={<CreateAcc />} />
+          <Route path="/personal" element={<PrivateRoute />}>
+            <Route index element={<Personal />} />
+            <Route path="favoriteLists" element={<FavoriteLists />} />
+            <Route path="favoriteLists/:listId" element={<SpecificList />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+    </UserProvider>
+  );
 }
 
 export default App;
