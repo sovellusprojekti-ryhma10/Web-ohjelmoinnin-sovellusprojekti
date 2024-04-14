@@ -17,7 +17,7 @@ export default function Login() {
       try {
         const data = { username: username, password: password };
         await login(data);
-        navigate("/"); // Navigate to the home page after successful login
+        navigate("/");
       } catch (error) {
         console.error("Error logging in:", error);
       }

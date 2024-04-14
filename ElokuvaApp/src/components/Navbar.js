@@ -37,13 +37,17 @@ export default function Navbar() {
         </div>
         <br></br>
         <br></br>
-        <p>Käyttäjät</p>
-        <div className="selectBubble">
-          <img src={Profile} className="icon" alt="Profile Icon" />
-          <p>
-            <Link to="Personal">Oma sivu</Link>
-          </p>{" "}
-        </div>
+        {user && (
+          <>
+            <p>Käyttäjät</p>
+            <div className="selectBubble">
+              <img src={Profile} className="icon" alt="Profile Icon" />
+              <p>
+                <Link to="Personal">Oma sivu</Link>
+              </p>
+            </div>
+          </>
+        )}
         <div className="selectBubble">
           <img src={Profile} className="icon" alt="Profile Icon" />{" "}
           <p>Etsi käyttäjiä</p>
@@ -53,14 +57,14 @@ export default function Navbar() {
           <p>Etsi ryhmiä</p>
         </div>
         <div className="selectBubble">
-          <img src={Koti} className="icon" alt="Home Icon" />
+          <img src={Koti} className="icon" alt="Home Icon" />{" "}
           {user === null && (
             <p>
               {" "}
               <Link to="login">Login</Link>
             </p>
           )}
-          {user && <Link to="/logout">Logout</Link>}
+          {user && <Link to="/logout">Logout</Link>}{" "}
         </div>
       </div>
     </nav>

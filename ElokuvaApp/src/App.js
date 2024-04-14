@@ -15,20 +15,21 @@ import FavoriteLists from "./pages/FavoriteLists";
 import SpecificList from "./components/SpecificList";
 import MovieSearch from "./components/MovieSearch";
 import MoviePage from "./components/MoviePage";
+import Logout from "./pages/Logout"; // Ensure this import is correct
 
 function App() {
-  const [mediaType, setMediaType] = useState("movie"); // mediaType hook täytyy määritellä App.js:ssä jotta sitä voi käyttää sekä MovieSearchissa että MoviePagessa
+  const [mediaType, setMediaType] = useState("movie");
 
   return (
     <UserProvider>
       <div className="App">
         <Navbar />
         <Routes>
-          <Route path="/Group" exact element={<GroupSearchPage />} />
-          <Route path="/group/:groupId" exact element={<GroupPage />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/Group" element={<GroupSearchPage />} />
+          <Route path="/group/:groupId" element={<GroupPage />} />
+          <Route path="/*" element={<Home />} />{" "}
+          {/* Adjusted path to include a trailing "*" */}
           <Route
-            exact
             path="/search"
             element={
               <MovieSearch setMediaType={setMediaType} mediaType={mediaType} />
@@ -45,6 +46,7 @@ function App() {
             <Route path="favoriteLists" element={<FavoriteLists />} />
             <Route path="favoriteLists/:listId" element={<SpecificList />} />
           </Route>
+          <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

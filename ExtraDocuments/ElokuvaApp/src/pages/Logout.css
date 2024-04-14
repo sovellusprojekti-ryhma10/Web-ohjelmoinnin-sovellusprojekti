@@ -1,0 +1,10 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 32px;
+  position: relative;
+  width: 473px;
+  height: 374px;
+}/*# sourceMappingURL=Logout.css.map */

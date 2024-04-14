@@ -1,17 +1,22 @@
-import "./Login.css";
 import React, { useState } from "react";
+import "./Login.css";
 import "../index.css";
-import register from "../context/UserProvider";
+import { useUser } from "../context/useUser";
 
 export default function CreateAccount() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { register } = useUser();
 
-  const validate = (e) => {
+  const validate = async (e) => {
     e.preventDefault();
     if (username.length > 0 && password.length > 0) {
-      const data = { user: username, pw: password };
-      register(data);
+      try {
+        const data = { username: username, password: password };
+        await register(data);
+      } catch (error) {
+        console.error("Error registering:", error);
+      }
     }
   };
 

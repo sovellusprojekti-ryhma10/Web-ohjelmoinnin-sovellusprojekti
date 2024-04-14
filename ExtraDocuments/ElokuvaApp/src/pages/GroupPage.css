@@ -1,0 +1,16 @@
+body {
+    color: black; 
+    font-weight: bold; 
+    background-color: grey;
+  }
+  .group-page-container {
+    align-content: center;
+    color: black; 
+    font-weight: bold; 
+    background-color: grey;
+    max-width: 60%;
+    max-height: 80%;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column; /* Arrange items vertically */
+  }
