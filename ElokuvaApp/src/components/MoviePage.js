@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./MoviePage.css";
 
+
 // API keyt haetaan .envistä
 const AUTH_TOKEN = process.env.REACT_APP_READ_ACCESS_TOKEN;
 const API_KEY = process.env.REACT_APP_API_KEY;
@@ -24,6 +25,7 @@ function MoviePage() {
           };
 
           console.log(mediaType);
+
 
           const response = await fetch(
             `https://api.themoviedb.org/3/${mediaType}/${movieID}?language=en-US&api_key=${API_KEY}`,
