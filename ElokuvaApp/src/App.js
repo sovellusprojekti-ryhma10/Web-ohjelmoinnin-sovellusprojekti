@@ -10,7 +10,7 @@ import { Route, Routes } from "react-router-dom";
 import GroupSearchPage from "./pages/GroupSearchPage";
 import GroupPage from "./pages/GroupPage";
 import Personal from "./pages/Personal";
-import CreateAcc from "./pages/CreateAcc";
+import CreateAccount from "./pages/CreateAccount"
 import FavoriteLists from "./pages/FavoriteLists";
 import SpecificList from "./components/SpecificList";
 import MovieSearch from "./components/MovieSearch";
@@ -40,7 +40,7 @@ function App() {
             element={<MoviePage mediaType={mediaType} />}
           />
           <Route path="/login" element={<Login />} />
-          <Route path="/CreateAcc" element={<CreateAcc />} />
+          <Route path="/CreateAcc" element={<CreateAccount />} />
           <Route path="/personal" element={<PrivateRoute />}>
             <Route index element={<Personal />} />
             <Route path="favoriteLists" element={<FavoriteLists />} />
