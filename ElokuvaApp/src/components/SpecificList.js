@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import "./SpecificList.css";
 
@@ -7,6 +7,7 @@ function SpecificList() {
   const { listId } = useParams();
   const [listContent, setListContent] = useState([]);
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchListContent = async () => {
@@ -25,14 +26,8 @@ function SpecificList() {
           }
           const data = await response.json();
           console.log("Raw data from API:", data);
-          // Assuming the API returns an array of objects and we're interested in the first one
-          if (data.length > 0 && data[0].list_content) {
-            console.log("list_content before parsing:", data[0].list_content);
-            // Directly use list_content as an array of objects
-            setListContent(data[0].list_content);
-          } else {
-            console.error("list_content is undefined or the array is empty");
-          }
+          // Assuming the API response is an array of objects, each with a list_content property
+          setListContent(data);
         }
       } catch (error) {
         console.error("Error fetching list content:", error);
@@ -42,18 +37,24 @@ function SpecificList() {
     fetchListContent();
   }, [listId, user]);
 
+  const navigateToMovieSearch = () => {
+    navigate("/");
+  };
+
   if (!listContent) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="specific-list-container">
-      <h2>List Content</h2>
       <ul>
-        {listContent.map((item, index) => (
-          <li key={index}>{item.movie_name}</li>
-        ))}
+        {listContent.map((item, index) =>
+          item.list_content.map((movie, movieIndex) => (
+            <li key={`${index}-${movieIndex}`}>{movie.movie_name}</li>
+          ))
+        )}
       </ul>
+      <button onClick={navigateToMovieSearch}>Lisää elokuvia</button>
     </div>
   );
 }
