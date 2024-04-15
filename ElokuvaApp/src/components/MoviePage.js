@@ -14,6 +14,9 @@ function MoviePage() {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
+        if (!movieID) {
+          throw new Error("Movie ID is undefined");
+        }
         const response = await fetch(
           `https://api.themoviedb.org/3/${mediaType}/${movieID}?language=en-US&api_key=${API_KEY}`
         );
@@ -59,19 +62,19 @@ function MoviePage() {
 
   const handleAddToFavoriteList = async () => {
     try {
-      // Ensure a list has been selected
       if (!selectedListId) {
         throw new Error("No list selected");
       }
 
-      // Prepare the content to be added to the favorite list
+      // Include movie's name, image, and description in the content to be added
       const listContent = [
         {
           movie_name: movieDetails.title || movieDetails.name,
+          movie_image: `https://image.tmdb.org/t/p/original${movieDetails.poster_path}`,
+          movie_description: movieDetails.overview,
         },
       ];
 
-      // Send the request to the correct endpoint
       const response = await fetch(
         `http://localhost:3001/api/favorite-lists/${selectedListId}/content`,
         {
@@ -85,7 +88,6 @@ function MoviePage() {
       );
       if (!response.ok) throw new Error("Failed to add to favorites");
 
-      // Clear selected list
       setSelectedListId("");
     } catch (error) {
       console.error("Error adding to favorites:", error);
