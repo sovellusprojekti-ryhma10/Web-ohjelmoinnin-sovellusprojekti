@@ -1,44 +1,98 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import "./MoviePage.css";
-
-// API keyt haetaan .envistä
-const AUTH_TOKEN = process.env.REACT_APP_READ_ACCESS_TOKEN;
-const API_KEY = process.env.REACT_APP_API_KEY;
+import { UserContext } from "../context/UserContext";
 
 function MoviePage() {
-  // Mediatyypin arvo on joko 'movie' tai 'tv' ja valitaan MovieSearch -sivulla, josta se tulee tähän funktioon
-  const { movieID, mediaType } = useParams(); // Leffan ID otetaan urlin parametreista
+  const { movieID, mediaType } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
+  const [favoriteLists, setFavoriteLists] = useState([]);
+  const [selectedListId, setSelectedListId] = useState("");
+  const { user } = useContext(UserContext);
+  const API_KEY = process.env.REACT_APP_API_KEY;
 
   useEffect(() => {
-    if (movieID) {
-      const fetchMovieDetails = async () => {
-        try {
-          const options = {
-            method: "GET",
-            headers: {
-              accept: "application/json",
-              Authorization: AUTH_TOKEN,
-            },
-          };
-
-          console.log(mediaType);
-
-          const response = await fetch(
-            `https://api.themoviedb.org/3/${mediaType}/${movieID}?language=en-US&api_key=${API_KEY}`,
-            options
-          );
-          const data = await response.json();
-          setMovieDetails(data);
-        } catch (error) {
-          console.error("Error fetching data:", error);
+    const fetchMovieDetails = async () => {
+      try {
+        if (!movieID) {
+          throw new Error("Movie ID is undefined");
         }
-      };
+        const response = await fetch(
+          `https://api.themoviedb.org/3/${mediaType}/${movieID}?language=en-US&api_key=${API_KEY}`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setMovieDetails(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-      fetchMovieDetails();
+    fetchMovieDetails();
+  }, [movieID, mediaType, API_KEY]);
+
+  useEffect(() => {
+    const fetchFavoriteLists = async () => {
+      try {
+        if (user && user.token) {
+          const response = await fetch(
+            "http://localhost:3001/api/favorite-lists",
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user.token}`,
+              },
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          setFavoriteLists(data);
+        }
+      } catch (error) {
+        console.error("Error fetching favorite lists:", error);
+      }
+    };
+
+    fetchFavoriteLists();
+  }, [user]);
+
+  const handleAddToFavoriteList = async () => {
+    try {
+      if (!selectedListId) {
+        throw new Error("No list selected");
+      }
+
+      // Include movie's name, image, and description in the content to be added
+      const listContent = [
+        {
+          movie_name: movieDetails.title || movieDetails.name,
+          movie_image: `https://image.tmdb.org/t/p/original${movieDetails.poster_path}`,
+          movie_description: movieDetails.overview,
+        },
+      ];
+
+      const response = await fetch(
+        `http://localhost:3001/api/favorite-lists/${selectedListId}/content`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ list_content: listContent }),
+        }
+      );
+      if (!response.ok) throw new Error("Failed to add to favorites");
+
+      setSelectedListId("");
+    } catch (error) {
+      console.error("Error adding to favorites:", error);
     }
-  }, [movieID]);
+  };
 
   return (
     <div className="movie-details">
@@ -50,8 +104,7 @@ function MoviePage() {
             alt="Movie Poster"
           />
           <div className="description-container">
-            <h2>{movieDetails.title}</h2>
-            <h2>{movieDetails.name}</h2>
+            <h2>{movieDetails.title || movieDetails.name}</h2>
             <p>
               Genres:{" "}
               {movieDetails.genres &&
@@ -61,6 +114,27 @@ function MoviePage() {
             <p>Release Date: {movieDetails.release_date}</p>
             <p>Vote Average: {movieDetails.vote_average}</p>
           </div>
+          {user && (
+            <>
+              <select
+                value={selectedListId}
+                onChange={(e) => {
+                  console.log("Dropdown value changed:", e.target.value); // Debugging line
+                  setSelectedListId(e.target.value);
+                }}
+              >
+                <option value="">Valitse suosikkilista</option>
+                {favoriteLists.map((list) => (
+                  <option key={list.id} value={list.id}>
+                    {list.favorite_list_name}
+                  </option>
+                ))}
+              </select>
+              <button onClick={handleAddToFavoriteList}>
+                Lisää suosikkilistaan
+              </button>
+            </>
+          )}
         </>
       )}
     </div>
