@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './GroupPage.css'; 
+import { useUser } from "../context/useUser";
 
 const GroupPage = () => {
+  const { user } = useUser();
   const { groupId } = useParams();
   const [groupInfo, setGroupInfo] = useState(null);
   const [description, setDescription] = useState('');
-  const accountId = 5;
 
   useEffect(() => {
     const fetchGroupInfo = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/group/${groupId}?accountId=${accountId}`);
+        const response = await fetch(`http://localhost:3001/group/${groupId}`, {
+          headers: {
+        Authorization: `Bearer ${user.token}`
+      }
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch group information');
         }
@@ -35,9 +40,10 @@ const GroupPage = () => {
       const response = await fetch(`http://localhost:3001/group/${groupId}/description`, {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ description, accountId, groupId }),
+        body: JSON.stringify({ description, groupId }),
       });
       if (!response.ok) {
         throw new Error('Failed to save description');
@@ -59,9 +65,10 @@ const GroupPage = () => {
       const response = await fetch(`http://localhost:3001/group/${groupId}/remove/person`, {
         method: 'DELETE',
         headers: {
+          Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ groupId, accountId, memberName }),
+        body: JSON.stringify({ groupId, memberName }),
       });
       if (!response.ok) {
         throw new Error('Failed to update member status');
@@ -77,8 +84,9 @@ const GroupPage = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`
         },
-        body: JSON.stringify({ groupId, accountId, request }),
+        body: JSON.stringify({ groupId, request }),
       });
       if (!response.ok) {
         throw new Error('Failed to update user to group');
@@ -95,8 +103,9 @@ const GroupPage = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`
         },
-        body: JSON.stringify({ groupId, accountId, memberName }),
+        body: JSON.stringify({groupId, memberName }),
       });
       if (!response.ok) {
         throw new Error('Failed to update member to admin');
