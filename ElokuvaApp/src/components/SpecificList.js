@@ -45,18 +45,22 @@ function SpecificList() {
 
   return (
     <div className="specific-list-container">
-      <ul>
-        {listContent.map((item, index) => {
-          const movies = JSON.parse(item.list_content);
-          return movies.map((movie, movieIndex) => (
-            <li key={`${index}-${movieIndex}`}>
-              <img src={movie.movie_image} alt={movie.movie_name} />
-              <h3>{movie.movie_name}</h3>
-              <p>{movie.movie_description}</p>
-            </li>
-          ));
-        })}
-      </ul>
+      {listContent.map((item, index) => {
+        const movies = JSON.parse(item.list_content);
+        return (
+          <div key={index} className="movie-list">
+            <ul>
+              {movies.map((movie, movieIndex) => (
+                <li key={`${index}-${movieIndex}`}>
+                  <img src={movie.movie_image} alt={movie.movie_name} />
+                  <h3>{movie.movie_name}</h3>
+                  <p>{movie.movie_description}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
       <button onClick={() => navigate("/")}>Lisää elokuvia</button>
     </div>
   );
