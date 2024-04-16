@@ -6,9 +6,9 @@ import PrivateRoute from "./pages/PrivateRoute";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import UserProvider from "./context/UserProvider";
-import GroupSearchPage from './pages/GroupSearchPage'
-import GroupPage from './pages/GroupPage'
 import { Route, Routes } from "react-router-dom";
+import GroupSearchPage from "./pages/GroupSearchPage";
+import GroupPage from "./pages/GroupPage";
 import Personal from "./pages/Personal";
 import CreateAcc from "./pages/createAcc";
 import FavoriteLists from "./pages/FavoriteLists";

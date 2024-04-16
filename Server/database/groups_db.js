@@ -25,6 +25,7 @@ const sql = {
     GET_REQUEST_JOIN_USERNAME: 'SELECT DISTINCT A.username FROM User_Groups UG JOIN Accounts A ON UG.account_id = A.id WHERE UG.group_id = ($1) AND request_sent = (FALSE)',
 
     GET_CREATED_BY: 'SELECT username FROM Accounts WHERE id = ($1)',
+
     ADD_CONTENT: 'UPDATE Group_pages SET content = $1 WHERE group_id = $2',
     ADD_GROUP_PAGES: 'INSERT INTO Group_pages (group_id) VALUES ($1)',
 
@@ -38,6 +39,40 @@ const sql = {
     
 
 };
+
+async function addUserGroup(accountId, group_name) {
+    try {
+        console.log("Tuleeko tämä tänne testi testi");
+        const result = await pgPool.query(sql.GET_GROUP_ID, [group_name]);
+        const groupId = result.rows[0].id;
+
+        const checkResult = await pgPool.query(sql.CHECK_IF_USER_IS_IN_GROUP, [account_id, groupId]);
+        if (checkResult.rows.length > 0) {
+            console.log('User is already in the group');
+            return groupId; // Return the group ID
+        }
+
+        await pgPool.query(sql.ADD_USER_GROUP, [accountId, groupId, false, false]);
+        return groupId;
+
+    } catch (error) {
+        console.error('Error adding user group:', error);
+        throw error;
+    }
+}
+
+async function addGroups(group_name, account_id) {
+    try {
+        
+        const result = await pgPool.query(sql.ADD_GROUP, [group_name, account_id]);
+        const groupId = result.rows[0].id; // Get the ID of the newly inserted group
+        await pgPool.query(sql.ADD_USER_GROUP, [account_id, groupId, true, true]);
+        await pgPool.query(sql.ADD_GROUP_PAGES, [groupId]);
+    } catch (error) {
+        console.error('Error adding group:', error);
+        throw error;
+    }
+}
 
 async function removeGroupsMember(memberName, adminId, groupId) {
     try {
@@ -55,18 +90,6 @@ async function removeGroupsMember(memberName, adminId, groupId) {
     }
 }
 
-async function addGroups(group_name, created_by, account_id) {
-    try {
-        
-        const result = await pgPool.query(sql.ADD_GROUP, [group_name, created_by]);
-        const groupId = result.rows[0].id; // Get the ID of the newly inserted group
-        await pgPool.query(sql.ADD_USER_GROUP, [account_id, groupId, true, true]);
-        await pgPool.query(sql.ADD_GROUP_PAGES, [groupId]);
-    } catch (error) {
-        console.error('Error adding group:', error);
-        throw error;
-    }
-}
 
 async function getGroups(perPage, currentPage) {
     try {

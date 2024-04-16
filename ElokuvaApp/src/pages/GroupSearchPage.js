@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext  } from 'react';
+
 import './GroupSearchPage.css'; 
 import { useNavigate } from 'react-router-dom';
+import { useUser } from "../context/useUser";
+
 
 const GroupSearchPage = () => {
+  const { user } = useUser();
   const [scrollPosition, setScrollPosition] = useState(0);
   const [groups, setGroups] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [writeBoxText, setWriteBoxText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(20);
-  const created_by = 5;
-  const accountId = 5;
   const navigate = useNavigate();
+  
 
 
   useEffect(() => {
@@ -32,7 +35,8 @@ const GroupSearchPage = () => {
   // Function to fetch groups from the backend
   const fetchGroups = async (currentPage) => {
     try { 
-      const response = await fetch(`http://localhost:3001/group/all?currentPage=${currentPage}&perPage=${perPage}`);
+      const response = await fetch(
+        `http://localhost:3001/group/all?currentPage=${currentPage}&perPage=${perPage}`,)
       if (!response.ok) {
         throw new Error('Failed to fetch groups');
       }
@@ -50,9 +54,10 @@ const GroupSearchPage = () => {
       const response = await fetch(`http://localhost:3001/group/join`, {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ account_id: accountId, group_name: group_name })
+        body: JSON.stringify({ group_name: group_name })
       });
       if (!response.ok) {
         throw new Error('Failed to join group');
@@ -72,9 +77,10 @@ const GroupSearchPage = () => {
       const response = await fetch('http://localhost:3001/group/add', {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ group_name: writeBoxText, created_by: created_by, account_id: accountId })
+        body: JSON.stringify({ group_name: writeBoxText})
       });
       if (!response.ok) {
         throw new Error('Failed to create group');
@@ -158,5 +164,6 @@ const GroupSearchPage = () => {
 
   );
 };
+
 
 export default GroupSearchPage;

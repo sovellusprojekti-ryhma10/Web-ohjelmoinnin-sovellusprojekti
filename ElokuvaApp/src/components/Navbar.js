@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useUser } from "../context/useUser";
 import UserProvider from "../context/UserProvider";
 import PrivateRoute from "../pages/PrivateRoute";
-
 import Group from "../icons/group.png";
 import Search from "../icons/search.png";
 import Grouppage from "../icons/groupPage.png";
@@ -49,8 +48,10 @@ export default function Navbar() {
           <p>Etsi käyttäjiä</p>
         </div>
         <div className="selectBubble">
-          <img src={Group} className="icon" alt="Group Icon" />{" "}
-          <p>Etsi ryhmiä</p>
+          <img src={Group} className="icon" alt="Group Icon" />
+          <p>
+          <Link to="Group">Etsi ryhmiä</Link>
+          </p>{" "}
         </div>
         <div className="selectBubble">
           <img src={Koti} className="icon" alt="Home Icon" />
