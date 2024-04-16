@@ -10,7 +10,11 @@ const favoriteListsRouter = require("./routes/FavoriteLists");
 const groupRouter = require ("./routes/group")
 
 const app = express(); // Define the app variable before using it
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Adjust this to match your client's origin
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

@@ -1,17 +1,34 @@
-/* SpecificList.css */
-
 .specific-list-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  .specific-list-container h2 {
-    margin-bottom: 20px;
-    text-align: center;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-left: 250px; /* Adjust based on the width of your navbar */
+ }
+ 
+ .specific-list-container h2 {
+  margin-bottom: 20px;
+  text-align: center;
+ }
+ 
+ .specific-list-container ul li img {
+  max-width: 250px; /* Adjust the width as needed */
+  max-height: 500px; /* Adjust the height as needed */
+  object-fit: cover; /* This ensures the image covers the area without stretching */
+  margin: auto; /* Centers the image horizontally */
+  display: block; /* Ensures the image is treated as a block element for centering */
+  margin-bottom: 10px; /* Adds some space below the image */
+ }
+ 
+ .specific-list-container ul li p {
+  max-width: 80%; /* Limits the width of the description text */
+  margin: auto; /* Centers the text block */
+  text-align: justify; /* Justifies the text to prevent long single lines */
+ }
+ 
+ 
+
   

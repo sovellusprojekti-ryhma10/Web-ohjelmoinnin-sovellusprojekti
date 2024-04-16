@@ -19,14 +19,16 @@ export default function UserProvider({ children }) {
       .post("http://localhost:3001/login", json, options)
       .then((response) => {
         const token = response.data.token;
-        setUser({ ...data, token: token });
-        sessionStorage.setItem("user", user);
+        const updatedUser = { ...data, token: token };
+        setUser(updatedUser);
+        sessionStorage.setItem("user", JSON.stringify(updatedUser)); // Store the updated user object
         navigate("/");
       })
       .catch((error) => {
         throw error;
       });
   };
+
   const register = async (data) => {
     const json = JSON.stringify(data);
     const options = {
@@ -39,8 +41,9 @@ export default function UserProvider({ children }) {
       .post("http://localhost:3001/register", json, options)
       .then((response) => {
         const token = response.data.token;
-        setUser({ ...data, token: token });
-        sessionStorage.setItem("user", user);
+        const updatedUser = { ...data, token: token };
+        setUser(updatedUser);
+        sessionStorage.setItem("user", JSON.stringify(updatedUser)); // Store the updated user object
         navigate("/");
       })
       .catch((error) => {

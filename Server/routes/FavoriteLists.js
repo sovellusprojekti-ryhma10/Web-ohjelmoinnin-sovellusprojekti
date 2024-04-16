@@ -37,6 +37,26 @@ router.get("/favorite-lists", auth, async (req, res) => {
   }
 });
 
+// Route for deleting a specific favorite list
+router.delete("/favorite-lists/:listId", auth, async (req, res) => {
+  const { listId } = req.params;
+
+  try {
+    // Delete the list from the database
+    const result = await pgPool.query(
+      "DELETE FROM personal_pages WHERE id = $1 RETURNING *",
+      [listId]
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "List not found" });
+    }
+    res.json({ message: "List deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred" });
+  }
+});
+
 // Route for fetching a specific favorite list
 router.get("/favorite-lists/:listId", auth, async (req, res) => {
   const { listId } = req.params;
@@ -77,5 +97,44 @@ router.post("/favorite-lists/:listId/content", auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+// Route for deleting a specific movie from a favorite list's content
+router.delete("/favorite-lists/:listId/movies", auth, async (req, res) => {
+  const { listId } = req.params;
+  const { movieName, movieImage, movieDescription } = req.body;
 
+  try {
+    // Fetch the current content of the list
+    const result = await pgPool.query(
+      "SELECT list_content FROM favorite_list_content WHERE list_id = $1",
+      [listId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "List not found" });
+    }
+
+    // Parse the list content from JSON
+    const listContent = JSON.parse(result.rows[0].list_content);
+
+    // Find and remove the specified movie from the list content
+    const updatedListContent = listContent.filter(
+      (movie) =>
+        movie.movie_name !== movieName ||
+        movie.movie_image !== movieImage ||
+        movie.movie_description !== movieDescription
+    );
+
+    // Update the list's content in the database
+    await pgPool.query(
+      "UPDATE favorite_list_content SET list_content = $1 WHERE list_id = $2",
+      [JSON.stringify(updatedListContent), listId]
+    );
+
+    res.json({ message: "Movie deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred" });
+  }
+});
+
+module.exports = router;
