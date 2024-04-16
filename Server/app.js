@@ -7,7 +7,6 @@ const { verifyCredentials } = require("./database/auth_db");
 const { auth } = require("./middleware/auth");
 const pgPool = require("./database/pg_connection");
 const favoriteListsRouter = require("./routes/FavoriteLists");
-const groupRouter = require ("./routes/group")
 
 const app = express(); // Define the app variable before using it
 app.use(
@@ -20,7 +19,6 @@ app.use(express.urlencoded({ extended: false }));
 
 // Use the favoriteListsRouter as middleware
 app.use("/api", favoriteListsRouter);
-app.use("/group", groupRouter)
 
 const port = 3001;
 
