@@ -8,6 +8,11 @@ body {
   font-style: normal;
   font-weight: 600;
 }
+@media (max-width: 800px) {
+  body {
+    background-color: #0000ff;
+  }
+}
 
 h1 {
   font-size: 1.5 rem;
@@ -44,6 +49,11 @@ a {
 }
 .navbar h1 {
   padding: 1% 0 10% 0;
+}
+@media screen and (min-width: 200) {
+  .navbar {
+    display: none ;
+  }
 }
 
 .selectBubble {

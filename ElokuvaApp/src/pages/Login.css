@@ -8,6 +8,11 @@ body {
   font-style: normal;
   font-weight: 600;
 }
+@media (min-width: 900px) {
+  body {
+    background-color: #0000ff;
+  }
+}
 
 h1 {
   font-size: 1.5 rem;
@@ -87,4 +92,9 @@ a {
 }
 .input:active:hover {
   background-color: #dbdeff;
+}
+
+.linksign {
+  padding: 10px;
+  margin: 10px 10px 10px 10px;
 }/*# sourceMappingURL=Login.css.map */
