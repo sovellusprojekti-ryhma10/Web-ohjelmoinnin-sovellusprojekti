@@ -7,6 +7,7 @@ function MoviePage() {
   const { movieID, mediaType } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
   const [favoriteLists, setFavoriteLists] = useState([]);
+  const [ratings, setRatings] = useState([]);
   const [selectedListId, setSelectedListId] = useState("");
   const { user } = useContext(UserContext);
   const API_KEY = process.env.REACT_APP_API_KEY;
@@ -32,6 +33,28 @@ function MoviePage() {
 
     fetchMovieDetails();
   }, [movieID, mediaType, API_KEY]);
+
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const url = `http://localhost:3001/movie_ratings/${movieID}`;
+        console.log("Fetching ratings from:", url);
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("Fetched ratings:", data);
+        setRatings(data.ratings); // Assuming data has a structure like { ratings: [], content: [] }
+      } catch (error) {
+        console.error("Error fetching ratings:", error);
+      }
+    };
+  
+    if (movieID) {
+      fetchRatings();
+    }
+  }, [movieID]);  
 
   useEffect(() => {
     const fetchFavoriteLists = async () => {
@@ -137,7 +160,26 @@ function MoviePage() {
           )}
         </>
       )}
+      <div className="ratings-container">
+        <h3>Ratings:</h3>
+        <ul>
+          {ratings.map((rating, index) => (
+            <li key={index}>
+              {/* Render rating as stars */}
+              {/* Assuming rating is a number from 1 to 5 */}
+              {Array.from({ length: rating.rating }, (_, i) => (
+                <span key={i}>★</span>
+              ))}
+              {/* Render other rating details like username, review, submission date */}
+              <p>Username: {rating.username}</p>
+              <p>Review: {rating.review}</p>
+              <p>Submission Date: {rating.submission_date}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
+    
   );
 }
 
