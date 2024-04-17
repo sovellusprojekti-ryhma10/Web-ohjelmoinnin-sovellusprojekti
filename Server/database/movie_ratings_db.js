@@ -21,7 +21,16 @@ async function getMovieRatings(movieId) {
     }
   }
 
+    async function addMovieRating(username, rating, review, submissionDate, movieId) {
+    try {
+      await pgPool.query(sql.ADD_REVIEW, [username, rating, review, submissionDate, movieId]);
+    } catch (error) {
+      console.error("Error adding movie rating:", error);
+      throw error;
+    }
+  }
 
 module.exports = {
-  getMovieRatings
+  getMovieRatings,
+  addMovieRating
 };

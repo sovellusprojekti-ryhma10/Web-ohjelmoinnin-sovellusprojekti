@@ -9,6 +9,8 @@ function MoviePage() {
   const [favoriteLists, setFavoriteLists] = useState([]);
   const [ratings, setRatings] = useState([]);
   const [selectedListId, setSelectedListId] = useState("");
+  const [userRating, setUserRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
   const { user } = useContext(UserContext);
   const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -34,23 +36,23 @@ function MoviePage() {
     fetchMovieDetails();
   }, [movieID, mediaType, API_KEY]);
 
-  useEffect(() => {
-    const fetchRatings = async () => {
-      try {
-        const url = `http://localhost:3001/movie_ratings/${movieID}`;
-        console.log("Fetching ratings from:", url);
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log("Fetched ratings:", data);
-        setRatings(data.ratings); // Assuming data has a structure like { ratings: [], content: [] }
-      } catch (error) {
-        console.error("Error fetching ratings:", error);
+  const fetchRatings = async () => {
+    try {
+      const url = `http://localhost:3001/movie_ratings/${movieID}`;
+      console.log("Fetching ratings from:", url);
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    };
-  
+      const data = await response.json();
+      console.log("Fetched ratings:", data);
+      setRatings(data.ratings); // Assuming data has a structure like { ratings: [], content: [] }
+    } catch (error) {
+      console.error("Error fetching ratings:", error);
+    }
+  };
+
+  useEffect(() => {
     if (movieID) {
       fetchRatings();
     }
@@ -117,6 +119,43 @@ function MoviePage() {
     }
   };
 
+  const handleRatingChange = (rating) => {
+    setUserRating(rating);
+  };
+
+  const handleReviewTextChange = (e) => {
+    setReviewText(e.target.value);
+  };
+
+  const handleSubmitRating = async () => {
+    try {
+      if (!userRating || !reviewText) {
+        throw new Error("Please provide a rating and review text");
+      }
+
+      const response = await fetch(
+        `http://localhost:3001/movie_ratings/${movieID}/add_rating`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ username: user.username, rating: userRating, review: reviewText }),
+        }
+      );
+      if (!response.ok) throw new Error("Failed to submit rating");
+
+      // After successful submission, update ratings
+      fetchRatings();
+      // Clear rating and review text
+      setUserRating(0);
+      setReviewText("");
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+    }
+  };
+
   return (
     <div className="movie-details">
       {movieDetails && (
@@ -177,6 +216,31 @@ function MoviePage() {
             </li>
           ))}
         </ul>
+        {user && (
+        <>
+          {/* UI for rating selection */}
+          <div className="rating-container">
+            <span>Your Rating: </span>
+            {[1, 2, 3, 4, 5].map((rating) => (
+              <span
+                key={rating}
+                className={rating <= userRating ? "active" : ""}
+                onClick={() => handleRatingChange(rating)}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+          {/* Input for review text */}
+          <textarea
+            value={reviewText}
+            onChange={handleReviewTextChange}
+            placeholder="Write a review..."
+          />
+          {/* Button to submit rating and review */}
+          <button onClick={handleSubmitRating}>Submit Rating</button>
+        </>
+      )}
       </div>
     </div>
     
