@@ -101,4 +101,15 @@ a:visited {
 .selectBubble a:active {
   color: #020b5e;
   animation: activate 1s;
+  
+.logout-button {
+  text-decoration: inherit;
+  cursor: pointer;
+}
+
+.logout-button a:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+
 }/*# sourceMappingURL=Navbar.css.map */
