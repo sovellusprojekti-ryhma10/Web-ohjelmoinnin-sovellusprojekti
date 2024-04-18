@@ -12,12 +12,13 @@ import Profile from "../icons/profile.png";
 import Settings from "../icons/settings.png";
 import Shows from "../icons/shows.png";
 import Sort from "../icons/sort.png";
-
+import Hambourger from "./Hambourger.js";
 export default function Navbar() {
   const { user } = useUser();
 
   return (
     <nav>
+      <Hambourger/>
       <div className="navbar">
         <h1>Elokuva-sivusto</h1>
         <p>Löydä elokuva</p>

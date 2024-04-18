@@ -1,93 +1,121 @@
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #e9e9e9;
+  font-family: "inter", sans-serif;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.5 rem;
+}
+
+a {
+  font-size: 1rem;
+  text-decoration: none;
+}
+a:visited {
+  color: #131313;
+}
+
+.content {
+  padding: 1% 1% 1% 1%;
+  width: 80%;
+  padding-left: 20%;
+}
+
+@keyframes activate {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(0.05);
+  }
+}
 .App {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #f5f5f5; /* Light background color */
-   }
-   
-   .search-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px; /* Space between search inputs and buttons */
-    width: 100%;
-    max-width: 600px; /* Maximum width for the search container */
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff; /* White background for the search container */
-   }
-   
-   .search-container input[type="text"],
-   .search-container input[type="number"],
-   .search-container select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-   }
-   
-   .search-container button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px; /* Add some space above the button */
-   }
-   
-   .search-container button:hover {
-    background-color: #0056b3;
-   }
-   
-   .movie-info,
-   .movie-info-b,
-   .movie-info-c,
-   .movie-info-d {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px; /* Space between movie title and image */
-    width: 100%;
-    max-width: 300px; /* Maximum width for each movie info section */
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff; /* White background for movie info sections */
-    margin-bottom: 20px; /* Space between movie info sections */
-   }
-   
-   .movie-info h2,
-   .movie-info-b h2,
-   .movie-info-c h2,
-   .movie-info-d h2 {
-    margin: 0; /* Remove default margin from h2 elements */
-   }
-   
-   .navigation-buttons {
-    display: flex;
-    justify-content: space-between; /* Space between Previous and Next buttons */
-    width: 100%;
-    max-width: 600px; /* Maximum width for the navigation buttons container */
-    padding: 20px;
-    margin-top: 20px; /* Space above the navigation buttons */
-   }
-   
-   .navigation-buttons button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-   }
-   
-   .navigation-buttons button:hover {
-    background-color: #0056b3;
-   }
-   
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+  /* Light background color */
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  /* Space between search inputs and buttons */
+  width: 100%;
+  max-width: 600px;
+  /* Maximum width for the search container */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  /* White background for the search container */
+}
+.search-container input[type=text], .search-container input[type=number] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.search-container select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.search-container button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  /* Add some space above the button */
+}
+ 
+.movie-info, .movie-info-b, .movie-info-c, .movie-info-d {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  /* Space between movie title and image */
+  width: 100%;
+  max-width: 300px;
+  /* Maximum width for each movie info section */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  /* White background for movie info sections */
+  margin-bottom: 20px;
+  /* Space between movie info sections */
+}
+
+.movie-info h2, .movie-info-b h2, .movie-info-c h2, .movie-info-d h2 {
+  margin: 0;
+  /* Remove default margin from h2 elements */
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  /* Space between Previous and Next buttons */
+  width: 100%;
+  max-width: 600px;
+  /* Maximum width for the navigation buttons container */
+  padding: 20px;
+  margin-top: 20px;
+  /* Space above the navigation buttons */
+}/*# sourceMappingURL=MovieSearch.css.map */
