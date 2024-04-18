@@ -116,12 +116,50 @@ const GroupPage = () => {
     }
   };
 
+  const handleRemoveAdmin = async (admin) => {
+    const memberName = admin;
+    console.log(admin);
+    try {
+      const response = await fetch(`http://localhost:3001/group/${groupId}/remove/admin`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`
+        },
+        body: JSON.stringify({groupId, memberName}),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update admin to member');
+      }
+      console.log(`removing  ${admin}s admin rights`);
+    } catch (error) {
+      console.error('Error updating admin status:', error);
+    }
+  };
+  const handleDeleteGroup = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/group/${groupId}/remove/group`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`
+        },
+        body: JSON.stringify({groupId}),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to remove group');
+      }
+      console.log(`removed group`);
+    } catch (error) {
+      console.error('Error removing group:', error);
+    }
+  };
 
   if (!groupInfo) {
     return <div>Loading...</div>;
   }
 
-  const { groupName, createdBy, groupData, groupMembers, isAdmin, groupAdmins, requestToJoin } = groupInfo;
+  const { groupName, createdBy, groupData, groupMembers, isAdmin, groupAdmins, requestToJoin, isCreatedBy } = groupInfo;
   const content = groupData.length > 0 ? groupData[0].content : "No content available";
   console.log(groupName, createdBy, groupData);
 
@@ -171,7 +209,7 @@ const GroupPage = () => {
     {isAdmin && (
       <>
         <button onClick={() => handleRemoveFromGroup(admin)}>poista ryhmästä</button>
-        <button onClick={() => handleGiveAdmin(admin)}>poista admin</button>
+        <button onClick={() => handleRemoveAdmin(admin)}>poista admin</button>
       </>
     )}
   </div> 
@@ -187,6 +225,9 @@ const GroupPage = () => {
       <button onClick={handleDescriptionSubmit}>Submit Description</button>
       </>
           )}
+          <div>
+          <button onClick={handleDeleteGroup}>Poista Ryhmä</button>
+          </div>
           </div>
     </div>
   );
