@@ -56,7 +56,7 @@ function MoviePage() {
     if (movieID) {
       fetchRatings();
     }
-  }, [movieID]);  
+  }, [movieID]);
 
   useEffect(() => {
     const fetchFavoriteLists = async () => {
@@ -139,9 +139,13 @@ function MoviePage() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            //Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ username: user.username, rating: userRating, review: reviewText }),
+          body: JSON.stringify({
+            username: user.username,
+            rating: userRating,
+            review: reviewText,
+          }),
         }
       );
       if (!response.ok) throw new Error("Failed to submit rating");
@@ -201,50 +205,56 @@ function MoviePage() {
       )}
       <div className="ratings-container">
         <h3>Ratings:</h3>
-        <ul>
-  {ratings.map((rating, index) => (
-    <li key={index}>
-      {/* Render rating as stars */}
-      <div className="star-container">
-        {Array.from({ length: rating.rating }, (_, i) => (
-          <span key={i} className="star filled">★</span>
-        ))}
-      </div>
-      {/* Render other rating details like username, review, submission date */}
-      <p>Username: {rating.username}</p>
-      <p>Review: {rating.review}</p>
-      <p>Submission Date: {rating.submission_date}</p>
-    </li>
-  ))}
-</ul>
+        <div className="reviews-box">
+          <ul>
+            {ratings.map((rating, index) => (
+              <li key={index}>
+                {/* Render rating as stars */}
+                <div className="star-container">
+                  {Array.from({ length: rating.rating }, (_, i) => (
+                    <span key={i} className="star filled">
+                      ★
+                    </span>
+                  ))}
+                </div>
+                {/* Render other rating details like username, review, submission date */}
+                <p>Username: {rating.username}</p>
+                <p>Review: {rating.review}</p>
+                <p>
+                  Submission Date:{" "}
+                  {new Date(rating.submission_date).toLocaleDateString()}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
         {user && (
-  <>
-    {/* UI for rating selection */}
-    <div className="rating-container">
-      <span>Your Rating: </span>
-      {[1, 2, 3, 4, 5].map((rating) => (
-        <span
-          key={rating}
-          className={`star ${rating <= userRating ? "filled" : ""}`}
-          onClick={() => handleRatingChange(rating)}
-        >
-          ★
-        </span>
-      ))}
-    </div>
-    {/* Input for review text */}
-    <textarea
-      value={reviewText}
-      onChange={handleReviewTextChange}
-      placeholder="Write a review..."
-    />
-    {/* Button to submit rating and review */}
-    <button onClick={handleSubmitRating}>Submit Rating</button>
-  </>
-      )}
+          <>
+            {/* UI for rating selection */}
+            <div className="rating-container">
+              <span>Your Rating: </span>
+              {[1, 2, 3, 4, 5].map((rating) => (
+                <span
+                  key={rating}
+                  className={`star ${rating <= userRating ? "filled" : ""}`}
+                  onClick={() => handleRatingChange(rating)}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+            {/* Input for review text */}
+            <textarea
+              value={reviewText}
+              onChange={handleReviewTextChange}
+              placeholder="Write a review..."
+            />
+            {/* Button to submit rating and review */}
+            <button onClick={handleSubmitRating}>Submit Rating</button>
+          </>
+        )}
       </div>
     </div>
-    
   );
 }
 

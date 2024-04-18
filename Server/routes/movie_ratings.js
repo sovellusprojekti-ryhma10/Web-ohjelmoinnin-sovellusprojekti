@@ -4,7 +4,7 @@ const {
   } = require("../database/movie_ratings_db");
   const express = require("express");
   const router = express.Router();
-//  const { auth } = require("../middleware/auth");
+  const { auth } = require("../middleware/auth");
   
   router.get("/:movieId", async (req, res) => {
     const movieId = req.params.movieId;
@@ -16,7 +16,7 @@ const {
     res.json(data);
   });
 
-  router.post("/:movieId/add_rating", async (req, res) => {
+  router.post("/:movieId/add_rating", auth, async (req, res) => {
     const { username, rating, review } = req.body;
     const movieId = req.params.movieId;
   
