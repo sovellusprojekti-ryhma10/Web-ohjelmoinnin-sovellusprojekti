@@ -43,7 +43,7 @@ const Personal = () => {
         </div>
         <div>
           <h2>Groups</h2>
-          <div className="group-list1" style={{ height: '300px', overflowY: 'scroll' }}>
+          <div className="group-list" style={{ height: '300px', overflowY: 'scroll' }}>
           <ul>
             {groups.map(group => (
               <li key={group.group_id}>

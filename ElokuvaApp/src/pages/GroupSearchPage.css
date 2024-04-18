@@ -15,7 +15,7 @@ body {
   display: flex;
   flex-direction: column; /* Arrange items vertically */
 }
-.group-insides1 {
+.group-insides {
   width: 1000px;
   background-color: white;
   padding: 10px
@@ -31,6 +31,9 @@ h2 {
 
 .input-group {
   margin-bottom: 10px;
+}
+.group-list {
+  width: 100%
 }
 
 .group-list ul {
