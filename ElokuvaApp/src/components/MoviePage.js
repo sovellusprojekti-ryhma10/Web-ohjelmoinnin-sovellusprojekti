@@ -46,7 +46,7 @@ function MoviePage() {
       }
       const data = await response.json();
       console.log("Fetched ratings:", data);
-      setRatings(data.ratings); // Assuming data has a structure like { ratings: [], content: [] }
+      setRatings(data.ratings); 
     } catch (error) {
       console.error("Error fetching ratings:", error);
     }
@@ -150,9 +150,7 @@ function MoviePage() {
       );
       if (!response.ok) throw new Error("Failed to submit rating");
 
-      // After successful submission, update ratings
       fetchRatings();
-      // Clear rating and review text
       setUserRating(0);
       setReviewText("");
     } catch (error) {
@@ -172,20 +170,20 @@ function MoviePage() {
           <div className="description-container">
             <h2>{movieDetails.title || movieDetails.name}</h2>
             <p>
-              Genres:{" "}
+              Genret:{" "}
               {movieDetails.genres &&
                 movieDetails.genres.map((genre) => genre.name).join(", ")}
             </p>
-            <p>Overview: {movieDetails.overview}</p>
-            <p>Release Date: {movieDetails.release_date}</p>
-            <p>Vote Average: {movieDetails.vote_average}</p>
+            <p>Kuvaus: {movieDetails.overview}</p>
+            <p>Julkaistu: {movieDetails.release_date}</p>
+            <p>TMDB Keskiarvo: {movieDetails.vote_average}</p>
           </div>
           {user && (
             <>
               <select
                 value={selectedListId}
                 onChange={(e) => {
-                  console.log("Dropdown value changed:", e.target.value); // Debugging line
+                  console.log("Dropdown value changed:", e.target.value); // Debuggausta
                   setSelectedListId(e.target.value);
                 }}
               >
@@ -204,12 +202,11 @@ function MoviePage() {
         </>
       )}
       <div className="ratings-container">
-        <h3>Ratings:</h3>
+        <h3>Arvostelut:</h3>
         <div className="reviews-box">
           <ul>
             {ratings.map((rating, index) => (
               <li key={index}>
-                {/* Render rating as stars */}
                 <div className="star-container">
                   {Array.from({ length: rating.rating }, (_, i) => (
                     <span key={i} className="star filled">
@@ -217,11 +214,10 @@ function MoviePage() {
                     </span>
                   ))}
                 </div>
-                {/* Render other rating details like username, review, submission date */}
-                <p>Username: {rating.username}</p>
-                <p>Review: {rating.review}</p>
+                <p>Käyttäjä: {rating.username}</p>
+                <p>Arvostelu: {rating.review}</p>
                 <p>
-                  Submission Date:{" "}
+                  Päivämäärä:{" "}
                   {new Date(rating.submission_date).toLocaleDateString()}
                 </p>
               </li>
@@ -230,9 +226,8 @@ function MoviePage() {
         </div>
         {user && (
           <>
-            {/* UI for rating selection */}
             <div className="rating-container">
-              <span>Your Rating: </span>
+              <span>Arviosi: </span>
               {[1, 2, 3, 4, 5].map((rating) => (
                 <span
                   key={rating}
@@ -243,14 +238,12 @@ function MoviePage() {
                 </span>
               ))}
             </div>
-            {/* Input for review text */}
             <textarea
               value={reviewText}
               onChange={handleReviewTextChange}
-              placeholder="Write a review..."
+              placeholder="Kirjoita arvostelu"
             />
-            {/* Button to submit rating and review */}
-            <button onClick={handleSubmitRating}>Submit Rating</button>
+            <button onClick={handleSubmitRating}>Lisää arvostelu</button>
           </>
         )}
       </div>
