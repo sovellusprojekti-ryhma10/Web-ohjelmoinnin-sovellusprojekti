@@ -18,7 +18,7 @@ export default function Personal() {
           </Link>
         </div>
         <div>
-          <h2>Groups</h2>
+          <h2>Ryhmät</h2>
         </div>
       </div>
     </div>
