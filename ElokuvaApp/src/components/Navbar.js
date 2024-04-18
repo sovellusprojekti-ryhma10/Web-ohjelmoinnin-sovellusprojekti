@@ -71,12 +71,12 @@ export default function Navbar() {
           {user === null && (
             <p>
               {" "}
-              <Link to="login">Login</Link>
+              <Link to="login">Kirjaudu</Link>
             </p>
           )}
           {user && (
             <p className="logout-button" onClick={handleLogout}>
-              Logout
+              Uloskirjaudu
             </p>
           )}
         </div>

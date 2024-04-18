@@ -31,25 +31,25 @@ export default function Login() {
         <h2>Käyttäjätiedot</h2>
         <div>
           <label htmlFor="username-input" className="formlabel">
-            Username
+            Käyttäjänimi
           </label>
           <input
             id="username-input"
             className="input"
             value={username}
-            placeholder="username"
+            placeholder="Käyttäjänimi"
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>
           <label htmlFor="password-input" className="formlabel">
-            Password
+            Salasana
           </label>
           <input
             id="password-input"
             className="input"
             type="password"
-            placeholder="password"
+            placeholder="Salasana"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

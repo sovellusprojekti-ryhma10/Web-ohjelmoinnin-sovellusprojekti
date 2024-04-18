@@ -26,25 +26,25 @@ export default function CreateAccount() {
         <h1>Luo tili</h1>
         <h2>Käyttäjätiedot</h2>
         <div>
-          <p className="formlabel">Username</p>
+          <p className="formlabel">Käyttäjänimi</p>
           <input
             className="input"
             value={username}
-            placeholder="username"
+            placeholder="Käyttäjänimi"
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>
-          <p className="formlabel">Password </p>
+          <p className="formlabel">Salasana </p>
           <input
             className="input"
             type="password"
-            placeholder="password"
+            placeholder="Salasana"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button id="submit">Create account</button>
+        <button id="submit">Luo tili</button>
       </form>
     </div>
   );
