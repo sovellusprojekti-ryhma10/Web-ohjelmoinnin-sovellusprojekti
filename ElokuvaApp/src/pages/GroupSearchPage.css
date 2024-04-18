@@ -13,6 +13,16 @@ h1 {
   font-size: 1.5 rem;
 }
 
+h2 {
+  text-align: left;
+  margin-top: 10px;
+  background-color: #131313;
+  color: #e9e9e9;
+  padding: 10px;
+  border-radius: 11px;
+  width: 90%;
+}
+
 a {
   font-size: 1rem;
   text-decoration: none;
@@ -41,6 +51,12 @@ a:visited {
   display: flex;
   flex-direction: column;
   /* Arrange items vertically */
+  /*clear out margin when in small screen so that the content is centered */
+}
+@media screen and (max-width: 800px) {
+  .group-search-container {
+    margin: 0px;
+  }
 }
 
 .group-insides {

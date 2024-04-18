@@ -58,17 +58,14 @@ a:visited {
 
 .hamburgershow {
   position: fixed;
-  top: 1rem;
   left: 1rem;
   z-index: 100;
-  width: 2100px;
-  height: 2100px;
+  min-width: 200px;
+  border-radius: 5px;
+  padding: 10px;
+  background: white;
   cursor: pointer;
-}
-@media screen and (min-width: 800px) {
-  .hamburgershow {
-    display: none;
-  }
+  animation: fadeIn 1s;
 }
 
 .hamburgerundefined {
@@ -81,5 +78,26 @@ a:visited {
 @media screen and (min-width: 800px) {
   .hamburgerundefined {
     display: none;
+  }
+}
+
+.MuiSvgIcon-root {
+  animation: fadeIn 1s;
+}
+
+.hide {
+  display: none !important;
+}
+
+.show {
+  display: block !important;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }/*# sourceMappingURL=Hamburger.css.map */

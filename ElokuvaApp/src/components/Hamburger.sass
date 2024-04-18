@@ -7,14 +7,20 @@
      display: none
 .hamburgershow
    position: fixed
-   top: 1rem
    left: 1rem
    z-index: 100
-   width: 2100px
-   height:2100px
+   min-width: 200px
+   border-radius: 5px
+   padding: 10px
+   background: white
    cursor: pointer
+   animation: fadeIn 1s
+// animation basics
+// animation: name duration timing-function delay iteration-count direction fill-mode
+// and below are the ketyframes
    @media screen and (min-width: 800px)
      display: none
+      animation: fadeIn 1s
 
 .hamburgerundefined
    position: absolute
@@ -25,3 +31,16 @@
    display: none!important
    @media screen and (min-width: 800px)
      display: none
+.MuiSvgIcon-root
+   animation: fadeIn 1s
+.hide
+   display: none!important
+
+.show
+   display: block!important
+
+@keyframes fadeIn
+  0%
+   opacity: 0
+  100%
+   opacity: 1

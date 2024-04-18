@@ -54,7 +54,7 @@ a:visited {
   background-color: #cfcfcf;
   padding: 1% 0% 0% 1%;
   height: 100%;
-  min-width: 200px;
+  animation: fadeIn 1s;
 }
 @media screen and (max-width: 800px) {
   .navbar {
@@ -65,13 +65,22 @@ a:visited {
   padding: 1% 0 10% 0;
 }
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 .selectBubble {
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 0px 16px;
   gap: 2%;
-  width: 86%;
+  width: 230px;
+  min-width: 100px;
   height: 2.5rem;
   background: #FBFBFB;
   border-radius: 8px;

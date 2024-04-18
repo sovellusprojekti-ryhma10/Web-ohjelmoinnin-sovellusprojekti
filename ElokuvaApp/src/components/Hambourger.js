@@ -35,7 +35,9 @@ function Hambourger() {
 
     return (
         <div className="hamburgernav">
-            <MenuRoundedIcon onClick={toggleActiveClass} />
+			<MenuRoundedIcon className={`${isActive ? styles.active : "hide"}`} onClick={toggleActiveClass} />
+			<MenuOpenRoundedIcon className={`hide ${isActive ? styles.active : "show"}`} onClick={toggleActiveClass} />
+
             <div
                 className={`hamburger${isActive ? styles.active : "show"}`}
                 onClick={toggleActiveClass}
