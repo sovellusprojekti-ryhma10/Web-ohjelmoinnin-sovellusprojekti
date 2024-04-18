@@ -173,11 +173,11 @@ function MovieSearch({ setMediaType, mediaType }) {
 
   return (
     <div className="App">
-      <h1>Movie Search</h1>
+      <h1>Elokuvahaku</h1>
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search for a movie or TV show..."
+          placeholder="Hae elokuvan tai TV-sarjan nimellä"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -185,7 +185,7 @@ function MovieSearch({ setMediaType, mediaType }) {
           value={selectedGenre}
           onChange={(e) => setSelectedGenre(e.target.value)}
         >
-          <option value="">Select Genre</option>
+          <option value="">Valitse Genre</option>
           {genreOptions.map((genre) => (
             <option key={genre.id} value={genre.id}>
               {genre.name}
@@ -194,13 +194,13 @@ function MovieSearch({ setMediaType, mediaType }) {
         </select>
         <input
           type="number"
-          placeholder="Release Year"
+          placeholder="Julkaisuvuosi"
           value={releaseYear}
           onChange={(e) => setReleaseYear(e.target.value)}
         />
         <input
           type="number"
-          placeholder="TMDB Rating"
+          placeholder="TMDB keskiarvo"
           value={rating}
           onChange={(e) => setRating(e.target.value)}
         />
@@ -208,8 +208,8 @@ function MovieSearch({ setMediaType, mediaType }) {
           value={ratingComparison}
           onChange={(e) => setRatingComparison(e.target.value)}
         >
-          <option value="higher">Higher Than</option>
-          <option value="lower">Lower Than</option>
+          <option value="higher">Suurempi kuin</option>
+          <option value="lower">Pienempi kuin</option>
         </select>
         <select
           value={mediaType}
@@ -218,8 +218,8 @@ function MovieSearch({ setMediaType, mediaType }) {
             handleSetMediaType(e.target.value);
           }}
         >
-          <option value="movie">Movies</option>
-          <option value="tv">TV Shows</option>
+          <option value="movie">Elokuvat</option>
+          <option value="tv">TV-sarjat</option>
         </select>
         <button
           onClick={() => {
@@ -227,7 +227,7 @@ function MovieSearch({ setMediaType, mediaType }) {
             resetPage();
           }}
         >
-          Search
+          Hae
         </button>
       </div>
       {movies.length > 0 && (
@@ -298,8 +298,8 @@ function MovieSearch({ setMediaType, mediaType }) {
             )}
           </div>
           <div className="navigation-buttons">
-            <button onClick={handlePrevMovie}>Previous</button>
-            <button onClick={handleNextMovie}>Next</button>
+            <button onClick={handlePrevMovie}>Edellinen sivu</button>
+            <button onClick={handleNextMovie}>Seuraava sivu</button>
           </div>
         </>
       )}
