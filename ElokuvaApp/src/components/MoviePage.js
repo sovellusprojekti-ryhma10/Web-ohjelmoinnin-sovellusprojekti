@@ -202,44 +202,45 @@ function MoviePage() {
       <div className="ratings-container">
         <h3>Ratings:</h3>
         <ul>
-          {ratings.map((rating, index) => (
-            <li key={index}>
-              {/* Render rating as stars */}
-              {/* Assuming rating is a number from 1 to 5 */}
-              {Array.from({ length: rating.rating }, (_, i) => (
-                <span key={i}>★</span>
-              ))}
-              {/* Render other rating details like username, review, submission date */}
-              <p>Username: {rating.username}</p>
-              <p>Review: {rating.review}</p>
-              <p>Submission Date: {rating.submission_date}</p>
-            </li>
-          ))}
-        </ul>
+  {ratings.map((rating, index) => (
+    <li key={index}>
+      {/* Render rating as stars */}
+      <div className="star-container">
+        {Array.from({ length: rating.rating }, (_, i) => (
+          <span key={i} className="star filled">★</span>
+        ))}
+      </div>
+      {/* Render other rating details like username, review, submission date */}
+      <p>Username: {rating.username}</p>
+      <p>Review: {rating.review}</p>
+      <p>Submission Date: {rating.submission_date}</p>
+    </li>
+  ))}
+</ul>
         {user && (
-        <>
-          {/* UI for rating selection */}
-          <div className="rating-container">
-            <span>Your Rating: </span>
-            {[1, 2, 3, 4, 5].map((rating) => (
-              <span
-                key={rating}
-                className={rating <= userRating ? "active" : ""}
-                onClick={() => handleRatingChange(rating)}
-              >
-                ★
-              </span>
-            ))}
-          </div>
-          {/* Input for review text */}
-          <textarea
-            value={reviewText}
-            onChange={handleReviewTextChange}
-            placeholder="Write a review..."
-          />
-          {/* Button to submit rating and review */}
-          <button onClick={handleSubmitRating}>Submit Rating</button>
-        </>
+  <>
+    {/* UI for rating selection */}
+    <div className="rating-container">
+      <span>Your Rating: </span>
+      {[1, 2, 3, 4, 5].map((rating) => (
+        <span
+          key={rating}
+          className={`star ${rating <= userRating ? "filled" : ""}`}
+          onClick={() => handleRatingChange(rating)}
+        >
+          ★
+        </span>
+      ))}
+    </div>
+    {/* Input for review text */}
+    <textarea
+      value={reviewText}
+      onChange={handleReviewTextChange}
+      placeholder="Write a review..."
+    />
+    {/* Button to submit rating and review */}
+    <button onClick={handleSubmitRating}>Submit Rating</button>
+  </>
       )}
       </div>
     </div>
