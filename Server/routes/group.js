@@ -1,4 +1,4 @@
-const { getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin, addGroupsMember, removeGroupsMember} = require('../database/groups_db');
+const {getUserGroups, removeGroup, getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin, addGroupsMember, removeGroupsMember, removeGroupsAdmin} = require('../database/groups_db');
 const express = require("express");
 const router = express.Router();
 const { auth } = require("../middleware/auth");
@@ -8,10 +8,11 @@ const { auth } = require("../middleware/auth");
 
 router.get('/all', async (req, res) => {
     try {
+        const { accountId } = res.locals;
         console.log("tuleeko tähän")
         const currentPage = req.query.currentPage;
         const perPage = req.query.perPage;
-        const { groups, content } = await getGroups(perPage, currentPage);
+        const { groups, content } = await getGroups(perPage, currentPage, accountId);
 
         const responseData = groups.map(group => {
             const groupContent = content.find(item => item.group_id === group.id);
@@ -23,6 +24,23 @@ router.get('/all', async (req, res) => {
         console.log(JSON.stringify(responseData) + "Tuleeko tänne Saakka tämä täällä sinä siellä");
 
         res.json(responseData);
+    } catch (error) {
+        console.error('Error getting groups:', error);
+        res.status(500).json({ error: 'Failed to fetch groups' });
+    }
+});
+
+
+router.get('/user/all', auth, async (req, res) => {
+    const { accountId } = res.locals;
+
+    try {
+        console.log("tuleeko tähän")
+        const groups = await getUserGroups(accountId);
+        console.log("tuleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+        console.log(groups);
+        res.json(groups);
+
     } catch (error) {
         console.error('Error getting groups:', error);
         res.status(500).json({ error: 'Failed to fetch groups' });
@@ -94,6 +112,33 @@ router.get('/:groupId', auth, async (req, res) => {
         catch (error) {
         console.error('Error making admin:', error);
         res.status(500).send("Error making admin");
+        }
+
+});
+router.delete('/:groupId/remove/group', auth, async (req, res) => {
+    const { groupId } = req.body;
+    const { accountId } = res.locals;
+    try {
+        await removeGroup(accountId, groupId);
+        res.send("removed group");
+        } 
+        catch (error) {
+        console.error('Error removing group:', error);
+        res.status(500).send("Error removing group");
+        }
+
+});
+
+router.put('/:groupId/remove/admin', auth, async (req, res) => {
+    const { memberName, groupId } = req.body;
+    const { accountId } = res.locals;
+    try {
+        await removeGroupsAdmin(memberName, accountId, groupId);
+        res.send("admin has been demoted");
+        } 
+        catch (error) {
+        console.error('Error removing admin:', error);
+        res.status(500).send("Error removing admin");
         }
 
 });

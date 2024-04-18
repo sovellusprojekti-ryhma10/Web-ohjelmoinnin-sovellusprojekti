@@ -75,7 +75,7 @@ function MovieSearch({ setMediaType, mediaType }) {
       } else {
         apiUrl = `https://api.themoviedb.org/3/search/${mediaType}?query=${searchQuery}&include_adult=false&language=en-US&page=${pageNumber}&api_key=${API_KEY}`;
       }
-
+      
       const response = await fetch(apiUrl, options);
 
       const data = await response.json();

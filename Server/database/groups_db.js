@@ -3,7 +3,6 @@ const pgPool = require('./pg_connection');
 const sql = {
     CHECK_IF_USER_IS_IN_GROUP: 'SELECT is_admin, request_sent FROM User_Groups WHERE account_id = ($1) AND group_id = ($2)',
 
-    GET_ALL_GROUPS: 'SELECT G.group_name, G.created_by, G.id, A.username AS created_by_username FROM Groups G JOIN Accounts A ON G.created_by = A.id ORDER BY G.id LIMIT 20 OFFSET ($1)',
     //GET_ALL_GROUPS: 'SELECT group_name, created_by, id FROM Groups ORDER BY id LIMIT 20 OFFSET ($1)',
     //GET_USERNAME: 'SELECT DISTINCT accounts.id, accounts.username FROM accounts JOIN groups ON accounts.id = groups.created_by;',
 
@@ -20,25 +19,79 @@ const sql = {
     GET_GROUP_DATA: 'SELECT content FROM Group_pages WHERE group_id = ($1)',
     GET_GROUP_INFO: 'SELECT group_name, created_by FROM Groups WHERE id = ($1)',
 
+    GET_CREATED_BY: 'SELECT username FROM Accounts WHERE id = ($1)',
+    ADD_CONTENT: 'UPDATE Group_pages SET content = $1 WHERE group_id = $2',
+    ADD_GROUP_PAGES: 'INSERT INTO Group_pages (group_id) VALUES ($1)',
+    CHECK_IF_USER_IS_ADMIN: 'SELECT is_admin FROM User_Groups WHERE account_id = ($1) AND group_id = ($2)',
+    CHECK_IF_USER_IS_CREATEDBY: 'SELECT created_by  FROM Groups WHERE id = ($1)',
+    MAKE_ADMIN: 'UPDATE User_Groups SET is_admin = TRUE WHERE account_id = ($1) AND group_id = ($2)',
+    GET_USER_ID: 'SELECT id FROM Accounts WHERE username = ($1)',
+    DELETE_USER_FROM_GROUP: 'DELETE FROM User_groups WHERE account_id = ($1) AND group_id = ($2)',
+    REMOVE_ADMIN: 'UPDATE User_Groups SET is_admin = FALSE WHERE account_id = ($1) AND group_id = ($2)',
+
+    REMOVE_GROUP1: 'DELETE FROM User_Groups WHERE group_id = ($1)',
+    REMOVE_GROUP2: 'DELETE FROM Group_pages WHERE group_id = ($1)',
+    REMOVE_GROUP3: 'DELETE FROM Groups WHERE id = ($1)',
+
     GET_GROUP_MEMBERS_USERNAME:'SELECT DISTINCT A.username FROM User_Groups UG JOIN Accounts A ON UG.account_id = A.id WHERE UG.group_id = ($1) AND is_admin = (false) AND request_sent = (TRUE);',
     GET_GROUPS_ADMINS:'SELECT DISTINCT A.username FROM User_Groups UG JOIN Accounts A ON UG.account_id = A.id WHERE UG.group_id = ($1) AND is_admin = (true);',
     GET_REQUEST_JOIN_USERNAME: 'SELECT DISTINCT A.username FROM User_Groups UG JOIN Accounts A ON UG.account_id = A.id WHERE UG.group_id = ($1) AND request_sent = (FALSE)',
 
-    GET_CREATED_BY: 'SELECT username FROM Accounts WHERE id = ($1)',
+    GET_ALL_GROUPS: 'SELECT G.group_name, G.created_by, G.id, A.username AS created_by_username FROM Groups G JOIN Accounts A ON G.created_by = A.id ORDER BY G.id LIMIT 20 OFFSET ($1)',
 
-    ADD_CONTENT: 'UPDATE Group_pages SET content = $1 WHERE group_id = $2',
-    ADD_GROUP_PAGES: 'INSERT INTO Group_pages (group_id) VALUES ($1)',
-
-    CHECK_IF_USER_IS_ADMIN: 'SELECT is_admin FROM User_Groups WHERE account_id = ($1) AND group_id = ($2)',
-    MAKE_ADMIN: 'UPDATE User_Groups SET is_admin = TRUE WHERE account_id = ($1) AND group_id = ($2)',
-
-    GET_USER_ID: 'SELECT id FROM Accounts WHERE username = ($1)',
-
-    DELETE_USER_FROM_GROUP: 'DELETE FROM User_groups WHERE account_id = ($1) AND group_id = ($2)'
-
-    
-
+    GET_USERS_GROUPS: 'SELECT Groups.id AS group_id, Groups.group_name, Accounts.username AS creator_username, group_pages.content FROM Accounts INNER JOIN User_groups ON Accounts.id = User_groups.account_id INNER JOIN Groups ON User_groups.group_id = Groups.id LEFT JOIN group_pages ON Groups.id = group_pages.group_id INNER JOIN Accounts AS Creators ON Groups.created_by = Creators.id WHERE Accounts.id = ($1) AND User_groups.request_sent = True;'
 };
+
+async function getUserGroups(accountId) {
+    try {
+        console.log(accountId);
+        const result = await pgPool.query(sql.GET_USERS_GROUPS, [accountId]);
+
+        return {
+            groups: result.rows,
+        };
+    } catch (error) {
+        console.error('Error getting groups:', error);
+        throw error;
+    }
+}
+
+async function removeGroup(accountId, groupId){
+    try {
+        console.log (groupId);
+        const isAdmindata = await pgPool.query(sql.CHECK_IF_USER_IS_CREATEDBY, [groupId]);
+        const isAdmin = isAdmindata.rows[0].created_by; 
+        console.log(isAdmin + accountId + "HALOOOOOOOOOOOOOOOOOO");
+        if (isAdmin == accountId) {
+            await pgPool.query(sql.REMOVE_GROUP1, [groupId]);
+            await pgPool.query(sql.REMOVE_GROUP2, [groupId]);
+            await pgPool.query(sql.REMOVE_GROUP3, [groupId]);
+        }
+    } catch (error) {
+        console.error('Error removing group', error);
+        throw error;
+    }
+
+}
+
+async function removeGroupsAdmin(memberName, adminId, groupId) {
+    try {
+        const isAdmindata = await pgPool.query(sql.CHECK_IF_USER_IS_CREATEDBY, [groupId]);
+        const isAdmin = isAdmindata.rows[0].created_by; // assuming there's only one row
+        console.log(isAdmin);
+        if (isAdmin == adminId) {
+            const accountIdData = await pgPool.query(sql.GET_USER_ID, [memberName]);
+            const accountId = accountIdData.rows[0].id;
+            console.log(accountId, groupId);
+            if(adminId != accountId){
+            await pgPool.query(sql.REMOVE_ADMIN, [accountId, groupId]);
+            }
+        }
+    } catch (error) {
+        console.error('Error demoting admin', error);
+        throw error;
+    }
+}
 
 async function addUserGroup(accountId, group_name) {
     try {
@@ -46,14 +99,15 @@ async function addUserGroup(accountId, group_name) {
         const result = await pgPool.query(sql.GET_GROUP_ID, [group_name]);
         const groupId = result.rows[0].id;
 
-        const checkResult = await pgPool.query(sql.CHECK_IF_USER_IS_IN_GROUP, [account_id, groupId]);
+        const checkResult = await pgPool.query(sql.CHECK_IF_USER_IS_IN_GROUP, [accountId, groupId]);
         if (checkResult.rows.length > 0) {
             console.log('User is already in the group');
             return groupId; // Return the group ID
         }
-
+        else {
         await pgPool.query(sql.ADD_USER_GROUP, [accountId, groupId, false, false]);
         return groupId;
+    }
 
     } catch (error) {
         console.error('Error adding user group:', error);
@@ -156,7 +210,7 @@ async function getGroupsData(accountId, groupId) {
 
         if (hasRequestSent || isAdmin) {
             const groupInfoResult = await pgPool.query(sql.GET_GROUP_INFO, [groupId]);
-            const groupInfo = groupInfoResult.rows[0];
+            const groupInfo = groupInfoResult.rows[0]; 
 
             const usernamesResult = await pgPool.query(sql.GET_GROUP_MEMBERS_USERNAME, [groupId]);
             const usernames = usernamesResult.rows.map(row => row.username);
@@ -240,4 +294,4 @@ async function addUserGroup(account_id, group_name) {
     }
 }
 
-module.exports = { getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin, addGroupsMember, removeGroupsMember };
+module.exports = {getUserGroups, removeGroup, getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin, addGroupsMember, removeGroupsMember, removeGroupsAdmin };
