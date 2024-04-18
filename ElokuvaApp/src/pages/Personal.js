@@ -36,13 +36,12 @@ const Personal = () => {
       <h1>Tervetuloa, {user.username}!</h1>
       <div className="container">
         <div>
-          <h2>Suosikkilistat</h2>
           <Link to="/Personal/FavoriteLists">
-            <button>Mene suosikkilistoihin</button>
+            <h2>Suosikkilistat</h2>
           </Link>
         </div>
         <div>
-          <h2>Groups</h2>
+          <h2>Ryhmät</h2>
           <div className="group-list" style={{ height: '300px', overflowY: 'scroll' }}>
           <ul>
             {groups.map(group => (

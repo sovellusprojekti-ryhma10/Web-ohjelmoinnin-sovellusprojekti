@@ -77,15 +77,15 @@ function MovieSearchByActorName() {
 
   return (
     <div className="App">
-      <h1>Movie Search</h1>
+      <h1>Näyttelijähaku</h1>
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search for an actor..."
+          placeholder="Hae elokuvia näyttelijän nimellä"
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
         />
-        <button onClick={handleSearch}>Search</button>
+        <button onClick={handleSearch}>Hae</button>
       </div>
       {movies.length > 0 && (
         <div className="movie-info">
@@ -93,8 +93,8 @@ function MovieSearchByActorName() {
           <div className="movie-details">
             <h3>{movies[selectedMovieIndex].movies[selectedMovieIndex].title}</h3>
             <p>{movies[selectedMovieIndex].movies[selectedMovieIndex].overview}</p>
-            <p>Release Date: {movies[selectedMovieIndex].movies[selectedMovieIndex].release_date}</p>
-            <p>Vote Average: {movies[selectedMovieIndex].movies[selectedMovieIndex].vote_average}</p>
+            <p>Julkaistu: {movies[selectedMovieIndex].movies[selectedMovieIndex].release_date}</p>
+            <p>TMDB keskiarvo: {movies[selectedMovieIndex].movies[selectedMovieIndex].vote_average}</p>
             {movies[selectedMovieIndex].movies[selectedMovieIndex].poster_path && (
               <img
                 src={movies[selectedMovieIndex].movies[selectedMovieIndex].poster_path}
@@ -105,13 +105,13 @@ function MovieSearchByActorName() {
           </div>
           <div className="navigation-buttons">
             <button onClick={handlePrevMovie} disabled={selectedMovieIndex === 0}>
-              Previous
+              Edellinen
             </button>
             <button
               onClick={handleNextMovie}
               disabled={selectedMovieIndex === movies[selectedMovieIndex].movies.length - 1}
             >
-              Next
+              Seuraava
             </button>
           </div>
         </div>
