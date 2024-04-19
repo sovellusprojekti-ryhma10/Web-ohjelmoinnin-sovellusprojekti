@@ -32,11 +32,10 @@ function ShowTimes() {
     { id: 1046, name: "Raisio: LUXE MYLLY" },
   ];
 
-  useEffect(() => {
     const fetchShowtimes = async () => {
       try {
         const response = await axios.get(
-          "https://www.finnkino.fi/xml/Schedule/?area=1018&dt=19.04.2024"
+            `https://www.finnkino.fi/xml/Schedule/?area=${theatre}&dt=19.04.2024`
         );
         const jsonData = xml2js(response.data, { compact: true });
         console.log("Parsed response data:", jsonData); // Log the parsed data
@@ -55,8 +54,6 @@ function ShowTimes() {
       }
     };
 
-    fetchShowtimes();
-  }, []); // Empty dependency array to run the effect only once
 
   // Group shows by title
   const groupedShows = {};
@@ -71,14 +68,32 @@ function ShowTimes() {
   return (
     <div>
       <h1>Showtimes</h1>
+      <select
+          value={theatre}
+          onChange={(e) => setTheatre(e.target.value)}
+        >
+          <option value="">Valitse teatteri tai alue</option>
+          {theatres.map((theatre) => (
+            <option key={theatre.id} value={theatre.id}>
+              {theatre.name}
+            </option>
+          ))}
+        </select>
+        <button
+          onClick={() => {
+            fetchShowtimes();
+          }}
+        >
+          Hae näytösajat
+        </button>
       {Object.entries(groupedShows).map(([title, shows]) => (
         <div key={title}>
           <h2>{title}</h2>
           <ul>
             {shows.map((show) => (
               <li key={show.ID._text}>
-                <p>Show Start: {new Date(show.dttmShowStart._text).toLocaleTimeString()}</p>
-                <p>Show End: {new Date(show.dttmShowEnd._text).toLocaleTimeString()}</p>
+                <p>Näytös alkaa: {new Date(show.dttmShowStart._text).toLocaleTimeString()}</p>
+                <p>Näytös päättyy: {new Date(show.dttmShowEnd._text).toLocaleTimeString()}</p>
               </li>
             ))}
           </ul>
