@@ -6,6 +6,7 @@ function ShowTimes() {
   const [showtimes, setShowtimes] = useState([]);
   const [theatre, setTheatre] = useState('');
   const [date, setDate] = useState('');
+  const [lastFetchParams, setLastFetchParams] = useState({ theatre: '', date: '' });
 
   const theatres = [
     { id: 1014, name: "Pääkaupunkiseutu" },
@@ -32,28 +33,45 @@ function ShowTimes() {
     { id: 1046, name: "Raisio: LUXE MYLLY" },
   ];
 
-    const fetchShowtimes = async () => {
-      try {
-        const response = await axios.get(
-            `https://www.finnkino.fi/xml/Schedule/?area=${theatre}&dt=19.04.2024`
-        );
-        const jsonData = xml2js(response.data, { compact: true });
-        console.log("Parsed response data:", jsonData); // Log the parsed data
-        if (
-          jsonData &&
-          jsonData.Schedule &&
-          jsonData.Schedule.Shows &&
-          Array.isArray(jsonData.Schedule.Shows.Show)
-        ) {
-          setShowtimes(jsonData.Schedule.Shows.Show); // Update showtimes state with fetched data
-        } else {
-          console.error("Invalid response data format:", jsonData);
-        }
-      } catch (error) {
-        console.error("Error fetching showtimes:", error);
-      }
-    };
+  const fetchShowtimes = async () => {
+    try {
+      // Format date string to match required format: DD.MM.YYYY
+      const formattedDate = new Date(date).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        }).replace(/\//g, '.');
 
+      let url = `https://www.finnkino.fi/xml/Schedule/?area=${theatre}&dt=${formattedDate}`;
+  
+      const response = await axios.get(
+        url
+      );
+      const jsonData = xml2js(response.data, { compact: true });
+      console.log("Parsed response data:", jsonData); // Log the parsed data
+      console.log(date);
+      console.log(url);
+      if (
+        jsonData &&
+        jsonData.Schedule &&
+        jsonData.Schedule.Shows &&
+        Array.isArray(jsonData.Schedule.Shows.Show)
+      ) {
+        setShowtimes(jsonData.Schedule.Shows.Show); // Update showtimes state with fetched data
+        setLastFetchParams({ theatre, date });
+      } else {
+        console.error("Invalid response data format:", jsonData);
+      }
+    } catch (error) {
+      console.error("Error fetching showtimes:", error);
+    }
+  };
+
+  const handleFetchShowtimes = () => {
+    if (theatre !== lastFetchParams.theatre || date !== lastFetchParams.date) {
+      fetchShowtimes();
+    }
+  };
 
   // Group shows by title
   const groupedShows = {};
@@ -67,25 +85,26 @@ function ShowTimes() {
 
   return (
     <div>
-      <h1>Showtimes</h1>
+      <h1>Näytösajat</h1>
       <select
-          value={theatre}
-          onChange={(e) => setTheatre(e.target.value)}
-        >
-          <option value="">Valitse teatteri tai alue</option>
-          {theatres.map((theatre) => (
-            <option key={theatre.id} value={theatre.id}>
-              {theatre.name}
-            </option>
-          ))}
-        </select>
-        <button
-          onClick={() => {
-            fetchShowtimes();
-          }}
-        >
-          Hae näytösajat
-        </button>
+        value={theatre}
+        onChange={(e) => setTheatre(e.target.value)}
+      >
+        <option value="">Valitse teatteri tai alue</option>
+        {theatres.map((theatre) => (
+          <option key={theatre.id} value={theatre.id}>
+            {theatre.name}
+          </option>
+        ))}
+      </select>
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+      />
+      <button onClick={handleFetchShowtimes}>
+        Hae näytösajat
+      </button>
       {Object.entries(groupedShows).map(([title, shows]) => (
         <div key={title}>
           <h2>{title}</h2>
@@ -102,5 +121,4 @@ function ShowTimes() {
     </div>
   );
 }
-
 export default ShowTimes;
