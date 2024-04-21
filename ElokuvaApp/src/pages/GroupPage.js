@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link  } from 'react-router-dom';
 import './GroupPage.css'; 
 import { useUser } from "../context/useUser";
 
@@ -8,6 +8,9 @@ const GroupPage = () => {
   const { groupId } = useParams();
   const [groupInfo, setGroupInfo] = useState(null);
   const [description, setDescription] = useState('');
+  const [groupLists, setGroupLists] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const API_KEY = process.env.REACT_APP_API_KEY;
 
   useEffect(() => {
     const fetchGroupInfo = async () => {
@@ -30,6 +33,58 @@ const GroupPage = () => {
 
     fetchGroupInfo();
   }, [groupId]);
+
+  useEffect(() => {
+    const fetchGroupPageContent = async () => {
+        try {
+            const response = await fetch("http://localhost:3001/group/get/pages/content", {
+                method: "POST", 
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ groupId }), 
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const data = await response.json();
+            console.log(data); 
+            setGroupLists(data);
+            fetchMovies(data); 
+        } catch (error) {
+            console.error("Error fetching group content list:", error);
+        }
+    };
+
+    fetchGroupPageContent();
+}, [groupId, user]);
+
+useEffect(() => {
+  fetchMovies(groupLists);
+}, [groupLists]);
+
+const fetchMovies = async (data) => {
+  try {
+      const movieIds = data.map((movie) => movie.movie_id);
+      const moviesData = await Promise.all(
+          movieIds.map(async (movieId) => {
+              const response = await fetch(
+                  `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`
+              );
+              if (!response.ok) {
+                  throw new Error(`Failed to fetch movie with ID ${movieId}`);
+              }
+              return response.json();
+          })
+      );
+      setMovies(moviesData);
+  } catch (error) {
+      console.error("Error fetching movies:", error);
+  }
+};
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
@@ -164,11 +219,33 @@ const GroupPage = () => {
   console.log(groupName, createdBy, groupData);
 
   return (
+    <div className="group-page-body">
+
+        <div className="group-movies-time-container">
+        <h1>Ryhmän nimi: {groupName}</h1>
+        <h2>Näytösajat</h2>
+        <p>Esimerkki aika 15.00</p>
+        <p>Esimerkki aika 15.00</p>
+        <p>Esimerkki aika 15.00</p>
+        <p>Esimerkki aika 15.00</p>
+        <p>Esimerkki aika 15.00</p>
+        </div>
+        <div class="group-container">
+
+          <div className="group-movies-container">
+      <h2>Elokuvat</h2>
+        {movies.map((movie) => (
+          <div key={movie.id} className="group-movie-info">
+            <Link to={`/movie/${movie.id}`} key={movie.id}>
+            <h3>{movie.title}</h3>
+            </Link>
+          </div>
+        ))}
+        </div>
+
+        
     <div className="group-page-container">
-      <h2>Group Information</h2>
-      <p>Ryhmän nimi: {groupName}</p>
-      <p>Ryhmän luoja: {createdBy}</p>
-      <p>Ryhmän kuvaus: {content}</p>
+      <h2>Käyttäjät</h2>
       
       {requestToJoin.map((request, index) => (
   <div key={index}>
@@ -214,9 +291,12 @@ const GroupPage = () => {
     )}
   </div> 
 ))}
+
+
       <div className="description">
       {isAdmin && (
             <>
+            <p>Ryhmän kuvaus: {content}</p>
       <textarea
         defaultValue={content} 
         onChange={handleDescriptionChange}
@@ -230,7 +310,10 @@ const GroupPage = () => {
           </div>
           </div>
     </div>
+    </div>
+    </div>
   );
 };
+
 
 export default GroupPage;

@@ -39,9 +39,76 @@ const sql = {
 
     GET_ALL_GROUPS: 'SELECT G.group_name, G.created_by, G.id, A.username AS created_by_username FROM Groups G JOIN Accounts A ON G.created_by = A.id ORDER BY G.id LIMIT 20 OFFSET ($1)',
 
-    GET_USERS_GROUPS: 'SELECT Groups.id AS group_id, Groups.group_name, Accounts.username AS creator_username, group_pages.content FROM Accounts INNER JOIN User_groups ON Accounts.id = User_groups.account_id INNER JOIN Groups ON User_groups.group_id = Groups.id LEFT JOIN group_pages ON Groups.id = group_pages.group_id INNER JOIN Accounts AS Creators ON Groups.created_by = Creators.id WHERE Accounts.id = ($1) AND User_groups.request_sent = True;'
+    GET_USERS_GROUPS: 'SELECT Groups.id AS group_id, Groups.group_name, Accounts.username AS creator_username, group_pages.content FROM Accounts INNER JOIN User_groups ON Accounts.id = User_groups.account_id INNER JOIN Groups ON User_groups.group_id = Groups.id LEFT JOIN group_pages ON Groups.id = group_pages.group_id INNER JOIN Accounts AS Creators ON Groups.created_by = Creators.id WHERE Accounts.id = ($1) AND User_groups.request_sent = True;',
+    GET_USER_GROUP_NAMES: 'SELECT G.group_name FROM Groups G INNER JOIN User_groups UG ON G.id = UG.group_id WHERE UG.account_id = ($1) AND UG.request_sent = (true)',
+    ADD_GROUP_PAGE_CONTENT: 'INSERT INTO group_pages_content (group_page_id, movie_id) VALUES ($1, $2)',
+    CHECK_IF_USER_IS_MEMBER: 'SELECT request_sent FROM User_Groups WHERE account_id = ($1) AND group_id = ($2)',
+    GET_GROUP_PAGES_ID: 'SELECT id FROM Group_pages WHERE group_id = ($1)',
+    GET_GROUP_PAGES_CONTENT: 'SELECT movie_id FROM group_pages_content WHERE group_page_id = ($1)'
+
 };
 
+async function getGroupPageContent(accountId, groupId){
+    try {
+        console.log(accountId, groupId);
+
+        const isMemberResult = await pgPool.query(sql.CHECK_IF_USER_IS_MEMBER, [accountId, groupId]);
+        const isMember = isMemberResult.rows.length > 0 && isMemberResult.rows[0].request_sent;
+
+         if(isMember){
+            const group_pages_id_result = await pgPool.query(sql.GET_GROUP_PAGES_ID, [groupId]);
+            const group_pages_id = group_pages_id_result.rows[0].id;
+
+            const result = await pgPool.query(sql.GET_GROUP_PAGES_CONTENT, [group_pages_id]);
+            console.log(result.rows);
+            return result.rows;
+         }
+
+    } catch (error) {
+        console.error('Error adding group pages content:', error);
+        throw error;
+    }
+
+}
+
+async function addGroupPageContent(accountId, movieId, group_name) {
+    try {
+        console.log(accountId, movieId, group_name);
+
+        const groupNameResult = await pgPool.query(sql.GET_GROUP_ID, [group_name]);
+        const group_id = groupNameResult.rows[0].id;
+
+        const isMemberResult = await pgPool.query(sql.CHECK_IF_USER_IS_MEMBER, [accountId, group_id]);
+        const isMember = isMemberResult.rows.length > 0 && isMemberResult.rows[0].request_sent;
+
+        if(isMember){
+        const group_pages_id_result = await pgPool.query(sql.GET_GROUP_PAGES_ID, [group_id]);
+        const group_pages_id = group_pages_id_result.rows[0].id;
+        
+        console.log(group_pages_id, movieId)
+
+        await pgPool.query(sql.ADD_GROUP_PAGE_CONTENT, [group_pages_id, movieId]);
+        }
+    } catch (error) {
+        console.error('Error adding group pages content:', error);
+        throw error;
+    }
+
+}
+async function getUserGroupName(accountId) {
+    try {
+        console.log(accountId);
+        const result = await pgPool.query(sql.GET_USER_GROUP_NAMES, [accountId]);
+        console.log (result.rows);
+        return {
+            groups: result.rows,
+        };
+    } catch (error) {
+        console.error('Error getting groups:', error);
+        throw error;
+    }
+
+}
 async function getUserGroups(accountId) {
     try {
         console.log(accountId);
@@ -294,4 +361,4 @@ async function addUserGroup(account_id, group_name) {
     }
 }
 
-module.exports = {getUserGroups, removeGroup, getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin, addGroupsMember, removeGroupsMember, removeGroupsAdmin };
+module.exports = {getGroupPageContent, addGroupPageContent, getUserGroupName ,getUserGroups, removeGroup, getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin, addGroupsMember, removeGroupsMember, removeGroupsAdmin };
