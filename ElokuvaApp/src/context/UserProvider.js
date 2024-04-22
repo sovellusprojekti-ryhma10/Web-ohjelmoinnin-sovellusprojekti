@@ -37,18 +37,16 @@ export default function UserProvider({ children }) {
       },
     };
 
-    axios
-      .post("http://localhost:3001/register", json, options)
-      .then((response) => {
-        const token = response.data.token;
-        const updatedUser = { ...data, token: token };
-        setUser(updatedUser);
-        sessionStorage.setItem("user", JSON.stringify(updatedUser)); // Store the updated user object
-        navigate("/");
-      })
-      .catch((error) => {
-        throw error;
-      });
+    try {
+      await axios.post("http://localhost:3001/register", json, options);
+      // Show an alert upon successful registration
+      alert("Käyttäjätili luotu onnistuneesti!");
+      // Redirect to the login page
+      navigate("/login");
+    } catch (error) {
+      console.error("Error during registration:", error);
+      // Optionally, handle the error, e.g., by showing an error message
+    }
   };
 
   return (
