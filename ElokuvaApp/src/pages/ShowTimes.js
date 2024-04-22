@@ -14,11 +14,8 @@ function ShowTimes() {
   });
 
   const theatres = [
-    //{ id: 1014, name: "Pääkaupunkiseutu" },
-    //{ id: 1012, name: "Espoo" },
     { id: 1039, name: "Espoo: OMENA" },
     { id: 1038, name: "Espoo: SELLO" },
-    //{ id: 1002, name: "Helsinki" },
     { id: 1045, name: "Helsinki: ITIS" },
     { id: 1031, name: "Helsinki: KINOPALATSI" },
     { id: 1032, name: "Helsinki: MAXIM" },
@@ -30,17 +27,14 @@ function ShowTimes() {
     { id: 1041, name: "Lappeenranta: STRAND" },
     { id: 1018, name: "Oulu: PLAZA" },
     { id: 1019, name: "Pori: PROMENADI" },
-    //{ id: 1021, name: "Tampere" },
     { id: 1034, name: "Tampere: CINE ATLAS" },
     { id: 1035, name: "Tampere: PLEVNA" },
-    //{ id: 1047, name: "Turku ja Raisio" },
     { id: 1022, name: "Turku: KINOPALATSI" },
     { id: 1046, name: "Raisio: LUXE MYLLY" },
   ];
 
   const fetchShowtimes = async () => {
     try {
-      // Format date string to match required format: DD.MM.YYYY
       const formattedDate = new Date(date)
         .toLocaleDateString("en-GB", {
           day: "2-digit",
@@ -53,7 +47,7 @@ function ShowTimes() {
 
       const response = await axios.get(url);
       const jsonData = xml2js(response.data, { compact: true });
-      console.log("Parsed response data:", jsonData); // Log the parsed data
+      console.log("Parsed response data:", jsonData);
       console.log(date);
       console.log(url);
       if (
@@ -62,7 +56,7 @@ function ShowTimes() {
         jsonData.Schedule.Shows &&
         Array.isArray(jsonData.Schedule.Shows.Show)
       ) {
-        setShowtimes(jsonData.Schedule.Shows.Show); // Update showtimes state with fetched data
+        setShowtimes(jsonData.Schedule.Shows.Show);
         setLastFetchParams({ theatre, date });
       } else {
         console.error("Invalid response data format:", jsonData);
