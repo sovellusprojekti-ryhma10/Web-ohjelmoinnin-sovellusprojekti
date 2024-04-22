@@ -15,6 +15,7 @@ import FavoriteLists from "./pages/FavoriteLists";
 import SpecificList from "./components/SpecificList";
 import MovieSearch from "./components/MovieSearch";
 import MoviePage from "./components/MoviePage";
+import ShowTimes from "./pages/ShowTimes";
 
 function App() {
   const [mediaType, setMediaType] = useState("movie");
@@ -39,6 +40,7 @@ function App() {
             element={<MoviePage mediaType={mediaType} />}
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/showtimes" element={<ShowTimes />} />
           <Route path="/CreateAcc" element={<CreateAccount />} />
           <Route path="/personal" element={<PrivateRoute />}>
             <Route index element={<Personal />} />

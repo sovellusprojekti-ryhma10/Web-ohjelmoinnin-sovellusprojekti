@@ -159,7 +159,8 @@ function MoviePage() {
   };
 
   return (
-    <div className="movie-details">
+    <div className="movie-page">
+      <div className="movie-details">
       {movieDetails && (
         <>
           <img
@@ -201,6 +202,7 @@ function MoviePage() {
           )}
         </>
       )}
+      </div>
       <div className="ratings-container">
         <h3>Arvostelut:</h3>
         <div className="reviews-box">
