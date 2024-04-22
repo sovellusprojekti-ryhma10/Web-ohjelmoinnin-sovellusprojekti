@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import "./Login.css";
-import "../index.css";
-import { useUser } from "../context/useUser";
+import { useUser } from "../context/useUser"; // Adjust the import path as necessary
+import { useNavigate } from "react-router-dom";
 
 export default function CreateAccount() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { register } = useUser();
+  const navigate = useNavigate(); // Use useNavigate for redirection
 
   const validate = async (e) => {
     e.preventDefault();
@@ -14,8 +14,10 @@ export default function CreateAccount() {
       try {
         const data = { username: username, password: password };
         await register(data);
+        // Assuming the register function now handles redirection and alerts
       } catch (error) {
         console.error("Error registering:", error);
+        // Optionally, handle the error, e.g., by showing an error message
       }
     }
   };
