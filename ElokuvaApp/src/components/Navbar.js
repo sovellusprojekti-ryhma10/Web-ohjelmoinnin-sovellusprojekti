@@ -47,10 +47,7 @@ export default function Navbar() {
             </div>
           </>
         )}
-        <div className="selectBubble">
-          <img src={Profile} className="icon" alt="Profile Icon" />{" "}
-          <p>Etsi käyttäjiä</p>
-        </div>
+ 
         <div className="selectBubble">
           <img src={Group} className="icon" alt="Group Icon" />
           <p>

@@ -87,4 +87,20 @@ a {
 }
 .input:active:hover {
   background-color: #dbdeff;
+}
+
+.linksign {
+  padding: 10px;
+  margin: 10px 10px 10px 10px;
+}
+
+button {
+  background-color: #131313;
+  color: #e9e9e9;
+  border: none;
+  padding: 1rem 1rem;
+  font-size: 1rem;
+  margin: 10px 10px 10px 10px;
+  border-radius: 11px;
+  font-weight: 600;
 }/*# sourceMappingURL=Login.css.map */
