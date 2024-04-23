@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { xml2js } from "xml-js";
 import "../index.css";
 import "./ShowTimes.css";
+import { UserContext } from "../context/UserContext";
 
 function ShowTimes() {
   const [showtimes, setShowtimes] = useState([]);
   const [theatre, setTheatre] = useState("");
   const [date, setDate] = useState("");
+  const [groupLists, setGroupLists] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState("");
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const { user } = useContext(UserContext);
   const [lastFetchParams, setLastFetchParams] = useState({
     theatre: "",
     date: "",
   });
+
 
   const theatres = [
     { id: 1039, name: "Espoo: OMENA" },
@@ -67,6 +73,34 @@ function ShowTimes() {
     }
   };
 
+
+  useEffect(() => {
+    const fetchGroupLists = async () => {
+      try {
+        if (user && user.token) {
+          const response = await fetch(
+            "http://localhost:3001/group/names",
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user.token}`,
+              },
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log(data.groups); // Check the structure of data
+          setGroupLists(data.groups); // Set the correct property
+        }
+      } catch (error) {
+        console.error("Error fetching favorite lists:", error);
+      }
+    };
+    fetchGroupLists();
+  }, [user]);
+
   const handleFetchShowtimes = () => {
     if (theatre !== lastFetchParams.theatre || date !== lastFetchParams.date) {
       fetchShowtimes();
@@ -82,6 +116,29 @@ function ShowTimes() {
     }
     groupedShows[title].push(show);
   });
+
+  const handleAddToGroup = async (selectedGroup, showStart, showTitle) => {
+    try {
+      const selectedTheater = theatres.find(theater => theater.id === parseInt(theatre));
+      const theaterName = selectedTheater.name;
+      console.log(selectedGroup, showStart, showTitle, theaterName);
+      const response = await fetch(`http://localhost:3001/group/pages/content/movie/times`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({ group_name: selectedGroup, showStart: showStart, showTitle: showTitle, theatre: theaterName })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to adding content to group pages');
+      }
+
+    } catch (error) {
+      console.error('Error adding content to group pages:', error);
+    }
+  };
 
   return (
     <div className="showtimes">
@@ -101,22 +158,43 @@ function ShowTimes() {
       />
       <button onClick={handleFetchShowtimes}>Hae näytösajat</button>
       <div className="shows">
-        {Object.entries(groupedShows).map(([title, shows]) => (
-          <div key={title}>
-            <h2>{title}</h2>
+        {showtimes.map((show) => (
+          <div key={show.ID._text}>
+            <h2>{show.Title._text}</h2>
             <ul>
-              {shows.map((show) => (
-                <li key={show.ID._text}>
-                  <p>
-                    Näytös alkaa:{" "}
-                    {new Date(show.dttmShowStart._text).toLocaleTimeString()}
-                  </p>
-                  <p>
-                    Näytös päättyy:{" "}
-                    {new Date(show.dttmShowEnd._text).toLocaleTimeString()}
-                  </p>
-                </li>
-              ))}
+              <li>
+                <p>
+                  Näytös alkaa:{" "}
+                  {new Date(show.dttmShowStart._text).toLocaleTimeString()}
+                </p>
+                <p>
+                  Näytös päättyy:{" "}
+                  {new Date(show.dttmShowEnd._text).toLocaleTimeString()}
+                  {user && (
+                    <button onClick={() => setOpenDropdown(show.ID._text)}>
+                      Lisää näytös ryhmään
+                    </button>
+                  )}
+                  {openDropdown === show.ID._text && (
+                    <div className="dropdown-content">
+                      <select
+                        value={selectedGroup}
+                        onChange={(e) => setSelectedGroup(e.target.value)}
+                      >
+                        <option value="">Valitse ryhmä</option>
+                        {groupLists.map((group) => (
+                          <option key={group.group_id} value={group.group_name}>
+                            {group.group_name}
+                          </option>
+                        ))}
+                      </select>
+                      <button onClick={() => handleAddToGroup(selectedGroup, show.dttmShowStart._text, show.Title._text)}>
+                        Lisää ryhmään
+                      </button>
+                    </div>
+                  )}
+                </p>
+              </li>
             </ul>
           </div>
         ))}
@@ -124,4 +202,5 @@ function ShowTimes() {
     </div>
   );
 }
+
 export default ShowTimes;

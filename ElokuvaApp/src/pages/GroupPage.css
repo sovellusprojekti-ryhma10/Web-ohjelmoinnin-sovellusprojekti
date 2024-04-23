@@ -1,64 +1,86 @@
-body {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: #e9e9e9;
-  font-family: "inter", sans-serif;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 600;
-}
 
-h1 {
-  font-size: 1.5 rem;
-}
-
-h2 {
-  text-align: left;
-  margin-top: 10px;
-  background-color: #131313;
-  color: #e9e9e9;
-  padding: 10px;
-  border-radius: 11px;
-  width: 90%;
-}
-
-a {
-  font-size: 1rem;
-  text-decoration: none;
-}
-a:visited {
-  color: #131313;
-}
-
-.content {
-  padding: 1% 1% 1% 1%;
+.group-page-body-movie {
   width: 80%;
-  padding-left: 20%;
-}
-
-@keyframes activate {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(0.05);
-  }
-}
-body {
-  color: #131313;
-  font-weight: bold;
-}
-
-.group-page-container {
-  align-content: center;
-  color: black;
-  font-weight: bold;
-  background-color: #cfcfcf;
-  max-width: 60%;
-  max-height: 80%;
-  margin: 20px auto;
   display: flex;
-  flex-direction: column;
-  /* Arrange items vertically */
-}/*# sourceMappingURL=GroupPage.css.map */
+  flex-direction: column; /* Stack the containers vertically */
+  align-items: flex-start; 
+
+}
+.group-page-body-movie h1 {
+  position: relative;
+  left: 20%;
+
+}
+.group-page-body-movie button{
+  position: relative;
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 10px 10px 10px 10px;
+}
+.movie-times-container {
+  position: relative;
+  width: 90%;
+  left: 20%;
+  margin-top: 20px; 
+}
+.movie-times-content {
+  width: 91%;
+  background-color: #e9e9e9;
+  padding: 10px;
+  overflow-y: auto;
+  max-height: 200px; 
+}
+
+.movie-times-content div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.movie-times-content span {
+  width: 30%; 
+}
+
+.headers-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.movie-times-headers {
+  display: inline-block;
+  width: 20%;
+  left: 23%;
+  color: grey;
+}
+
+.movie-times-headers2 {
+  position: absolute;
+  display: inline-block;
+  width: 20%;
+  left: 33%;
+  color: grey;
+}
+
+.movie-times-headers3 {
+  position: absolute;
+  display: inline-block;
+  width: 20%;
+  left: 65%;
+  color: grey;
+}
+.group-movies-container{
+  position: relative;
+  margin-top: 5%;
+  width: 40%;
+  left: 20%;
+}
+.group-page-container{
+  position: relative;
+  left: 60%;
+  width: 40%;
+  transform: translateY(-29%);
+}
