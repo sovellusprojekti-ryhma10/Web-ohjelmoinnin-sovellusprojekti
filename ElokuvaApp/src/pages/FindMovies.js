@@ -9,7 +9,6 @@ function FindMovies() {
 
     return (
         <div>
-            <h1>Find Movies</h1>
             <Routes>
                 <Route path="" element={<MovieSearch setMediaType={setMediaType} mediaType={mediaType} />} />
                 <Route path="/:mediaType/:movieID" element={<MoviePage mediaType={mediaType} />} />

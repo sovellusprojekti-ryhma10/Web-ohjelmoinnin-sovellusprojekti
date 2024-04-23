@@ -12,12 +12,21 @@ import Profile from "../icons/profile.png";
 import Settings from "../icons/settings.png";
 import Shows from "../icons/shows.png";
 import Sort from "../icons/sort.png";
+import Hambourger from "./Hambourger.js";
 
 export default function Navbar() {
   const { user } = useUser();
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("user");
+
+    // Redirect to the login page
+    window.location.href = "/login";
+  };
+
   return (
     <nav>
+      <Hambourger />
       <div className="navbar">
         <h1>Elokuva-sivusto</h1>
         <p>Löydä elokuva</p>
@@ -31,7 +40,9 @@ export default function Navbar() {
           </div>
           <div className="selectBubble">
             <img src={Shows} className="icon" alt="Schedule Icon" />{" "}
-            <p>Aikataulut</p>
+            <p>
+              <Link to="/showtimes">Näytösajat</Link>
+              </p>
           </div>
         </div>
         <br></br>
@@ -51,7 +62,7 @@ export default function Navbar() {
         <div className="selectBubble">
           <img src={Group} className="icon" alt="Group Icon" />
           <p>
-          <Link to="Group">Etsi ryhmiä</Link>
+            <Link to="Group">Etsi ryhmiä</Link>
           </p>{" "}
         </div>
         <div className="selectBubble">
@@ -59,10 +70,14 @@ export default function Navbar() {
           {user === null && (
             <p>
               {" "}
-              <Link to="login">Login</Link>
+              <Link to="login">Kirjaudu</Link>
             </p>
           )}
-          {user && <Link to="/logout">Logout</Link>}{" "}
+          {user && (
+            <p className="logout-button" onClick={handleLogout}>
+              Uloskirjaudu
+            </p>
+          )}
         </div>
       </div>
     </nav>

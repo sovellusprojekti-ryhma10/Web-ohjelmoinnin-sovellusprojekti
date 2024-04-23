@@ -15,9 +15,11 @@ import FavoriteLists from "./pages/FavoriteLists";
 import SpecificList from "./components/SpecificList";
 import MovieSearch from "./components/MovieSearch";
 import MoviePage from "./components/MoviePage";
+   
 import Remove from "./pages/RemoveAccount";
 import Logout from "./pages/Logout"; // Ensure this import is correct
-
+ import ShowTimes from "./pages/ShowTimes";
+ 
 function App() {
   const [mediaType, setMediaType] = useState("movie");
 
@@ -41,6 +43,7 @@ function App() {
             element={<MoviePage mediaType={mediaType} />}
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/showtimes" element={<ShowTimes />} />
           <Route path="/CreateAcc" element={<CreateAccount />} />
           <Route path="/Remove" element={<Remove />} />
 
@@ -49,7 +52,6 @@ function App() {
             <Route path="favoriteLists" element={<FavoriteLists />} />
             <Route path="favoriteLists/:listId" element={<SpecificList />} />
           </Route>
-          <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

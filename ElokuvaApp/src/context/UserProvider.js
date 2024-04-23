@@ -40,7 +40,7 @@ export default function UserProvider({ children }) {
       },
     };
 
-    axios
+     axios
       .post("http://localhost:3001/register", json, options)
       .then((response) => {
         const token = response.data.token;
@@ -75,6 +75,7 @@ export default function UserProvider({ children }) {
         console.log(`This is the error: ${error.response.data.error}`);
         return error.response.data.error;
       });
+ 
   };
 
   return (

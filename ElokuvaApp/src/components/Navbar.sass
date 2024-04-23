@@ -5,13 +5,22 @@
 	z-index: 1
 	top: 0
 	left: 0
-	background-color:$navbarbg
+	background-color: $navbarbg
 	// tämä on 14.4 px jos otetaan 1440 leveydestä, alkuperäinen figma halusi 16px
 	padding: 1% 0% 0% 1%
 	height: 100%
+	animation: fadeIn 1s
+	@media screen and ( max-width: 800px )
+		display: none
+
 	h1
 		padding: 1%	0	10%	0
-	// display: none
+
+@keyframes fadeIn
+	0%
+		opacity: 0
+	100%
+		opacity: 1
 
 
 
@@ -21,14 +30,17 @@
 	align-items: center
 	padding: 0px 16px
 	gap: 2%
-	width: 86%
+	max-width: 90%
+	min-width: 100px
 	height: 2.5rem
 	background: #FBFBFB
 	border-radius: 8px
 	flex: none
 	order: 1
 	flex-grow: 0
-	margin: 10px 0px
+	margin: 10px 10px 10px 0px
+
+
 	img
 		padding: 0px 1rem 0px 0px
 

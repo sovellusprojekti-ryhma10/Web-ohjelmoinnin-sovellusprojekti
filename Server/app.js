@@ -8,6 +8,7 @@ const { auth } = require("./middleware/auth");
 const pgPool = require("./database/pg_connection");
 const favoriteListsRouter = require("./routes/FavoriteLists");
 const groupRouter = require("./routes/group");
+const ratingsRouter = require("./routes/movie_ratings")
 
 const app = express(); // Define the app variable before using it
 app.use(
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 // Use the favoriteListsRouter as middleware
 app.use("/api", favoriteListsRouter);
 app.use("/group", groupRouter);
+app.use("/movie_ratings", ratingsRouter);
 
 const port = 3001;
 //LOGIN ACCOUNT
@@ -118,5 +120,6 @@ app.get("/protected", auth, (req, res) => {
 });
 //show on start
 app.listen(port, () => {
-    console.log(`App is running on port ${port}`);
+     console.log(`App is running on port ${port}`);
 })
+ 

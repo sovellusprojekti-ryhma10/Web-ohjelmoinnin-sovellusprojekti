@@ -20,3 +20,31 @@
    .container button {
     margin-top: 20px;
    }
+  
+   .group-list {
+    width: 100%;
+   }
+
+   .group-description1 {
+    cursor: pointer; 
+  }
+  
+  .group-description1::after {
+    width: 50%;
+    content: attr(title); 
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8); 
+    color: white; 
+    padding: 5px 10px; 
+    border-radius: 5px; 
+    z-index: 0; 
+    display: none;
+    bottom: 100%;
+    left: 40%; 
+    transform: translateX(-50%); 
+  }
+  
+  .group-description1:hover::after {
+    display: block; 
+  }
+ 

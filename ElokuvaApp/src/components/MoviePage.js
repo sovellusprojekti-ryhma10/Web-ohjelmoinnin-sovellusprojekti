@@ -7,7 +7,12 @@ function MoviePage() {
   const { movieID, mediaType } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
   const [favoriteLists, setFavoriteLists] = useState([]);
+  const [groupLists, setGroupLists] = useState([]);
+  const [ratings, setRatings] = useState([]);
   const [selectedListId, setSelectedListId] = useState("");
+  const [selectedListId2, setSelectedListId2] = useState("");
+  const [userRating, setUserRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
   const { user } = useContext(UserContext);
   const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -32,6 +37,28 @@ function MoviePage() {
 
     fetchMovieDetails();
   }, [movieID, mediaType, API_KEY]);
+
+  const fetchRatings = async () => {
+    try {
+      const url = `http://localhost:3001/movie_ratings/${movieID}`;
+      console.log("Fetching ratings from:", url);
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      console.log("Fetched ratings:", data);
+      setRatings(data.ratings); 
+    } catch (error) {
+      console.error("Error fetching ratings:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (movieID) {
+      fetchRatings();
+    }
+  }, [movieID]);
 
   useEffect(() => {
     const fetchFavoriteLists = async () => {
@@ -58,6 +85,35 @@ function MoviePage() {
     };
 
     fetchFavoriteLists();
+  }, [user]);
+
+  useEffect(() => {
+    const fetchGroupLists = async () => {
+      try {
+        if (user && user.token) {
+          const response = await fetch(
+            "http://localhost:3001/group/names",
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user.token}`,
+              },
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log(data.groups); // Check the structure of data
+          setGroupLists(data.groups); // Set the correct property
+        }
+      } catch (error) {
+        console.error("Error fetching favorite lists:", error);
+      }
+    };
+    
+
+    fetchGroupLists();
   }, [user]);
 
   const handleAddToFavoriteList = async () => {
@@ -94,8 +150,69 @@ function MoviePage() {
     }
   };
 
+  const handleRatingChange = (rating) => {
+    setUserRating(rating);
+  };
+
+  const handleReviewTextChange = (e) => {
+    setReviewText(e.target.value);
+  };
+
+  const handleAddToGroup = async () => {
+    try {
+      console.log(selectedListId2, movieID);
+      const response = await fetch(`http://localhost:3001/group/pages/content`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ movie_id: movieID, group_name: selectedListId2 })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to adding content to group pages');
+      }
+      setSelectedListId2("");
+
+    } catch (error) {
+      console.error('Error adding content to group pages:', error);
+    }
+  };
+
+  const handleSubmitRating = async () => {
+    try {
+      if (!userRating || !reviewText) {
+        throw new Error("Please provide a rating and review text");
+      }
+
+      const response = await fetch(
+        `http://localhost:3001/movie_ratings/${movieID}/add_rating`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({
+            username: user.username,
+            rating: userRating,
+            review: reviewText,
+          }),
+        }
+      );
+      if (!response.ok) throw new Error("Failed to submit rating");
+
+      fetchRatings();
+      setUserRating(0);
+      setReviewText("");
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+    }
+  };
+
   return (
-    <div className="movie-details">
+    <div className="movie-page">
+      <div className="movie-details">
       {movieDetails && (
         <>
           <img
@@ -106,20 +223,20 @@ function MoviePage() {
           <div className="description-container">
             <h2>{movieDetails.title || movieDetails.name}</h2>
             <p>
-              Genres:{" "}
+              Genret:{" "}
               {movieDetails.genres &&
                 movieDetails.genres.map((genre) => genre.name).join(", ")}
             </p>
-            <p>Overview: {movieDetails.overview}</p>
-            <p>Release Date: {movieDetails.release_date}</p>
-            <p>Vote Average: {movieDetails.vote_average}</p>
+            <p>Kuvaus: {movieDetails.overview}</p>
+            <p>Julkaistu: {movieDetails.release_date}</p>
+            <p>TMDB Keskiarvo: {movieDetails.vote_average}</p>
           </div>
           {user && (
             <>
               <select
                 value={selectedListId}
                 onChange={(e) => {
-                  console.log("Dropdown value changed:", e.target.value); // Debugging line
+                  console.log("Dropdown value changed:", e.target.value); // Debuggausta
                   setSelectedListId(e.target.value);
                 }}
               >
@@ -135,8 +252,77 @@ function MoviePage() {
               </button>
             </>
           )}
+{user && (
+  <>
+    <select
+      value={selectedListId2}
+      onChange={(e) => {
+        console.log("Dropdown value changed:", e.target.value);
+        setSelectedListId2(e.target.value);
+      }}
+    >
+      <option value="">Valitse Ryhmä</option>
+      {groupLists.map((group) => (
+        <option key={group.group_id} value={group.group_name}>
+          {group.group_name}
+        </option>
+      ))}
+    </select>
+    <button onClick={handleAddToGroup}>
+      Lisää ryhmään
+    </button>
+  </>
+)}
+          
         </>
       )}
+      </div>
+      <div className="ratings-container">
+        <h3>Arvostelut:</h3>
+        <div className="reviews-box">
+          <ul>
+            {ratings.map((rating, index) => (
+              <li key={index}>
+                <div className="star-container">
+                  {Array.from({ length: rating.rating }, (_, i) => (
+                    <span key={i} className="star filled">
+                      ★
+                    </span>
+                  ))}
+                </div>
+                <p>Käyttäjä: {rating.username}</p>
+                <p>Arvostelu: {rating.review}</p>
+                <p>
+                  Päivämäärä:{" "}
+                  {new Date(rating.submission_date).toLocaleDateString()}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {user && (
+          <>
+            <div className="rating-container">
+              <span>Arviosi: </span>
+              {[1, 2, 3, 4, 5].map((rating) => (
+                <span
+                  key={rating}
+                  className={`star ${rating <= userRating ? "filled" : ""}`}
+                  onClick={() => handleRatingChange(rating)}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+            <textarea
+              value={reviewText}
+              onChange={handleReviewTextChange}
+              placeholder="Kirjoita arvostelu"
+            />
+            <button onClick={handleSubmitRating}>Lisää arvostelu</button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
