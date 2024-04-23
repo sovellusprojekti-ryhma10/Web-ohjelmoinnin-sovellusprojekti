@@ -44,4 +44,5 @@ a:visited {
   100% {
     transform: scale(0.05);
   }
+  border-radius: 11px !important;
 }/*# sourceMappingURL=index.css.map */

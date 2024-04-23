@@ -4,6 +4,7 @@
 }
 
 .movie-details {
+ 
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -60,3 +61,4 @@
 .star.filled {
     color: #ffc107;
 }
+ 
