@@ -1,48 +1,86 @@
-.group-page-body{
-  position: absolute;
-  right: 0;
-  background-color: #f2f2f2;
-  width: 81%;
-}
-@keyframes activate {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(0.05);
-  }
-}
 
-.group-page-container {
-  width: 40%;
-  margin: 20px;
-  font-weight: bold;
-  left: 100%;
+.group-page-body-movie {
+  width: 80%;
   display: flex;
-  flex-direction: column;
-  /* Arrange items vertically */
-}/*# sourceMappingURL=GroupPage.css.map */
+  flex-direction: column; /* Stack the containers vertically */
+  align-items: flex-start; 
 
-.group-movies-container {
+}
+.group-page-body-movie h1 {
   position: relative;
-  width: 40%;
-  margin: 20px;
+  left: 20%;
+
 }
-.group-container {
-  display: flex;
-}
-button{
-  background-color: #131313;
+.group-page-body-movie button{
+  position: relative;
+  background-color: black;
   color: white;
   border: none;
   padding: 8px 16px;
   cursor: pointer;
-  border-radius: 8px;
-  margin: 5px;
-
+  border-radius: 4px;
+  margin: 10px 10px 10px 10px;
 }
-.group-movies-time-container{
+.movie-times-container {
   position: relative;
-  margin: 20px;
+  width: 90%;
+  left: 20%;
+  margin-top: 20px; 
+}
+.movie-times-content {
+  width: 91%;
+  background-color: #e9e9e9;
+  padding: 10px;
+  overflow-y: auto;
+  max-height: 200px; 
+}
 
+.movie-times-content div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.movie-times-content span {
+  width: 30%; 
+}
+
+.headers-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.movie-times-headers {
+  display: inline-block;
+  width: 20%;
+  left: 23%;
+  color: grey;
+}
+
+.movie-times-headers2 {
+  position: absolute;
+  display: inline-block;
+  width: 20%;
+  left: 33%;
+  color: grey;
+}
+
+.movie-times-headers3 {
+  position: absolute;
+  display: inline-block;
+  width: 20%;
+  left: 65%;
+  color: grey;
+}
+.group-movies-container{
+  position: relative;
+  margin-top: 5%;
+  width: 40%;
+  left: 20%;
+}
+.group-page-container{
+  position: relative;
+  left: 60%;
+  width: 40%;
+  transform: translateY(-29%);
 }

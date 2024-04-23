@@ -44,9 +44,34 @@ const sql = {
     ADD_GROUP_PAGE_CONTENT: 'INSERT INTO group_pages_content (group_page_id, movie_id) VALUES ($1, $2)',
     CHECK_IF_USER_IS_MEMBER: 'SELECT request_sent FROM User_Groups WHERE account_id = ($1) AND group_id = ($2)',
     GET_GROUP_PAGES_ID: 'SELECT id FROM Group_pages WHERE group_id = ($1)',
-    GET_GROUP_PAGES_CONTENT: 'SELECT movie_id FROM group_pages_content WHERE group_page_id = ($1)'
+    GET_GROUP_PAGES_CONTENT: 'SELECT movie_id FROM group_pages_content WHERE group_page_id = $1',
+    ADD_GROUP_PAGE_CONTENT_MOVIE_TIME: 'INSERT INTO group_pages_movie_times (group_page_id, title, theater, movie_date) VALUES ($1, $2, $3, $4)',
+    GET_GROUP_PAGES_CONTENT_MOVIE_TIMES: 'SELECT * FROM group_pages_movie_times WHERE group_page_id = $1'
 
 };
+
+async function getGroupPageContentMovieTimes(accountId, groupId){
+    try {
+        console.log(accountId, groupId);
+
+        const isMemberResult = await pgPool.query(sql.CHECK_IF_USER_IS_MEMBER, [accountId, groupId]);
+        const isMember = isMemberResult.rows.length > 0 && isMemberResult.rows[0].request_sent;
+
+         if(isMember){
+            const group_pages_id_result = await pgPool.query(sql.GET_GROUP_PAGES_ID, [groupId]);
+            const group_pages_id = group_pages_id_result.rows[0].id;
+
+            const result = await pgPool.query(sql.GET_GROUP_PAGES_CONTENT_MOVIE_TIMES, [group_pages_id]);
+            console.log(result.rows);
+            return result.rows;
+         }
+
+    } catch (error) {
+        console.error('Error adding group pages content:', error);
+        throw error;
+    }
+
+}
 
 async function getGroupPageContent(accountId, groupId){
     try {
@@ -64,6 +89,32 @@ async function getGroupPageContent(accountId, groupId){
             return result.rows;
          }
 
+    } catch (error) {
+        console.error('Error adding group pages content:', error);
+        throw error;
+    }
+
+}
+
+
+async function addGroupPageContentMovieTime(accountId, group_name, showStart, showTitle, theatre) {
+    try {
+        console.log(accountId, group_name, showStart, showTitle, theatre);
+
+        const groupNameResult = await pgPool.query(sql.GET_GROUP_ID, [group_name]);
+        const group_id = groupNameResult.rows[0].id;
+
+        const isMemberResult = await pgPool.query(sql.CHECK_IF_USER_IS_MEMBER, [accountId, group_id]);
+        const isMember = isMemberResult.rows.length > 0 && isMemberResult.rows[0].request_sent;
+
+        if(isMember){
+        const group_pages_id_result = await pgPool.query(sql.GET_GROUP_PAGES_ID, [group_id]);
+        const group_pages_id = group_pages_id_result.rows[0].id;
+        
+        console.log(group_pages_id)
+
+        await pgPool.query(sql.ADD_GROUP_PAGE_CONTENT_MOVIE_TIME, [group_pages_id, showTitle, theatre, showStart]);
+        }
     } catch (error) {
         console.error('Error adding group pages content:', error);
         throw error;
@@ -361,4 +412,4 @@ async function addUserGroup(account_id, group_name) {
     }
 }
 
-module.exports = {getGroupPageContent, addGroupPageContent, getUserGroupName ,getUserGroups, removeGroup, getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin, addGroupsMember, removeGroupsMember, removeGroupsAdmin };
+module.exports = {getGroupPageContentMovieTimes, addGroupPageContentMovieTime, getGroupPageContent, addGroupPageContent, getUserGroupName ,getUserGroups, removeGroup, getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin, addGroupsMember, removeGroupsMember, removeGroupsAdmin };

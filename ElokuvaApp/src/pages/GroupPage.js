@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link  } from 'react-router-dom';
-import './GroupPage.css'; 
+import { useParams, Link } from 'react-router-dom';
+import './GroupPage.css';
 import { useUser } from "../context/useUser";
+
 
 const GroupPage = () => {
   const { user } = useUser();
@@ -10,6 +11,8 @@ const GroupPage = () => {
   const [description, setDescription] = useState('');
   const [groupLists, setGroupLists] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [moviesTimes, setMoviesTimes] = useState([]);
+  const [showtimes, setShowtimes] = useState([]);
   const API_KEY = process.env.REACT_APP_API_KEY;
 
   useEffect(() => {
@@ -17,8 +20,8 @@ const GroupPage = () => {
       try {
         const response = await fetch(`http://localhost:3001/group/${groupId}`, {
           headers: {
-        Authorization: `Bearer ${user.token}`
-      }
+            Authorization: `Bearer ${user.token}`
+          }
         });
         if (!response.ok) {
           throw new Error('Failed to fetch group information');
@@ -35,56 +38,81 @@ const GroupPage = () => {
   }, [groupId]);
 
   useEffect(() => {
-    const fetchGroupPageContent = async () => {
-        try {
-            const response = await fetch("http://localhost:3001/group/get/pages/content", {
-                method: "POST", 
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${user.token}`,
-                },
-                body: JSON.stringify({ groupId }), 
-            });
+    const fetchGroupPageContentMovieTimes = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/group/get/pages/content/movie/times", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ groupId }),
+        });
 
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            const data = await response.json();
-            console.log(data); 
-            setGroupLists(data);
-            fetchMovies(data); 
-        } catch (error) {
-            console.error("Error fetching group content list:", error);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
+
+        const movieTimes = await response.json();
+        console.log(movieTimes);
+        setMoviesTimes(movieTimes);
+      } catch (error) {
+        console.error("Error fetching group content list:", error);
+      }
+    };
+
+    fetchGroupPageContentMovieTimes();
+  }, [groupId, user]);
+
+  useEffect(() => {
+    const fetchGroupPageContent = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/group/get/pages/content", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ groupId }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setGroupLists(data);
+        fetchMovies(data);
+      } catch (error) {
+        console.error("Error fetching group content list:", error);
+      }
     };
 
     fetchGroupPageContent();
-}, [groupId, user]);
+  }, [groupId, user]);
 
-useEffect(() => {
-  fetchMovies(groupLists);
-}, [groupLists]);
 
-const fetchMovies = async (data) => {
-  try {
+
+  const fetchMovies = async (data) => {
+    try {
       const movieIds = data.map((movie) => movie.movie_id);
       const moviesData = await Promise.all(
-          movieIds.map(async (movieId) => {
-              const response = await fetch(
-                  `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`
-              );
-              if (!response.ok) {
-                  throw new Error(`Failed to fetch movie with ID ${movieId}`);
-              }
-              return response.json();
-          })
+        movieIds.map(async (movieId) => {
+          const response = await fetch(
+            `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`
+          );
+          if (!response.ok) {
+            throw new Error(`Failed to fetch movie with ID ${movieId}`);
+          }
+          return response.json();
+        })
       );
       setMovies(moviesData);
-  } catch (error) {
+    } catch (error) {
       console.error("Error fetching movies:", error);
-  }
-};
+    }
+  };
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
@@ -160,7 +188,7 @@ const fetchMovies = async (data) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`
         },
-        body: JSON.stringify({groupId, memberName }),
+        body: JSON.stringify({ groupId, memberName }),
       });
       if (!response.ok) {
         throw new Error('Failed to update member to admin');
@@ -181,7 +209,7 @@ const fetchMovies = async (data) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`
         },
-        body: JSON.stringify({groupId, memberName}),
+        body: JSON.stringify({ groupId, memberName }),
       });
       if (!response.ok) {
         throw new Error('Failed to update admin to member');
@@ -199,7 +227,7 @@ const fetchMovies = async (data) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`
         },
-        body: JSON.stringify({groupId}),
+        body: JSON.stringify({ groupId }),
       });
       if (!response.ok) {
         throw new Error('Failed to remove group');
@@ -214,103 +242,121 @@ const fetchMovies = async (data) => {
     return <div>Loading...</div>;
   }
 
+
   const { groupName, createdBy, groupData, groupMembers, isAdmin, groupAdmins, requestToJoin, isCreatedBy } = groupInfo;
   const content = groupData.length > 0 ? groupData[0].content : "No content available";
   console.log(groupName, createdBy, groupData);
 
   return (
-    <div className="group-page-body">
+    <div className="group-page-body-movie">
 
-        <div className="group-movies-time-container">
-        <h1>Ryhmän nimi: {groupName}</h1>
-        <h2>Näytösajat</h2>
-        <p>Esimerkki aika 15.00</p>
-        <p>Esimerkki aika 15.00</p>
-        <p>Esimerkki aika 15.00</p>
-        <p>Esimerkki aika 15.00</p>
-        <p>Esimerkki aika 15.00</p>
+      <h1>Ryhmän nimi: {groupName}</h1>
+
+      <div className="movie-times-container">
+      <h2 className="movie-times-header">Näytösajat</h2>
+      <span className='movie-times-headers'><p>Elokuva</p></span>
+      <span className='movie-times-headers2'><p>Teatteri</p></span>
+      <span className='movie-times-headers3'><p>Päivämäärä/aika</p></span>
+
+        <div className="movie-times-content">
+          {moviesTimes.map((movie, index) => (
+            <div key={index}>
+              <span>{movie.title}</span>
+              <span>{movie.theater}</span>
+              <span>{new Date(movie.movie_date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })}</span>
+            </div>
+          ))}
+          </div>
         </div>
-        <div class="group-container">
 
-          <div className="group-movies-container">
-      <h2>Elokuvat</h2>
+      
+
+
+
+      <div className="group-movies-container">
+        <h2>Elokuvat</h2>
         {movies.map((movie) => (
           <div key={movie.id} className="group-movie-info">
             <Link to={`/movie/${movie.id}`} key={movie.id}>
-            <h3>{movie.title}</h3>
+              <h3>{movie.title}</h3>
             </Link>
           </div>
         ))}
-        </div>
+      </div>
 
-        
-    <div className="group-page-container">
-      <h2>Käyttäjät</h2>
-      
-      {requestToJoin.map((request, index) => (
-  <div key={index}>
-    <span>{request}</span>
 
-    {isAdmin && (
-      <>
-        <button onClick={() => handleAddToGroup(request)}>Hyväksy pyyntö</button>
-        <button onClick={() => handleRemoveFromGroup(request)}>Hylkää pyyntö</button>
-      </>
-    )}
+      <div className="group-page-container">
+        <h2>Käyttäjät</h2>
 
-  </div> 
-  ))}
-      {isAdmin && (
-            <>
-      <p>Pyytää liittymään ryhmään:</p>
-      </>
-          )}
+        {requestToJoin.map((request, index) => (
+          <div key={index}>
+            <span>{request}</span>
 
-      <p>Ryhmä Jäsenet:</p>
-      {groupMembers.map((member, index) => (
-  <div key={index}>
-    <span>{member}</span>
-    {isAdmin && (
-      <>
-        <button onClick={() => handleRemoveFromGroup(member)}>poista ryhmästä</button>
-          <button onClick={() => handleGiveAdmin(member)}>anna admin</button>
+            {isAdmin && (
+              <>
+                <button onClick={() => handleAddToGroup(request)}>Hyväksy pyyntö</button>
+                <button onClick={() => handleRemoveFromGroup(request)}>Hylkää pyyntö</button>
+              </>
+            )}
+
+          </div>
+        ))}
+        {isAdmin && (
+          <>
+            <p>Pyytää liittymään ryhmään:</p>
           </>
-          )}
+        )}
 
-  </div> 
-))}
-      {groupAdmins.map((admin, index) => (
-  <div key={index}>
-    <span>{admin}</span>
+        <p>Ryhmä Jäsenet:</p>
+        {groupMembers.map((member, index) => (
+          <div key={index}>
+            <span>{member}</span>
+            {isAdmin && (
+              <>
+                <button onClick={() => handleRemoveFromGroup(member)}>poista ryhmästä</button>
+                <button onClick={() => handleGiveAdmin(member)}>anna admin</button>
+              </>
+            )}
 
-    {isAdmin && (
-      <>
-        <button onClick={() => handleRemoveFromGroup(admin)}>poista ryhmästä</button>
-        <button onClick={() => handleRemoveAdmin(admin)}>poista admin</button>
-      </>
-    )}
-  </div> 
-))}
+          </div>
+        ))}
+        {groupAdmins.map((admin, index) => (
+          <div key={index}>
+            <span>{admin}</span>
+
+            {isAdmin && (
+              <>
+                <button onClick={() => handleRemoveFromGroup(admin)}>poista ryhmästä</button>
+                <button onClick={() => handleRemoveAdmin(admin)}>poista admin</button>
+              </>
+            )}
+          </div>
+        ))}
 
 
-      <div className="description">
-      {isAdmin && (
+        <div className="description">
+          {isAdmin && (
             <>
-            <p>Ryhmän kuvaus: {content}</p>
-      <textarea
-        defaultValue={content} 
-        onChange={handleDescriptionChange}
-        placeholder="Type description here..."
-      />
-      <button onClick={handleDescriptionSubmit}>Submit Description</button>
-      </>
+              <p>Ryhmän kuvaus: {content}</p>
+              <textarea
+                defaultValue={content}
+                onChange={handleDescriptionChange}
+                placeholder="Type description here..."
+              />
+              <button onClick={handleDescriptionSubmit}>Submit Description</button>
+              <button onClick={handleDeleteGroup}>Poista Ryhmä</button>
+            </>
           )}
           <div>
-          <button onClick={handleDeleteGroup}>Poista Ryhmä</button>
+          {isAdmin && (
+            <>
+
+              <button onClick={handleDeleteGroup}>Poista Ryhmä</button>
+            </>
+          )}
           </div>
-          </div>
-    </div>
-    </div>
+        </div>
+      </div>
     </div>
   );
 };
