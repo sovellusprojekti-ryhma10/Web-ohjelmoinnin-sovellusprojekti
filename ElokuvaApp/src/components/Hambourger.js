@@ -5,19 +5,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../context/useUser";
 import Group from "../icons/group.png";
-import Search from "../icons/search.png";
-import Grouppage from "../icons/groupPage.png";
 import Koti from "../icons/home.png";
 import Profile from "../icons/profile.png";
-import Settings from "../icons/settings.png";
 import Shows from "../icons/shows.png";
-import Sort from "../icons/sort.png";
 import styles from "./Hamburger.css";
-import UserProvider from "../context/UserProvider";
-import PrivateRoute from "../pages/PrivateRoute";
+
 function Hambourger() {
     const { user } = useUser();
-    const { dd } = "hamburger";
 
     // adding the states
     const [isActive, setIsActive] = useState(false);
@@ -35,32 +29,38 @@ function Hambourger() {
 
     return (
         <div className="hamburgernav">
-			<MenuRoundedIcon className={`${isActive ? styles.active : "hide"}`} onClick={toggleActiveClass} />
-			<MenuOpenRoundedIcon className={`hide ${isActive ? styles.active : "show"}`} onClick={toggleActiveClass} />
+            <MenuRoundedIcon
+                className={`${isActive ? styles.active : "hide"}`}
+                onClick={toggleActiveClass}
+            />
+            <MenuOpenRoundedIcon
+                className={`hide ${isActive ? styles.active : "show"}`}
+                onClick={toggleActiveClass}
+            />
 
             <div
                 className={`hamburger${isActive ? styles.active : "show"}`}
                 onClick={toggleActiveClass}
             >
                 {user && (
-                    <>
-                        <p>Käyttäjät</p>
-                        <div className="selectBubble">
-                            <img
-                                src={Profile}
-                                className="icon"
-                                alt="Profile Icon"
-                            />
-                            <p>
-                                <Link to="Personal">Oma sivu</Link>
-                            </p>
-                        </div>
-                    </>
+                    <div className="selectBubble">
+                        <img
+                            src={Profile}
+                            className="icon"
+                            alt="Profile Icon"
+                        />
+                        <p>
+                            <Link to="Personal">Oma sivu</Link>
+                        </p>
+                    </div>
                 )}
                 <div className="selectBubble">
-                    <img src={Profile} className="icon" alt="Profile Icon" />{" "}
-                    <p>Etsi käyttäjiä</p>
+                    <img src={Shows} className="icon" alt="Schedule Icon" />{" "}
+                    <p>
+                        <Link to="/showtimes">Näytösajat</Link>
+                    </p>
                 </div>
+
                 <div className="selectBubble">
                     <img src={Group} className="icon" alt="Group Icon" />
                     <p>

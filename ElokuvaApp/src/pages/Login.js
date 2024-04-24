@@ -10,14 +10,15 @@ export default function Login() {
   const { login } = useUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const data = { username: username, password: password };
 
   const validate = async (e) => {
+  let loginData =await login(data);
+
     e.preventDefault();
     if (username.length > 0 && password.length > 0) {
       try {
-        const data = { username: username, password: password };
-        await login(data);
+         localStorage.setItem('items', JSON.stringify(loginData));
         } catch (error) {
          console.error("Error logging in:", error);
       }
@@ -35,7 +36,7 @@ export default function Login() {
         <h2>Käyttäjätiedot</h2>
         <div>
            <p className="formlabel">Käyttäjänimi</p>
- 
+
           <input
             className="input"
             value={username}
@@ -45,7 +46,7 @@ export default function Login() {
         </div>
         <div>
            <p className="formlabel">Salasana </p>
- 
+
           <input
             className="input"
             type="password"
@@ -62,9 +63,7 @@ export default function Login() {
       <Link className="linksign" to="/CreateAcc">
         Luo tili
       </Link>
-      <Link className="linksign" to="/Remove">
-        Poista tili
-      </Link>
+
       </div>
     </div>
   );

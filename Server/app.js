@@ -8,7 +8,7 @@ const { auth } = require("./middleware/auth");
 const pgPool = require("./database/pg_connection");
 const favoriteListsRouter = require("./routes/FavoriteLists");
 const groupRouter = require("./routes/group");
-const ratingsRouter = require("./routes/movie_ratings")
+const ratingsRouter = require("./routes/movie_ratings");
 
 const app = express(); // Define the app variable before using it
 app.use(
@@ -43,7 +43,6 @@ app.post("/login", async (req, res) => {
             );
             res.status(200).json({ token: token });
             console.log(res);
-
         } else {
             res.status(401).json({ message: "Invalid credentials!" });
             console.log(res);
@@ -66,7 +65,9 @@ app.post("/register", async (req, res) => {
         if (existingUser.rowCount > 0) {
             return res.status(409).json({ message: "Username already exists" });
         }
-
+        if (password == "" || username == "") {
+            return res.status(400).json({ message: "Fill out all the fields" });
+        }
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         console.log(hashedPassword, username, password);
@@ -81,45 +82,34 @@ app.post("/register", async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
-// REMOVE ACCOUNT
-app.post("/remove", async (req, res) => {
-    const { username, password } = req.body;
+//remove account
+app.post("/user/remove ", async (req, res) => {
+    const { username } = req.body;
+    console.log(req);
     try {
         const existingUser = await pgPool.query(
-            "SELECT password_hash, id FROM accounts WHERE username = $1",
+            "SELECT * FROM accounts WHERE username = $1",
             [username]
         );
-
-        if (existingUser.rowCount < 0) {
-            return res.status(409).json({ message: "Username doesn't exist" });
+        if (existingUser.rowCount > 0) {
+            return res.status(409).json({ message: "No such user" });
         }
-
-        // check if password is correct
-        const { isAuth, accountId } = await verifyCredentials(username, password);
-        if (!isAuth) {
-            return res.status(401).json({ message: "Invalid credentials!" });
-        } else {
-            await pgPool.query(
-                "DELETE FROM accounts WHERE username = $1",
-                [username]
-            );
-            res.status(200).json({ message: "User removed successfully" });
-            console.log(res);
-        }
-    }
-
-
-    catch (error) {
+        await pgPool.query("DELETE FROM accounts WHERE USERNAME = $1", [username]);
+        res.status(201).json({ message: "delete successful" });
+    } catch (error) {
         console.error("Error during deletion:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 });
+
 //PROTECTED ROUTE FOR PASSWORD PROTECTED PAGES
 app.get("/protected", auth, (req, res) => {
     res.json({ message: "This is a protected route" });
 });
 //show on start
 app.listen(port, () => {
-     console.log(`App is running on port ${port}`);
-})
- 
+    console.log(`App is running on port ${port}`);
+});
+
+module.exports = app;
+module.a = 5;
