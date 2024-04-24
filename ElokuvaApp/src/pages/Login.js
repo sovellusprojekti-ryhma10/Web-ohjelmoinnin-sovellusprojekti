@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useUser } from "../context/useUser";
 import "../index.css";
 import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 export default function Login() {
   const { login } = useUser();
@@ -17,12 +18,15 @@ export default function Login() {
       try {
         const data = { username: username, password: password };
         await login(data);
-        navigate("/");
-      } catch (error) {
-        console.error("Error logging in:", error);
+        } catch (error) {
+         console.error("Error logging in:", error);
       }
+    } else {
+      toast.error("Täytä kaikki kentät");
     }
   };
+
+
 
   return (
     <div className="formcontent">
@@ -30,11 +34,9 @@ export default function Login() {
         <h1>Kirjaudu</h1>
         <h2>Käyttäjätiedot</h2>
         <div>
-          <label htmlFor="username-input" className="formlabel">
-            Käyttäjänimi
-          </label>
+           <p className="formlabel">Käyttäjänimi</p>
+ 
           <input
-            id="username-input"
             className="input"
             value={username}
             placeholder="Käyttäjänimi"
@@ -42,11 +44,9 @@ export default function Login() {
           />
         </div>
         <div>
-          <label htmlFor="password-input" className="formlabel">
-            Salasana
-          </label>
+           <p className="formlabel">Salasana </p>
+ 
           <input
-            id="password-input"
             className="input"
             type="password"
             placeholder="Salasana"
@@ -57,11 +57,15 @@ export default function Login() {
         <button id="login-submit" type="submit">
           Kirjaudu
         </button>
-        <button id="delete-account-submit">Poista tili</button>
       </form>
+      <div id="accounts">
       <Link className="linksign" to="/CreateAcc">
         Luo tili
       </Link>
+      <Link className="linksign" to="/Remove">
+        Poista tili
+      </Link>
+      </div>
     </div>
   );
 }

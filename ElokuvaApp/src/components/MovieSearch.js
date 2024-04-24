@@ -34,7 +34,7 @@ function MovieSearch({ setMediaType, mediaType }) {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [releaseYear, setReleaseYear] = useState("");
   const [rating, setRating] = useState("");
-  const [ratingComparison, setRatingComparison] = useState("Higher Than");
+  const [ratingComparison, setRatingComparison] = useState("higher");
   const [page, setPage] = useState(1);
   const [movies, setMovies] = useState([]);
   const [selectedMovieIndex, setSelectedMovieIndex] = useState(0);
@@ -125,6 +125,9 @@ function MovieSearch({ setMediaType, mediaType }) {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+    console.log(rating);
+    console.log(ratingComparison);
+    //console.log(movies[selectedMovieIndex].vote_average);
   };
 
   // Previous ja Next -painikkeita painellessa sivulla näkyvät hakutulokset vaihtuu. Kerrallaan näkyy neljä tulosta. Kun päästään sivun loppuun (tai peruutettaessa sivun alkuun), vaihdetaan sivua ja kutsutaan uudestaan hakufunktiota
@@ -232,6 +235,7 @@ function MovieSearch({ setMediaType, mediaType }) {
       </div>
       {movies.length > 0 && (
         <>
+          {movies[selectedMovieIndex] && (
           <div className="movie-info">
             <h2>{movies[selectedMovieIndex].title}</h2>
             <h2>{movies[selectedMovieIndex].name}</h2>
@@ -249,6 +253,8 @@ function MovieSearch({ setMediaType, mediaType }) {
               </Link>
             )}
           </div>
+        )}
+        {movies[selectedMovieIndexB] && (
           <div className="movie-info-b">
             <h2>{movies[selectedMovieIndexB].title}</h2>
             <h2>{movies[selectedMovieIndexB].name}</h2>
@@ -265,6 +271,8 @@ function MovieSearch({ setMediaType, mediaType }) {
               </Link>
             )}
           </div>
+        )}
+        {movies[selectedMovieIndexC] && (
           <div className="movie-info-c">
             <h2>{movies[selectedMovieIndexC].title}</h2>
             <h2>{movies[selectedMovieIndexC].name}</h2>
@@ -281,6 +289,8 @@ function MovieSearch({ setMediaType, mediaType }) {
               </Link>
             )}
           </div>
+        )}
+        {movies[selectedMovieIndexD] && (
           <div className="movie-info-d">
             <h2>{movies[selectedMovieIndexD].title}</h2>
             <h2>{movies[selectedMovieIndexD].name}</h2>
@@ -297,13 +307,15 @@ function MovieSearch({ setMediaType, mediaType }) {
               </Link>
             )}
           </div>
-          <div className="navigation-buttons">
-            <button onClick={handlePrevMovie}>Edellinen sivu</button>
-            <button onClick={handleNextMovie}>Seuraava sivu</button>
-          </div>
-        </>
-      )}
-    </div>
+        )}
+
+        <div className="navigation-buttons">
+          <button onClick={handlePrevMovie}>Edellinen sivu</button>
+          <button onClick={handleNextMovie}>Seuraava sivu</button>
+        </div>
+      </>
+    )}
+  </div>
   );
 }
 

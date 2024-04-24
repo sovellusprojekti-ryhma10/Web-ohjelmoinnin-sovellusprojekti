@@ -1,4 +1,4 @@
-const {getUserGroups, removeGroup, getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin, addGroupsMember, removeGroupsMember, removeGroupsAdmin} = require('../database/groups_db');
+const {getGroupPageContentMovieTimes, addGroupPageContentMovieTime, getGroupPageContent, addGroupPageContent, getUserGroupName ,getUserGroups, removeGroup, getGroups, addGroups, addUserGroup, getGroupsData, addGroupsContent, addGroupsAdmin, addGroupsMember, removeGroupsMember, removeGroupsAdmin} = require('../database/groups_db');
 const express = require("express");
 const router = express.Router();
 const { auth } = require("../middleware/auth");
@@ -30,6 +30,89 @@ router.get('/all', async (req, res) => {
     }
 });
 
+
+router.post('/pages/content', auth, async (req, res) => {
+    const { accountId } = res.locals;
+    const { movie_id, group_name } = req.body;
+
+    try {
+        console.log("tuleeko tähän")
+        const movieID = await addGroupPageContent(accountId, movie_id, group_name);
+        console.log(movieID);
+        res.json(movieID);
+
+    } catch (error) {
+        console.error('Error adding group content:', error);
+        res.status(500).json({ error: 'Failed to adding group content' });
+    }
+});
+
+router.post('/pages/content/movie/times', auth, async (req, res) => {
+    const { accountId } = res.locals;
+    const { group_name, showStart, showTitle, theatre } = req.body;
+    try {
+        console.log("tuleeko tähän")
+        const movieID = await addGroupPageContentMovieTime(accountId, group_name, showStart, showTitle, theatre);
+        console.log(movieID);
+        res.json(movieID);
+
+    } catch (error) {
+        console.error('Error adding group content:', error);
+        res.status(500).json({ error: 'Failed to adding group content' });
+    }
+});
+
+router.post('/get/pages/content/movie/times', auth, async (req, res) => {
+    const { accountId } = res.locals;
+    const { groupId } = req.body;
+
+    try {
+        console.log("halooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloo")
+        console.log(accountId, groupId)
+        const movie_time_id = await getGroupPageContentMovieTimes(accountId, groupId);
+        console.log(movie_time_id);
+        res.json(movie_time_id);
+
+    } catch (error) {
+        console.error('Error getting group content:', error);
+        res.status(500).json({ error: 'Failed to fetch group content' });
+    }
+});
+
+router.post('/get/pages/content', auth, async (req, res) => {
+    const { accountId } = res.locals;
+    const { groupId } = req.body;
+
+    try {
+        console.log("halooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloohalooohalooo haloo")
+        console.log(accountId, groupId)
+        const movieID = await getGroupPageContent(accountId, groupId);
+        console.log(movieID);
+        res.json(movieID);
+
+    } catch (error) {
+        console.error('Error getting group content:', error);
+        res.status(500).json({ error: 'Failed to fetch group content' });
+    }
+});
+
+
+
+router.get('/names', auth, async (req, res) => {
+    const { accountId } = res.locals;
+
+    try {
+        console.log("tuleeko tähän")
+        const groups = await getUserGroupName(accountId);
+        console.log("tuleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+        console.log(groups);
+        res.json(groups);
+
+    } catch (error) {
+        console.error('Error getting groups:', error);
+        res.status(500).json({ error: 'Failed to fetch groups' });
+    }
+});
 
 router.get('/user/all', auth, async (req, res) => {
     const { accountId } = res.locals;

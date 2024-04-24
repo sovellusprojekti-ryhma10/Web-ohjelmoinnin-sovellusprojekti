@@ -40,7 +40,9 @@ export default function Navbar() {
           </div>
           <div className="selectBubble">
             <img src={Shows} className="icon" alt="Schedule Icon" />{" "}
-            <p>Aikataulut</p>
+            <p>
+              <Link to="/showtimes">Näytösajat</Link>
+              </p>
           </div>
         </div>
         <br></br>
@@ -56,10 +58,7 @@ export default function Navbar() {
             </div>
           </>
         )}
-        <div className="selectBubble">
-          <img src={Profile} className="icon" alt="Profile Icon" />{" "}
-          <p>Etsi käyttäjiä</p>
-        </div>
+ 
         <div className="selectBubble">
           <img src={Group} className="icon" alt="Group Icon" />
           <p>

@@ -7,8 +7,10 @@ function MoviePage() {
   const { movieID, mediaType } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
   const [favoriteLists, setFavoriteLists] = useState([]);
+  const [groupLists, setGroupLists] = useState([]);
   const [ratings, setRatings] = useState([]);
   const [selectedListId, setSelectedListId] = useState("");
+  const [selectedListId2, setSelectedListId2] = useState("");
   const [userRating, setUserRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const { user } = useContext(UserContext);
@@ -85,6 +87,35 @@ function MoviePage() {
     fetchFavoriteLists();
   }, [user]);
 
+  useEffect(() => {
+    const fetchGroupLists = async () => {
+      try {
+        if (user && user.token) {
+          const response = await fetch(
+            "http://localhost:3001/group/names",
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user.token}`,
+              },
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log(data.groups); // Check the structure of data
+          setGroupLists(data.groups); // Set the correct property
+        }
+      } catch (error) {
+        console.error("Error fetching favorite lists:", error);
+      }
+    };
+    
+
+    fetchGroupLists();
+  }, [user]);
+
   const handleAddToFavoriteList = async () => {
     try {
       if (!selectedListId) {
@@ -127,6 +158,27 @@ function MoviePage() {
     setReviewText(e.target.value);
   };
 
+  const handleAddToGroup = async () => {
+    try {
+      console.log(selectedListId2, movieID);
+      const response = await fetch(`http://localhost:3001/group/pages/content`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ movie_id: movieID, group_name: selectedListId2 })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to adding content to group pages');
+      }
+      setSelectedListId2("");
+
+    } catch (error) {
+      console.error('Error adding content to group pages:', error);
+    }
+  };
+
   const handleSubmitRating = async () => {
     try {
       if (!userRating || !reviewText) {
@@ -159,7 +211,8 @@ function MoviePage() {
   };
 
   return (
-    <div className="movie-details">
+    <div className="movie-page">
+      <div className="movie-details">
       {movieDetails && (
         <>
           <img
@@ -199,8 +252,31 @@ function MoviePage() {
               </button>
             </>
           )}
+{user && (
+  <>
+    <select
+      value={selectedListId2}
+      onChange={(e) => {
+        console.log("Dropdown value changed:", e.target.value);
+        setSelectedListId2(e.target.value);
+      }}
+    >
+      <option value="">Valitse Ryhmä</option>
+      {groupLists.map((group) => (
+        <option key={group.group_id} value={group.group_name}>
+          {group.group_name}
+        </option>
+      ))}
+    </select>
+    <button onClick={handleAddToGroup}>
+      Lisää ryhmään
+    </button>
+  </>
+)}
+          
         </>
       )}
+      </div>
       <div className="ratings-container">
         <h3>Arvostelut:</h3>
         <div className="reviews-box">

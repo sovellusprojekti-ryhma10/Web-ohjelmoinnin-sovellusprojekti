@@ -7,19 +7,20 @@
     width: 100%;
     padding: 0 20px;
    }
-   
+
    h1 {
     text-align: center;
     margin-top: 20px;
    }
-   
+
    .container h2 {
     margin: 20px 0;
    }
-   
+
    .container button {
     margin-top: 20px;
    }
+  
    .group-list {
     width: 100%;
    }
@@ -46,4 +47,4 @@
   .group-description1:hover::after {
     display: block; 
   }
-
+ 
