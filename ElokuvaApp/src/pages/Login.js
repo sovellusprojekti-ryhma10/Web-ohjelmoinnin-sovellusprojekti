@@ -34,14 +34,8 @@ export default function Login() {
         <h1>Kirjaudu</h1>
         <h2>Käyttäjätiedot</h2>
         <div>
-<<<<<<< HEAD
            <p className="formlabel">Käyttäjänimi</p>
  
-=======
-          <label htmlFor="username-input" className="formlabel">
-            Käyttäjänimi
-          </label>
->>>>>>> 780cb2b009d262ff1900f6befaee19b4bd9d5af2
           <input
             className="input"
             value={username}
@@ -50,14 +44,8 @@ export default function Login() {
           />
         </div>
         <div>
-<<<<<<< HEAD
            <p className="formlabel">Salasana </p>
  
-=======
-          <label htmlFor="password-input" className="formlabel">
-            Salasana
-          </label>
->>>>>>> 780cb2b009d262ff1900f6befaee19b4bd9d5af2
           <input
             className="input"
             type="password"
