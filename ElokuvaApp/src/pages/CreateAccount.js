@@ -4,7 +4,6 @@ import "../index.css";
 import { useUser } from "../context/useUser";
 import { Link } from "react-router-dom";
  
-import { useUser } from "../context/useUser"; // Adjust the import path as necessary
 import { useNavigate } from "react-router-dom";
  
 export default function CreateAccount() {
