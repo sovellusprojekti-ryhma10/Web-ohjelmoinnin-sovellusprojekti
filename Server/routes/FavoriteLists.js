@@ -37,6 +37,26 @@ router.get("/favorite-lists", auth, async (req, res) => {
   }
 });
 
+// Route for deleting a specific favorite list
+router.delete("/favorite-lists/:listId", auth, async (req, res) => {
+  const { listId } = req.params;
+
+  try {
+    // Delete the list from the database
+    const result = await pgPool.query(
+      "DELETE FROM personal_pages WHERE id = $1 RETURNING *",
+      [listId]
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "List not found" });
+    }
+    res.json({ message: "List deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred" });
+  }
+});
+
 // Route for fetching a specific favorite list
 router.get("/favorite-lists/:listId", auth, async (req, res) => {
   const { listId } = req.params;
@@ -78,4 +98,3 @@ router.post("/favorite-lists/:listId/content", auth, async (req, res) => {
 });
 
 module.exports = router;
-

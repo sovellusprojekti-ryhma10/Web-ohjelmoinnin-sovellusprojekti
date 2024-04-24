@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
@@ -6,33 +6,54 @@ import PrivateRoute from "./pages/PrivateRoute";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import UserProvider from "./context/UserProvider";
-import GroupSearchPage from './pages/GroupSearchPage'
-import GroupPage from './pages/GroupPage'
 import { Route, Routes } from "react-router-dom";
+import GroupSearchPage from "./pages/GroupSearchPage";
+import GroupPage from "./pages/GroupPage";
 import Personal from "./pages/Personal";
-import CreateAcc from "./pages/createAcc";
+import CreateAccount from "./pages/CreateAccount"
 import FavoriteLists from "./pages/FavoriteLists";
 import SpecificList from "./components/SpecificList";
-
+import MovieSearch from "./components/MovieSearch";
+import MoviePage from "./components/MoviePage";
+   
+import Remove from "./pages/RemoveAccount";
+import Logout from "./pages/Logout"; // Ensure this import is correct
+ import ShowTimes from "./pages/ShowTimes";
+ 
 function App() {
+  const [mediaType, setMediaType] = useState("movie");
+
   return (
     <UserProvider>
-      <Routes>
-        <Route path="/Group" exact element={<GroupSearchPage />} />
-        <Route path="/group/:groupId" exact element={<GroupPage />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/CreateAcc" element={<CreateAcc />} />
-        <Route path="/personal" element={<PrivateRoute />}>
-          <Route index element={<Personal />} />
-          <Route path="favoriteLists" element={<FavoriteLists />} />
-          <Route path="favoriteLists/:listId" element={<SpecificList />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
       <div className="App">
         <Navbar />
-        <div className="content">{/* Add your content here */}</div>
+        <Routes>
+          <Route path="/Group" element={<GroupSearchPage />} />
+          <Route path="/group/:groupId" element={<GroupPage />} />
+          <Route path="/*" element={<Home />} />{" "}
+          {/* Adjusted path to include a trailing "*" */}
+          <Route
+            path="/search"
+            element={
+              <MovieSearch setMediaType={setMediaType} mediaType={mediaType} />
+            }
+          />
+          <Route
+            path="/:mediaType/:movieID"
+            element={<MoviePage mediaType={mediaType} />}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/showtimes" element={<ShowTimes />} />
+          <Route path="/CreateAcc" element={<CreateAccount />} />
+          <Route path="/Remove" element={<Remove />} />
+
+          <Route path="/personal" element={<PrivateRoute />}>
+            <Route index element={<Personal />} />
+            <Route path="favoriteLists" element={<FavoriteLists />} />
+            <Route path="favoriteLists/:listId" element={<SpecificList />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </div>
     </UserProvider>
   );

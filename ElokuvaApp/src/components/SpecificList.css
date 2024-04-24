@@ -1,17 +1,61 @@
-/* SpecificList.css */
-
 .specific-list-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  .specific-list-container h2 {
-    margin-bottom: 20px;
-    text-align: center;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-left: 250px;
+  gap: 20px; 
+ }
+ 
+ .specific-list-container h2 {
+  margin-bottom: 20px;
+  text-align: center;
+ }
+ 
+ .specific-list-container ul {
+  list-style-type: none;
+  padding-left: 0;
+ }
+ 
+ .specific-list-container ul li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+ }
+ 
+ .specific-list-container ul li img {
+  max-width: 250px;
+  max-height: 500px;
+  object-fit: cover;
+  margin: auto;
+  display: block;
+  margin-bottom: 10px;
+ }
+ 
+ .specific-list-container ul li h3 {
+  text-align: center;
+ }
+ 
+ .specific-list-container ul li p {
+  max-width: 80%;
+  margin: auto;
+  text-align: justify; 
+ }
+ 
+ .movie-list {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 20px;
+  margin-bottom: 20px; 
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+
   

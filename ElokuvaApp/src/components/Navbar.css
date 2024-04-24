@@ -1,6 +1,6 @@
 body {
   position: relative;
-  width:  100%;
+  width: 100%;
   height: 100%;
   background-color: #e9e9e9;
   font-family: "inter", sans-serif;
@@ -13,9 +13,22 @@ h1 {
   font-size: 1.5 rem;
 }
 
+h2 {
+  text-align: left;
+  margin-top: 10px;
+  background-color: #131313;
+  color: #e9e9e9;
+  padding: 10px;
+  border-radius: 11px;
+  width: 90%;
+}
+
 a {
   font-size: 1rem;
   text-decoration: none;
+}
+a:visited {
+  color: #131313;
 }
 
 .content {
@@ -41,25 +54,40 @@ a {
   background-color: #cfcfcf;
   padding: 1% 0% 0% 1%;
   height: 100%;
+  animation: fadeIn 1s;
+}
+@media screen and (max-width: 800px) {
+  .navbar {
+    display: none;
+  }
 }
 .navbar h1 {
   padding: 1% 0 10% 0;
 }
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 .selectBubble {
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 0px 16px;
   gap: 2%;
-  width: 86%;
+  max-width: 90%;
+  min-width: 100px;
   height: 2.5rem;
   background: #FBFBFB;
   border-radius: 8px;
   flex: none;
   order: 1;
   flex-grow: 0;
-  margin: 10px 0px;
+  margin: 10px 10px 10px 0px;
 }
 .selectBubble img {
   padding: 0px 1rem 0px 0px;

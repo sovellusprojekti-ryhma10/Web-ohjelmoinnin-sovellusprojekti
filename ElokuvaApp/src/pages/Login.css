@@ -13,9 +13,22 @@ h1 {
   font-size: 1.5 rem;
 }
 
+h2 {
+  text-align: left;
+  margin-top: 10px;
+  background-color: #131313;
+  color: #e9e9e9;
+  padding: 10px;
+  border-radius: 11px;
+  width: 90%;
+}
+
 a {
   font-size: 1rem;
   text-decoration: none;
+}
+a:visited {
+  color: #131313;
 }
 
 .content {
@@ -38,12 +51,30 @@ a {
   padding: 5% 1% 1% 21%;
   width: 80%;
   margin: 0 50px;
+  background-color: #e9e9e9;
+}
+@media screen and (max-width: 800px) {
+  .formcontent {
+    padding: 2px;
+  }
+}
+.formcontent button {
+  padding: 10px;
+  background-color: #131313;
+  color: #e9e9e9;
+  border-radius: 11px;
+  border: none;
+  margin: 11px 5px 5px 5px;
+}
+.formcontent button:hover {
+  background-color: #9a9cb0;
+  color: #e9e9e9;
 }
 
 .formlabel {
   font-size: 1rem;
   font-weight: 200;
-  margin-bottom: 1%;
+  margin: 5px 5px 5px 5px;
 }
 
 #submit {
@@ -66,8 +97,9 @@ a {
 
 .input {
   font-size: 1.2rem;
+  margin: 5px 5px 5px 5px;
   padding: 3px 10px 5px 10px;
-  border: 0px;
+  border: 1px;
   box-shadow: 5px 5px 13px 0px rgba(0, 0, 0, 0.1);
   border-radius: 11px;
   width: 30%;
@@ -87,4 +119,21 @@ a {
 }
 .input:active:hover {
   background-color: #dbdeff;
+}
+
+.linksign {
+  padding: 10px;
+  margin: 10px 10px 10px 10px;
+ }
+
+button {
+  background-color: #131313;
+  color: #e9e9e9;
+  border: none;
+  padding: 1rem 1rem;
+  font-size: 1rem;
+  margin: 10px 10px 10px 10px;
+  border-radius: 11px;
+  font-weight: 600;
+ 
 }/*# sourceMappingURL=Login.css.map */

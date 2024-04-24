@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import "./SpecificList.css";
 
 function SpecificList() {
   const { listId } = useParams();
   const [listContent, setListContent] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchListContent = async () => {
@@ -24,29 +26,42 @@ function SpecificList() {
             throw new Error("Network response was not ok");
           }
           const data = await response.json();
-          console.log("Fetched list content:", data);
+          console.log("Received data:", data);
           setListContent(data);
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching list content:", error);
+        setLoading(false);
       }
     };
 
     fetchListContent();
   }, [listId, user]);
 
-  if (!listContent) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="specific-list-container">
-      <h2>List Content</h2>
-      <ul>
-        {listContent.map((item) => (
-          <li key={item.id}>{item.movie_name}</li>
-        ))}
-      </ul>
+      {listContent.map((item, index) => {
+        const movies = JSON.parse(item.list_content);
+        return (
+          <div key={index} className="movie-list">
+            <ul>
+              {movies.map((movie, movieIndex) => (
+                <li key={`${index}-${movieIndex}`}>
+                  <img src={movie.movie_image} alt={movie.movie_name} />
+                  <h3>{movie.movie_name}</h3>
+                  <p>{movie.movie_description}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
+      <button onClick={() => navigate("/")}>Lisää elokuvia</button>
     </div>
   );
 }

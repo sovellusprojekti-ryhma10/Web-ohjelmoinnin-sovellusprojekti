@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext  } from 'react';
+
 import './GroupSearchPage.css'; 
 import { useNavigate } from 'react-router-dom';
+import { useUser } from "../context/useUser";
+import { toast } from 'react-toastify';
+
 
 const GroupSearchPage = () => {
+  const { user } = useUser();
   const [scrollPosition, setScrollPosition] = useState(0);
   const [groups, setGroups] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [writeBoxText, setWriteBoxText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(20);
-  const created_by = 5;
-  const accountId = 5;
   const navigate = useNavigate();
+  
 
 
   useEffect(() => {
@@ -32,7 +36,8 @@ const GroupSearchPage = () => {
   // Function to fetch groups from the backend
   const fetchGroups = async (currentPage) => {
     try { 
-      const response = await fetch(`http://localhost:3001/group/all?currentPage=${currentPage}&perPage=${perPage}`);
+      const response = await fetch(
+        `http://localhost:3001/group/all?currentPage=${currentPage}&perPage=${perPage}`,)
       if (!response.ok) {
         throw new Error('Failed to fetch groups');
       }
@@ -50,9 +55,10 @@ const GroupSearchPage = () => {
       const response = await fetch(`http://localhost:3001/group/join`, {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ account_id: accountId, group_name: group_name })
+        body: JSON.stringify({ group_name: group_name })
       });
       if (!response.ok) {
         throw new Error('Failed to join group');
@@ -60,7 +66,7 @@ const GroupSearchPage = () => {
       const groupId = await response.json();
 
       // testissä
-      navigate(`/group/${groupId}`);
+      toast.success("Pyyntösi on lähetetty onnistuneesti.");
     } catch (error) {
       console.error('Error joining group:', error);
     }
@@ -72,9 +78,10 @@ const GroupSearchPage = () => {
       const response = await fetch('http://localhost:3001/group/add', {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ group_name: writeBoxText, created_by: created_by, account_id: accountId })
+        body: JSON.stringify({ group_name: writeBoxText})
       });
       if (!response.ok) {
         throw new Error('Failed to create group');
@@ -108,7 +115,7 @@ const GroupSearchPage = () => {
     <div className="group-search-container">
       <h2>Ryhmät</h2>
 
-      <div className="insides"> 
+      <div className="group-insides"> 
 
       <div className="input-group">
         <h3>Ryhmän nimi</h3>
@@ -132,7 +139,7 @@ const GroupSearchPage = () => {
               <span className="group-name">{group.group_name}</span>
               <span className="created-by">{group.created_by_username}</span>
               <span className="group-description" title={group.content}>Ryhmän kuvaus</span>
-              <button className="button-join" onClick={(event) => handleJoinGroup(event, group.group_name)}>Liity ryhmään</button>
+              <button className="button-join" onClick={(event) => handleJoinGroup(event, group.group_name)}>Pyydä liittyä ryhmään</button>
             </li>
           ))}
         </ul>
@@ -158,5 +165,6 @@ const GroupSearchPage = () => {
 
   );
 };
+
 
 export default GroupSearchPage;

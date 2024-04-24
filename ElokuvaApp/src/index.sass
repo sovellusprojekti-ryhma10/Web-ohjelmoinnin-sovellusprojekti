@@ -1,13 +1,13 @@
 ///let's declare some globals
 //breakpoints
-$lg: 1024px
+$lg: 800px
 //common colors
 $bg: #e9e9e9
 $navbarbg: #cfcfcf
 $active: #dbdeff
 $loact: #9a9cb0
 $blk: #131313
-
+$tr:11px!important
 body
 	position: relative
 	width: 100%
@@ -17,16 +17,23 @@ body
 	font-size: 1rem
 	font-style: normal
 	font-weight: 600
-	// @media (min-width: 900px)
-	// 	background-color: #0000ff
 
 h1
 	font-size: 1.5 rem
+h2
+	text-align: left
+	margin-top: 10px
+	background-color: $blk
+	color: $bg
+	padding: 10px
+	border-radius: 11px
+	width: 90%
 
 a
 	font-size: 1rem
 	text-decoration: none
-
+	&:visited
+		color: $blk
 
 .content
 	// voit antaa paddingin ja marginin prosentteina, jolloin ne skaalautuvat tai voit antaa kiinteän arvon, jolloin ne pysyvät samana kokoajan
@@ -40,3 +47,5 @@ a
 		transform: scale(0)
 	100%
 		transform: scale(0.05)
+
+	border-radius: 11px!important

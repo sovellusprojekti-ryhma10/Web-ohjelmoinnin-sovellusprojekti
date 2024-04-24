@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useUser } from "../context/useUser";
 import UserProvider from "../context/UserProvider";
 import PrivateRoute from "../pages/PrivateRoute";
-
 import Group from "../icons/group.png";
 import Search from "../icons/search.png";
 import Grouppage from "../icons/groupPage.png";
@@ -13,12 +12,21 @@ import Profile from "../icons/profile.png";
 import Settings from "../icons/settings.png";
 import Shows from "../icons/shows.png";
 import Sort from "../icons/sort.png";
+import Hambourger from "./Hambourger.js";
 
 export default function Navbar() {
   const { user } = useUser();
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("user");
+
+    // Redirect to the login page
+    window.location.href = "/login";
+  };
+
   return (
     <nav>
+      <Hambourger />
       <div className="navbar">
         <h1>Elokuva-sivusto</h1>
         <p>Löydä elokuva</p>
@@ -32,35 +40,44 @@ export default function Navbar() {
           </div>
           <div className="selectBubble">
             <img src={Shows} className="icon" alt="Schedule Icon" />{" "}
-            <p>Aikataulut</p>
+            <p>
+              <Link to="/showtimes">Näytösajat</Link>
+              </p>
           </div>
         </div>
         <br></br>
         <br></br>
-        <p>Käyttäjät</p>
+        {user && (
+          <>
+            <p>Käyttäjät</p>
+            <div className="selectBubble">
+              <img src={Profile} className="icon" alt="Profile Icon" />
+              <p>
+                <Link to="Personal">Oma sivu</Link>
+              </p>
+            </div>
+          </>
+        )}
+ 
         <div className="selectBubble">
-          <img src={Profile} className="icon" alt="Profile Icon" />
+          <img src={Group} className="icon" alt="Group Icon" />
           <p>
-            <Link to="Personal">Oma sivu</Link>
+            <Link to="Group">Etsi ryhmiä</Link>
           </p>{" "}
         </div>
         <div className="selectBubble">
-          <img src={Profile} className="icon" alt="Profile Icon" />{" "}
-          <p>Etsi käyttäjiä</p>
-        </div>
-        <div className="selectBubble">
-          <img src={Group} className="icon" alt="Group Icon" />{" "}
-          <p>Etsi ryhmiä</p>
-        </div>
-        <div className="selectBubble">
-          <img src={Koti} className="icon" alt="Home Icon" />
+          <img src={Koti} className="icon" alt="Home Icon" />{" "}
           {user === null && (
             <p>
               {" "}
-              <Link to="login">Login</Link>
+              <Link to="login">Kirjaudu</Link>
             </p>
           )}
-          {user && <Link to="/logout">Logout</Link>}
+          {user && (
+            <p className="logout-button" onClick={handleLogout}>
+              Uloskirjaudu
+            </p>
+          )}
         </div>
       </div>
     </nav>

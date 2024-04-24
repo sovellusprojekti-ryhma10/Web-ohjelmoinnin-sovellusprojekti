@@ -5,10 +5,25 @@
   padding: 5% 1% 1% 21%
   width: 80%
   margin: 0 50px
+  background-color: $bg
+  @media screen and ( max-width: 800px )
+   padding: 2px
+
+  button
+    padding: 10px
+    background-color: $blk
+    color: $bg
+    border-radius: 11px
+    border: none
+    margin: 11px 5px 5px 5px
+    &:hover
+      background-color: $loact
+      color: $bg
+
 .formlabel
   font-size: 1rem
   font-weight: 200
-  margin-bottom: 1%
+  margin: 5px 5px 5px 5px
 #submit
  margin: 5px
  background-color: $blk
@@ -27,8 +42,9 @@
 
 .input
  font-size: 1.2rem
+ margin: 5px 5px 5px 5px
  padding: 3px 10px 5px 10px
- border: 0px
+ border: 1px
  box-shadow: 5px 5px 13px 0px rgba(0, 0, 0, 0.1)
  border-radius: 11px
  width: 30%
@@ -49,3 +65,13 @@
 .linksign
   padding: 10px
   margin: 10px 10px 10px 10px
+
+button
+  background-color: $blk
+  color: $bg
+  border: none
+  padding: 1rem 1rem
+  font-size: 1rem
+  margin: 10px 10px 10px 10px
+  border-radius: 11px
+  font-weight: 600
