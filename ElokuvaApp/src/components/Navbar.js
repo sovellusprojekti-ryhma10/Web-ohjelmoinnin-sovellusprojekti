@@ -2,21 +2,23 @@ import "./Navbar.css";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../context/useUser";
-import UserProvider from "../context/UserProvider";
-import PrivateRoute from "../pages/PrivateRoute";
 import Group from "../icons/group.png";
 import Search from "../icons/search.png";
-import Grouppage from "../icons/groupPage.png";
 import Koti from "../icons/home.png";
 import Profile from "../icons/profile.png";
-import Settings from "../icons/settings.png";
 import Shows from "../icons/shows.png";
-import Sort from "../icons/sort.png";
 import Hambourger from "./Hambourger.js";
 
+/**
+ * Renders the navigation bar component.
+ * @returns {JSX.Element} The rendered navigation bar.
+ */
 export default function Navbar() {
   const { user } = useUser();
 
+  /**
+   * Handles the logout functionality.
+   */
   const handleLogout = () => {
     sessionStorage.removeItem("user");
 
@@ -42,7 +44,7 @@ export default function Navbar() {
             <img src={Shows} className="icon" alt="Schedule Icon" />{" "}
             <p>
               <Link to="/showtimes">Näytösajat</Link>
-              </p>
+            </p>
           </div>
         </div>
         <br></br>
@@ -51,14 +53,17 @@ export default function Navbar() {
           <>
             <p>Käyttäjät</p>
             <div className="selectBubble">
-              <img src={Profile} className="icon" alt="Profile Icon" />
+              <img
+                src={Profile}
+                className="icon"
+                alt="Profile Icon"
+              />
               <p>
                 <Link to="Personal">Oma sivu</Link>
               </p>
             </div>
           </>
         )}
- 
         <div className="selectBubble">
           <img src={Group} className="icon" alt="Group Icon" />
           <p>

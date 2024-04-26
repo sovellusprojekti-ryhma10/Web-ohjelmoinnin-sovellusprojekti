@@ -18,7 +18,7 @@ const Personal = () => {
           Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json'
         }
-      });
+      }); 
 
       if (!response.ok) {
         throw new Error('Failed to fetch groups');
@@ -34,6 +34,8 @@ const Personal = () => {
   const handleDeleteAccount = async () => {
     if (window.confirm("Haluatko varmasti poistaa käyttäjätilisi?")) {
       console.log("User confirmed account deletion.");
+      // adding some stuff to help remove account
+      console.log(user.token);
       try {
         const response = await fetch("http://localhost:3001/user/delete", {
           method: "DELETE",
