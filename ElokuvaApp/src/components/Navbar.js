@@ -64,7 +64,6 @@ export default function Navbar() {
             </div>
           </>
         )}
-
         <div className="selectBubble">
           <img src={Group} className="icon" alt="Group Icon" />
           <p>

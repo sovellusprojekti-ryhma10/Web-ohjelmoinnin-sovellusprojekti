@@ -5,9 +5,8 @@ let chaiHttp = require('chai-http');
 let server = require('../app');
 chai.use(chaiHttp);
 let should = chai.should();
-let expect = chai.expect;
-let request = chaiHttp.request;
-let have = chai.have;
+
+//https://www.chaijs.com/plugins/chai-http/
 let random = Math.floor((Math.random() * 100) + 1);
 
 //Login

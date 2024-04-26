@@ -343,8 +343,7 @@ const GroupPage = () => {
                 onChange={handleDescriptionChange}
                 placeholder="Type description here..."
               />
-              <button onClick={handleDescriptionSubmit}>Submit Description</button>
-              <button onClick={handleDeleteGroup}>Poista Ryhmä</button>
+              <button onClick={handleDescriptionSubmit}>Lisää kuvaus</button>
             </>
           )}
           <div>

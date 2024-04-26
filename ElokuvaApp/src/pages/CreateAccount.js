@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 
 import { useNavigate } from "react-router-dom";
-
+ 
 export default function CreateAccount() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

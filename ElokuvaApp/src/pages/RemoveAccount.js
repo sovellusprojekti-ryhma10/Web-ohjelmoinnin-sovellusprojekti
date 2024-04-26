@@ -6,36 +6,36 @@ import "../index.css";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 
-export default function Login() {
-  const { login } = useUser();
+export default function Remove() {
+  const { remove } = useUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const data = { username: username, password: password };
+  const navigate = useNavigate();
 
-  const validate = async (e) => {
-  let loginData =await login(data);
 
+  const deldata = async (e) => {
     e.preventDefault();
     if (username.length > 0 && password.length > 0) {
       try {
-         localStorage.setItem('items', JSON.stringify(loginData));
-        } catch (error) {
-         console.error("Error logging in:", error);
+         const data = { username: username, password: password };
+        await remove(data);
+        toast.success("Tili poistettu onnistuneesti");
+        navigate("/Login");
+      } catch (error) {
+        toast.error("Error deleting account:", error);
       }
     } else {
       toast.error("Täytä kaikki kentät");
     }
-  };
-
-
+  }
 
   return (
     <div className="formcontent">
-      <form id="login-form" onSubmit={validate}>
+      <form id="login-form" onSubmit={deldata}>
         <h1>Kirjaudu</h1>
         <h2>Käyttäjätiedot</h2>
         <div>
-           <p className="formlabel">Käyttäjänimi</p>
+          <p className="formlabel">Käyttäjänimi</p>
           <input
             className="input"
             value={username}
@@ -44,7 +44,7 @@ export default function Login() {
           />
         </div>
         <div>
-           <p className="formlabel">Salasana </p>
+          <p className="formlabel">Salasana </p>
           <input
             className="input"
             type="password"
@@ -53,15 +53,12 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button id="login-submit" type="submit">
-          Kirjaudu
-        </button>
+
+        <button   type="submit" >Poista Käyttäjänimi</button>
       </form>
-      <div id="accounts">
       <Link className="linksign" to="/CreateAcc">
         Luo tili
       </Link>
-      </div>
     </div>
   );
 }

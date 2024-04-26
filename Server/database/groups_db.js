@@ -32,6 +32,8 @@ const sql = {
     REMOVE_GROUP1: 'DELETE FROM User_Groups WHERE group_id = ($1)',
     REMOVE_GROUP2: 'DELETE FROM Group_pages WHERE group_id = ($1)',
     REMOVE_GROUP3: 'DELETE FROM Groups WHERE id = ($1)',
+    REMOVE_GROUP4: 'DELETE FROM group_pages_content WHERE group_page_id = ($1)',
+    REMOVE_GROUP5: 'DELETE FROM group_pages_movie_times WHERE group_page_id = ($1)',
 
     GET_GROUP_MEMBERS_USERNAME:'SELECT DISTINCT A.username FROM User_Groups UG JOIN Accounts A ON UG.account_id = A.id WHERE UG.group_id = ($1) AND is_admin = (false) AND request_sent = (TRUE);',
     GET_GROUPS_ADMINS:'SELECT DISTINCT A.username FROM User_Groups UG JOIN Accounts A ON UG.account_id = A.id WHERE UG.group_id = ($1) AND is_admin = (true);',
@@ -181,9 +183,15 @@ async function removeGroup(accountId, groupId){
         const isAdmin = isAdmindata.rows[0].created_by; 
         console.log(isAdmin + accountId + "HALOOOOOOOOOOOOOOOOOO");
         if (isAdmin == accountId) {
+
+            const result = await pgPool.query(sql.GET_GROUP_PAGES_ID, [groupId]);
+            const group_page_id = result.rows[0].id;
+            await pgPool.query(sql.REMOVE_GROUP5, [group_page_id]);
+            await pgPool.query(sql.REMOVE_GROUP4, [group_page_id]);
             await pgPool.query(sql.REMOVE_GROUP1, [groupId]);
             await pgPool.query(sql.REMOVE_GROUP2, [groupId]);
             await pgPool.query(sql.REMOVE_GROUP3, [groupId]);
+            
         }
     } catch (error) {
         console.error('Error removing group', error);
@@ -195,8 +203,8 @@ async function removeGroup(accountId, groupId){
 async function removeGroupsAdmin(memberName, adminId, groupId) {
     try {
         const isAdmindata = await pgPool.query(sql.CHECK_IF_USER_IS_CREATEDBY, [groupId]);
-        const isAdmin = isAdmindata.rows[0].created_by; // assuming there's only one row
-        console.log(isAdmin);
+        const isAdmin = isAdmindata.rows[0].created_by; 
+        console.log(isAdmin );
         if (isAdmin == adminId) {
             const accountIdData = await pgPool.query(sql.GET_USER_ID, [memberName]);
             const accountId = accountIdData.rows[0].id;
@@ -222,14 +230,12 @@ async function addUserGroup(accountId, group_name) {
             console.log('User is already in the group');
             return groupId; // Return the group ID
         }
-        else {
+
         await pgPool.query(sql.ADD_USER_GROUP, [accountId, groupId, false, false]);
         return groupId;
-    }
 
     } catch (error) {
         console.error('Error adding user group:', error);
-        throw error;
     }
 }
 
@@ -248,13 +254,16 @@ async function addGroups(group_name, account_id) {
 
 async function removeGroupsMember(memberName, adminId, groupId) {
     try {
-        
+            const isAdmindata = await pgPool.query(sql.CHECK_IF_USER_IS_CREATEDBY, [groupId]);
+            const isAdminCreateBy = isAdmindata.rows[0].created_by; 
         const result = await pgPool.query(sql.CHECK_IF_USER_IS_ADMIN, [adminId, groupId]);
         const isAdmin = result.rows[0].is_admin
         if(isAdmin){
             const result2 = await pgPool.query(sql.GET_USER_ID, [memberName]);
             const accountId = result2.rows[0].id;
-            await pgPool.query(sql.DELETE_USER_FROM_GROUP, [accountId, groupId]);
+            if (isAdminCreateBy != accountId){
+                await pgPool.query(sql.DELETE_USER_FROM_GROUP, [accountId, groupId]);
+            }
         }
     } catch (error) {
         console.error('Error removing member from the group:', error);

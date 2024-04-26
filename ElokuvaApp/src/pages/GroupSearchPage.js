@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext  } from 'react';
 import './GroupSearchPage.css'; 
 import { useNavigate } from 'react-router-dom';
 import { useUser } from "../context/useUser";
+import { toast } from 'react-toastify';
 
 
 const GroupSearchPage = () => {
@@ -65,7 +66,7 @@ const GroupSearchPage = () => {
       const groupId = await response.json();
 
       // testissä
-      navigate(`/group/${groupId}`);
+      toast.success("Pyyntösi on lähetetty onnistuneesti.");
     } catch (error) {
       console.error('Error joining group:', error);
     }
@@ -138,7 +139,7 @@ const GroupSearchPage = () => {
               <span className="group-name">{group.group_name}</span>
               <span className="created-by">{group.created_by_username}</span>
               <span className="group-description" title={group.content}>Ryhmän kuvaus</span>
-              <button className="button-join" onClick={(event) => handleJoinGroup(event, group.group_name)}>Liity ryhmään</button>
+              <button className="button-join" onClick={(event) => handleJoinGroup(event, group.group_name)}>Pyydä liittyä ryhmään</button>
             </li>
           ))}
         </ul>
